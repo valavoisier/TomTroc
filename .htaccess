@@ -1,0 +1,3 @@
+# Redirection de toutes les requêtes vers index.php pour traitement routeur
+RewriteEngine on
+RewriteRule ^(.*)$ index.php?url=$1 [L,QSA]
