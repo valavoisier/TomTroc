@@ -11,5 +11,8 @@ $urlParts = explode('/', trim($url, '/'));
 //Si la première partie de l'URL est vide, on utilise 'HomeController' par défaut
 $controllerName = (!empty($urlParts[0]) ? ucfirst($urlParts[0]) . 'Controller' : 'HomeController');
 //Déterminer l'action en fonction de la deuxième partie de l'URL
-//Si la deuxième partie de l'URL est vide, on utilise 'index' par défaut
+//Si la deuxième partie de l'URL est vide, on utilise une méthode'index' par défaut
 $action = (!empty($urlParts[1]) ? $urlParts[1] : 'index');
+//Construction du chemin vers le fichier du contrôleur
+//Concatène le dossier 'controllers/' avec le nom du contrôleur et l'extension '.php'
+$controllerFile = 'controllers/' . $controllerName . '.php';
