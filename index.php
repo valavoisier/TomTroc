@@ -20,7 +20,14 @@ $controllerFile = 'controllers/' . $controllerName . '.php';
 //si chemin existe/ $controllerName.php existe
 if (file_exists($controllerFile)) {
     require_once $controllerFile;
-    echo "le contrôleur existe<br>";
+    //fonction native vérification éxistance classe, si éxiste on l'instancie
+    if (class_exists($controllerName)) {
+        $controller = new $controllerName();
+        echo "la classe existe";
+        } else {
+            // Si la méthode n'existe pas, on affiche une erreur
+            echo "Erreur 404 - page non trouvée! - classe non trouvée";
+        }
 } else {
         // Si le nombre de paramètres fournis est insuffisant, on affiche une erreur
         echo "Erreur 404 - page non trouvée! - contrôleur non trouvé";
