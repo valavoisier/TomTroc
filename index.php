@@ -16,3 +16,12 @@ $action = (!empty($urlParts[1]) ? $urlParts[1] : 'index');
 //Construction du chemin vers le fichier du contrôleur
 //Concatène le dossier 'controllers/' avec le nom du contrôleur et l'extension '.php'
 $controllerFile = 'controllers/' . $controllerName . '.php';
+//mise en place du processus qui permet l'éxécution de la méthode du contrôleur après vérifications
+//si chemin existe/ $controllerName.php existe
+if (file_exists($controllerFile)) {
+    require_once $controllerFile;
+    echo "le contrôleur existe<br>";
+} else {
+        // Si le nombre de paramètres fournis est insuffisant, on affiche une erreur
+        echo "Erreur 404 - page non trouvée! - contrôleur non trouvé";
+    }
