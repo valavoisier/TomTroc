@@ -16,19 +16,28 @@ $action = (!empty($urlParts[1]) ? $urlParts[1] : 'index');
 //Construction du chemin vers le fichier du contrôleur
 //Concatène le dossier 'controllers/' avec le nom du contrôleur et l'extension '.php'
 $controllerFile = 'controllers/' . $controllerName . '.php';
-//mise en place du processus qui permet l'éxécution de la méthode du contrôleur après vérifications
-//si chemin existe/ $controllerName.php existe
+//mise en place du processus qui permet l'éxécution de la méthode du contrôleur après vérifications:
+//1) si chemin existe/ fichier $controllerName.php existe alors on l'inclut
 if (file_exists($controllerFile)) {
     require_once $controllerFile;
     //fonction native vérification éxistance classe, si éxiste on l'instancie
     if (class_exists($controllerName)) {
         $controller = new $controllerName();
-        echo "la classe existe";
+        //méthode native vérification éxistance méthode dans la classe
+        //on cherche méthode $actiondans objet $controller
+        if (method_exists($controller, $action)) {
+            //Appel dynamique de la méthode du contrôleur
+            $controller->$action();
+            echo "la méthode existe";
         } else {
             // Si la méthode n'existe pas, on affiche une erreur
-            echo "Erreur 404 - page non trouvée! - classe non trouvée";
+            echo "Erreur 404 - page non trouvée! - méthode(action) non trouvée";
         }
-} else {
-        // Si le nombre de paramètres fournis est insuffisant, on affiche une erreur
-        echo "Erreur 404 - page non trouvée! - contrôleur non trouvé";
+    } else {
+        // Si la méthode n'existe pas, on affiche une erreur
+        echo "Erreur 404 - page non trouvée! - classe non trouvée";
     }
+} else {
+    // Si absence fichier, on affiche une erreur
+    echo "Erreur 404 - page non trouvée! - contrôleur non trouvé";
+}
