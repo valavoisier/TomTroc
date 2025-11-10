@@ -35,7 +35,16 @@ if (file_exists($controllerFile)) {
             $methodParams = $reflectionMethod->getParameters();
             // condition sur le nombre de paramètres retournés (0 si aucun paramètre requis)
             if(count($methodParams) > 0) {
-                echo "methode qui admet paramètres";
+                // Vérification du nombre de paramètres passés en URL stockes dans $params 
+                // $methodParams stocke les paramètres de la méthode à éxécuter
+               if(count($params) >= count($methodParams)) {
+                   //Appel dynamique de la méthode du contrôleur avec les paramètres
+                   call_user_func_array([$controller, $action], $params);//tableau avec 1er élément=objet, 2ème=méthode a éxécuter
+                   //revient à l'Appel dynamique de la méthode du contrôleur  $controller->$action();
+               } else {
+                   // Si le nombre de paramètres est insuffisant, on affiche une erreur
+                   echo "Erreur 404 - page non trouvée! - nombre de paramètres passés en URL insuffisant";
+               }
             } else {                
               //Appel dynamique de la méthode du contrôleur
               $controller->$action();
