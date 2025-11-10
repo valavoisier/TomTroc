@@ -5,10 +5,6 @@ $url = isset($_GET['url']) ? $_GET['url'] : '/';
 //trim() supprime les slashs de début et fin (ex: "/controller/action/" → "controller/action")
 //explode() divise la chaîne en tableau selon le délimiteur '/'
 $urlParts = explode('/', trim($url, '/'));
-//test affichage tableau de toutes es parties de l'URL
-echo "<pre>";
-print_r($urlParts);
-echo "</pre>";
 //Construire dynamiquement le nom du controlleur en fonction de la première partie de l'URL
 //ucfirst() met la première lettre en majuscule pour respecter la convention de nommage des classes
 //Ajout de 'Controller' à la fin pour obtenir le nom complet de la classe du contrôleur
@@ -33,25 +29,23 @@ if (file_exists($controllerFile)) {
             //récupération de tous les paramètres supplémentaires dans l'URL
             //fonction array_slice() pour obtenir un tableau des paramètres à partir du 3ème segment de l'URL
             $params = array_slice($urlParts, 2);
-            //test affichage tableau paramètres
-            echo "<pre>";
-            print_r($params);
-            echo "</pre>";
             //récupération des informations de la méthode (stockées dans $action) à éxécuter avec la classe native ReflectionMethod que l'on instancie
             $reflectionMethod = new ReflectionMethod($controller, $action); //objet $controller et méthode $action
             //utilisation de la méthode getParameters de la classe ReflectionMethod pour obtenir le nombre de paramètres requis par la méthode
             $methodParams = $reflectionMethod->getParameters();
-            foreach ($methodParams as $parametre) {
-                echo "Paramètre : " . $parametre->getName() . "<br>"; //affiche un seul paramètre dans chaque ligne
+            // condition sur le nombre de paramètres retournés (0 si aucun paramètre requis)
+            if(count($methodParams) > 0) {
+                echo "methode qui admet paramètres";
+            } else {                
+              //Appel dynamique de la méthode du contrôleur
+              $controller->$action();
             }
-            //Appel dynamique de la méthode du contrôleur
-            $controller->$action();
         } else {
             // Si la méthode n'existe pas, on affiche une erreur
             echo "Erreur 404 - page non trouvée! - méthode(action) non trouvée";
         }
     } else {
-        // Si la méthode n'existe pas, on affiche une erreur
+        // Si la méthode n'existe pas,  on affiche une erreur
         echo "Erreur 404 - page non trouvée! - classe non trouvée";
     }
 } else {

@@ -6,4 +6,7 @@ class BookController {
     public function bookById($id, $id2, $id3, $id4) {
         echo "Affichage d'un livre par ID";
     }
+    public function list() {
+        echo"Affichage de la liste des livres";
+    }
 }
