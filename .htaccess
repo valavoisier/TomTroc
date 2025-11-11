@@ -1,6 +1,8 @@
 # Redirection de toutes les requêtes vers index.php pour traitement routeur
 RewriteEngine on
-# Ne pas rediriger les fichiers et dossiers existants (CSS, JS, images, etc.)
+# Ne pas rediriger les fichiers statics et dossiers existants (CSS, JS, images, etc.)
+# pour éviter recherche d'un fichier inexistant nommé PublicController par le système
+# RewriteCond %{REQUEST_URI} !^/TomTroc/public/css/style.css$
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php?url=$1 [L,QSA]
