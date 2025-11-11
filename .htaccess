@@ -1,3 +1,6 @@
 # Redirection de toutes les requêtes vers index.php pour traitement routeur
 RewriteEngine on
+# Ne pas rediriger les fichiers et dossiers existants (CSS, JS, images, etc.)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php?url=$1 [L,QSA]

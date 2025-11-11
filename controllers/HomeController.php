@@ -1,6 +1,6 @@
 <?php
 class HomeController {
     public function index() {
-        echo "Bonjour HomeController";
+         require_once "views/books/index.php";
     }
 }
