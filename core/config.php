@@ -22,7 +22,11 @@
     if ($_SERVER['SERVER_NAME'] == 'localhost') {
         // Environnement local
         define('ROOT', 'http://localhost/TomTroc'); 
+        define('DB_HOST', 'localhost');
+        define('DB_USERNAME', 'root');
+        define('DB_PASSWORD', '');
+        define('DB_NAME', 'tomtroc_db');  
     } else {
         // Environnement de production
-        define('ROOT', 'https://valerielavoisier.fr');
+        define('ROOT', 'https://valerielavoisier.fr/TomTroc');
     }
