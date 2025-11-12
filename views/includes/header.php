@@ -9,7 +9,7 @@
                 </div>
                 <nav class="nav-left">
                     <a href="<?=ROOT?>" class="active">Accueil</a>
-                    <a href="available-books.html">Nos livres à l'échange</a>
+                    <a href="<?=ROOT?>/book/availableBooks">Nos livres à l'échange</a>
                 </nav>
             </div>
 
@@ -20,11 +20,11 @@
                     Messagerie
                     <span class="message-counter">1</span>
                 </a>
-                <a href="account.html" class="nav-link">
+                <a href="<?=ROOT?>/user" class="nav-link">
                     <img src="<?=ROOT?>/public/img/compte.svg" alt="Compte" class="nav-icon">
                     Mon compte
                 </a>
-                <a href="login.html" class="nav-link connexion">Connexion</a>
+                <a href="<?=ROOT?>/user/login" class="nav-link connexion">Connexion</a>
             </nav>
         </div>
     </header>
