@@ -8,6 +8,7 @@ class Database {
     private static $instance;
     private $connection;
 
+    // Constructeur privé pour empêcher l'instanciation directe
     private function __construct($host, $username, $password, $database) {        
         try {
             $this->connection = new PDO("mysql:host=$host;dbname=$database", $username, $password);
@@ -17,6 +18,7 @@ class Database {
         }
     }
 
+    // Méthode statique pour obtenir l'instance unique de la classe Database
     public static function getInstance() {
         //vérif si il n'y a pas instance de la classe Database stockée dans $instance
         if (!self::$instance) {
@@ -26,7 +28,8 @@ class Database {
         }
         return self::$instance;
     }
-
+    
+    // Méthode pour obtenir la connexion PDO
     public function getConnection() {
         return $this->connection;
     }
