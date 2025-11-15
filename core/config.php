@@ -22,6 +22,7 @@
     if ($_SERVER['SERVER_NAME'] == 'localhost') {
         // Environnement local
         define('ROOT', 'http://localhost/TomTroc'); 
+        // Paramètres de connexion à la base de données locale
         define('DB_HOST', 'localhost');
         define('DB_USERNAME', 'root');
         define('DB_PASSWORD', '');

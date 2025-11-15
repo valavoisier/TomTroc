@@ -1,5 +1,9 @@
-<?php 
-
+<?php
+/**
+ * Classe Database
+ *
+ * Cette classe gère la connexion à la base de données en utilisant le pattern Singleton.
+ */
 class Database {
     private static $instance;
     private $connection;
@@ -15,7 +19,9 @@ class Database {
 
     public static function getInstance() {
         //vérif si il n'y a pas instance de la classe Database stockée dans $instance
-        if (!self::$instance) {            
+        if (!self::$instance) {
+            // Création de l'instance si elle n'existe pas
+            // constantes définies dans config.php
             self::$instance = new Database(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);               
         }
         return self::$instance;

@@ -7,7 +7,7 @@ ob_start(); ?>
 <section class="edit-book">
     <div class="edit-book-container">
         <!-- Lien retour -->
-        <a href="available-books.html" class="back-link">← Retour</a>
+        <a href="<?= ROOT ?>/book/availableBooks" class="back-link">← Retour</a>
 
         <!-- Titre principal -->
         <h1 class="edit-title">Modifier les informations</h1>
@@ -40,14 +40,14 @@ ob_start(); ?>
                         <input type="text" id="author" name="author">
                     </div>
                     <div class="form-group">
-                        <label for="comment">Commentaire</label>
+                        <label for="description">Commentaire</label>
                         <textarea id="description" name="description" rows="5"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="status">Disponibilité</label>
                         <select id="status" name="status">
                             <option value="disponible">Disponible</option>
-                            <option value="non-disponible">Non disponible</option>
+                            <option value="non-dispo.">Non disponible</option>
                         </select>
                     </div>
                     <button type="submit" class="btn-primary validate-btn">Valider</button>
