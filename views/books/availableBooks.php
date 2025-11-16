@@ -10,7 +10,7 @@ ob_start(); ?>
             <form class="search-bar" action="<?= ROOT ?>/book/search" method="POST">
                 <div class="search-container">
                     <img src="<?= ROOT ?>/public/img/loupe.svg" alt="Recherche" class="search-icon">
-                    <input type="search" name="q" placeholder="Rechercher un livre" class="search-input">
+                    <input type="search" name="q" placeholder="Titre du livre..." class="search-input">
                 </div>
             </form>
             <?php if (isset($message)): echo $message?><?php endif; ?>
