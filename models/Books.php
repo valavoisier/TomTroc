@@ -1,8 +1,11 @@
 <?php 
+/* 
+Modèle pour les opérations sur les livres
+ */
 // Autochargement des classes
 require_once './Autoload.php';
 
-class Books extends PrincipalManager {
+class Books extends BookManager {
     protected $table; // Nom de la table associée au modèle ici 'books'
 
     public function __construct($table) {

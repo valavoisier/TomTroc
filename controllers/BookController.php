@@ -78,9 +78,24 @@ class BookController
     }
 
 
+      /*
+    Méthode pour afficher tous les livres disponibles en appelant la méthode getAllBooks() du modèle Books
+    */
     public function availableBooks()
     {
-        include('views/books/availableBooks.php');
+        // Instanciation du BookManager pour utiliser la méthode getAllBooksWithUser()
+        $bookManager = new BookManager();
+        // Appel de la méthode getAllBooks du principalManager pour récupérer tous les livres en BDD
+        $books = $bookManager->getAllBooksWithUser();
+        if ($books) {
+            // Inclure la vue pour afficher les livres
+            include('views/books/availableBooks.php');
+        } else {
+            $message = "Aucun livre trouvé.";
+            include('views/books/availableBooks.php');
+        }
+        // Inclure la vue pour afficher les livres
+        //include('views/books/availableBooks.php');
     }
 
     public function editBook()
