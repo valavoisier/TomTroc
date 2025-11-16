@@ -36,6 +36,20 @@ remplace la méthode getAll() générique du PrincipalManager qui ne récupérai
         return $req->fetch(PDO::FETCH_ASSOC);
     }
 
+    // Méthode pour récupérer les 4 derniers livres ajoutés avec les informations de l'utilisateur (pseudo, avatar)
+     public function getLastBooks($limit = 4){
+    $dbConnection = $this->db->getConnection();
+    $query = "SELECT books.*, users.pseudo, users.avatar, users.id AS user_id
+              FROM books
+              JOIN users ON books.user_id = users.id
+              ORDER BY books.id DESC
+              LIMIT :limit";
+    $req = $dbConnection->prepare($query);
+    $req->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
+    $req->execute();
+    return $req->fetchAll(PDO::FETCH_ASSOC);
+}
+
     
     
 
