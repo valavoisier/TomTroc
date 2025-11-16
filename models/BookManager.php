@@ -22,6 +22,19 @@ remplace la méthode getAll() générique du PrincipalManager qui ne récupérai
         $req->execute();
         return $req->fetchAll(PDO::FETCH_ASSOC);
     }
+    
+     // Méthode pour récupérer les détails d'un livre spécifique par son ID avec les informations de l'utilisateur (pseudo, avatar)
+     public function getBookById($id)
+    {
+        $dbConnection = $this->db->getConnection();
+        $query = "SELECT books.*, users.pseudo, users.avatar, users.id AS user_id
+              FROM books
+              JOIN users ON books.user_id = users.id
+              WHERE books.id = :id";
+        $req = $dbConnection->prepare($query);
+        $req->execute([':id' => $id]);
+        return $req->fetch(PDO::FETCH_ASSOC);
+    }
 
     
     

@@ -97,13 +97,27 @@ class BookController
         // Inclure la vue pour afficher les livres
         //include('views/books/availableBooks.php');
     }
+  
+    // Méthode pour afficher les détails d'un livre spécifique en appelant la méthode getBookById() de BookManager
+   public function singleBook($id = null)
+    {
+        if ($id !== null) {
+            $bookManager = new BookManager();
+            $book = $bookManager->getBookById($id);
+
+            if ($book) {
+                include('views/books/singleBook.php');
+            } else {
+                echo "Livre introuvable.";
+            }
+        } else {
+            echo "Aucun livre sélectionné.";
+        }
+    }
 
     public function editBook()
     {
         include('views/books/editBook.php');
     }
-    public function singleBook()
-    {
-        include('views/books/singleBook.php');
-    }
+   
 }

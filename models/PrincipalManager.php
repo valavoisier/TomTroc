@@ -55,6 +55,24 @@ class PrincipalManager {
         return $req->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    
+    /** Méthode générique pour récupérer un enregistrement par son ID dans une table donnée
+     * $table : nom de la table
+     * $id : identifiant de l'enregistrement
+     */
+    protected function getById($table, $id) {
+        // Requête pour récupérer un enregistrement par son ID
+        $query = "SELECT * FROM $table WHERE id = :id";
+        //stocke la connexion PDO
+        $dbConnection = $this->db->getConnection();
+        // Préparation et exécution de la requête
+        $req = $dbConnection->prepare($query);
+        // Binding du paramètre ID à la valeur fournie 
+        $req->bindParam(':id', $id);
+        // Exécution de la requête
+        $req->execute();
+        // Récupération du résultat sous forme de tableau associatif
+        $result = $req->fetch(PDO::FETCH_ASSOC);
+        return $result;
+    }   
      
 }

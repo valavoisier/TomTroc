@@ -9,8 +9,7 @@
                 </div>
                 <nav class="nav-left">
                     <a href="<?=ROOT?>" class="active">Accueil</a>
-                    <a href="<?=ROOT?>/book/availableBooks">Nos livres à l'échange</a>
-                     <a href="<?=ROOT?>/book/addBook">Ajouter un livre</a>
+                    <a href="<?=ROOT?>/book/availableBooks">Nos livres à l'échange</a>                    
                 </nav>
             </div>
 
