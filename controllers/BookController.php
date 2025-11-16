@@ -3,7 +3,9 @@ class BookController
 {
     public function index()
     {
-        echo "Bonjour BookController";
+          // Redirection vers la page d'accueil
+    header('Location: ' . ROOT );
+    exit;
     }
 
     // Méthode pour afficher le formulaire d'ajout de livre
