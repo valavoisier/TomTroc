@@ -1,41 +1,20 @@
-<?php
+<?php 
 // Autochargement des classes
 require_once './Autoload.php';
 
-class Books
-{
-    private $db;
+class Books extends PrincipalManager {
+    protected $table; // Nom de la table associée au modèle ici 'books'
 
-    public function __construct()
-    {
-        // Initialisation de la connexion à la base de données
-        // instanciation de la classe Database par méthode static getInstance()
-        $this->db = Database::getInstance();
+    public function __construct($table) {
+        parent::__construct(); // Appel du constructeur du modèle principal pour initialiser la connexion DB
+        $this->table = $table; // Initialisation du nom de la table
+    
     }
 
     // Méthode pour enregistrer un livre en BDD
-    public function registerBookBdd($user_id, $title, $author, $description, $image, $status, $created_at, $updated_at)
-    {
-        // Requête d'insertion
-        $query = "INSERT INTO books (user_id, title, author, description, image, status, created_at, updated_at) 
-                  VALUES (:user_id, :title, :author, :description, :image, :status, :created_at, :updated_at)";
-        //stocke la connexion PDO               
-        $dbConnection = $this->db->getConnection();
-        // Préparation et exécution de la requête 
-        $req = $dbConnection->prepare($query);
-        // Liaison des paramètres / values
-        $req->bindParam(':user_id', $user_id);
-        $req->bindParam(':title', $title);
-        $req->bindParam(':author', $author);
-        $req->bindParam(':description', $description);
-        $req->bindParam(':image', $image);
-        $req->bindParam(':status', $status);
-        $req->bindParam(':created_at', $created_at);
-        $req->bindParam(':updated_at', $updated_at);
-        $req->execute();
-        // Retourne le nombre de lignes affectées, opération réussie si > 0 (renvoie true/false)
-        return $req->rowCount() > 0;
+    public function registerBookBdd($data){
+        // Appel de la méthode add() du modèle principal pour insérer les données dans la table
+        return $this->add($this->table, $data);
     }
-
-    
+      
 }
