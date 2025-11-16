@@ -1,12 +1,14 @@
 <?php
 class BookController
 {
-    public function index(){
+    public function index()
+    {
         echo "Bonjour BookController";
     }
 
     // Méthode pour afficher le formulaire d'ajout de livre
-    public function addBook(){
+    public function addBook()
+    {
         include('views/books/addBook.php');
     }
     // Méthode pour traiter le formulaire d'ajout de livre en récupérant les données POST
@@ -78,7 +80,7 @@ class BookController
     }
 
 
-      /*
+    /*
     Méthode pour afficher tous les livres disponibles en appelant la méthode getAllBooks() du modèle Books
     */
     public function availableBooks()
@@ -97,9 +99,32 @@ class BookController
         // Inclure la vue pour afficher les livres
         //include('views/books/availableBooks.php');
     }
-  
+
+    // Méthode pour rechercher un livre par son titre
+    public function search()
+    {
+        if (!empty($_POST['q'])) {
+            $bookManager = new BookManager();
+            $book = $bookManager->getBookByTitle($_POST['q']);
+
+            if ($book) {
+                // Redirection vers la page détail du livre trouvé
+                header('Location: ' . ROOT . '/book/singleBook/' . $book['id']);
+                exit;
+            } else {
+                $books = $bookManager->getAllBooksWithUser(); // récupère tous les livres
+                $message = "Erreur 404- Aucun livre trouvé.";
+                include('views/books/availableBooks.php');
+            }
+        } else {
+            // Si champ vide, retour à la liste
+            header('Location: ' . ROOT . '/book/availableBooks');
+            exit;
+        }
+    }
+
     // Méthode pour afficher les détails d'un livre spécifique en appelant la méthode getBookById() de BookManager
-   public function singleBook($id = null)
+    public function singleBook($id = null)
     {
         if ($id !== null) {
             $bookManager = new BookManager();
@@ -119,5 +144,4 @@ class BookController
     {
         include('views/books/editBook.php');
     }
-   
 }

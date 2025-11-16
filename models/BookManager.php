@@ -22,6 +22,16 @@ remplace la méthode getAll() générique du PrincipalManager qui ne récupérai
         $req->execute();
         return $req->fetchAll(PDO::FETCH_ASSOC);
     }
+    // Méthode pour rechercher un livre par son titre
+    // Retourne uniquement les données de base pour identifier le livre
+    public function getBookByTitle($title)
+    {
+        $dbConnection = $this->db->getConnection();
+        $query = "SELECT * FROM books WHERE title LIKE :title LIMIT 1";
+        $req = $dbConnection->prepare($query);
+        $req->execute([':title' => "%$title%"]);
+        return $req->fetch(PDO::FETCH_ASSOC);
+    }
     
      // Méthode pour récupérer les détails d'un livre spécifique par son ID avec les informations de l'utilisateur (pseudo, avatar)
      public function getBookById($id)
