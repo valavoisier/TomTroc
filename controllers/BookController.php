@@ -3,9 +3,7 @@ class BookController
 {
     public function index()
     {
-          // Redirection vers la page d'accueil
-    header('Location: ' . ROOT );
-    exit;
+        $this->availableBooks();
     }
 
     // Méthode pour afficher le formulaire d'ajout de livre
