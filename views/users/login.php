@@ -8,7 +8,10 @@ ob_start(); ?>
     <div class="login-container">
         <div class="login-form-area">
             <h1 class="login-title">Connexion</h1>
-            <form class="login-form">
+            <?php if (!empty($message)): ?>
+                <p class="error-message"><?= $message ?></p>
+            <?php endif; ?>
+            <form class="login-form" method="POST" action="<?= ROOT ?>/user/login">
                 <div class="form-group">
                     <label for="email">Adresse email</label>
                     <input type="email" id="email" name="email">

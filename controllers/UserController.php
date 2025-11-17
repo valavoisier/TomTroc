@@ -8,10 +8,16 @@ class UserController {
     public function index() {
         include ('views/users/account.php'); 
     }
+    public function account() {
+        include ('views/users/account.php'); 
+    }
 
-     public function publicAccount() {
+    public function publicAccount() {
         include ('views/users/publicAccount.php'); 
     }
+    /*
+    * Méthode pour gérer l'inscription des utilisateurs
+    */
     public function register() {
         // Vérification que le formulaire est soumis
         // superglobale $_SERVER qui contient la méthode HTTP pour envoyer la requête vers le serveur
@@ -80,10 +86,54 @@ class UserController {
             include('views/users/register.php');       
         }
     }
-
+    /*
+    * Méthode pour gérer la connexion des utilisateurs
+    */
     public function login() {
+        // Vérification que le formulaire est soumis 
+        // vérifie si la méthode HTTP utilisée pour accéder à la page = POST
+        // code éxécuté si formulaire validé
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // Validation des champs
+        if (empty($_POST['email']) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+            $message = "Veuillez saisir une adresse email valide.";
+            include('views/users/login.php');
+            return;
+        } elseif (empty($_POST['password'])) {
+            $message = "Veuillez saisir votre mot de passe.";
+            include('views/users/login.php');
+            return;
+        }
+
+        // Nettoyage des données
+        $email    = htmlspecialchars($_POST['email'], ENT_QUOTES, 'UTF-8');
+        $password = $_POST['password'];
+
+        // Recherche de l'utilisateur par email
+        $user = $this->users->findByEmail($email);
+        // Vérification du mot de passe avec password_verify (comparaison avec le hash stocké)
+        if ($user && password_verify($password, $user['password'])) {
+            // Création de la session utilisateur  (inclus id pour les requêtes futures)
+            $_SESSION['user'] = [
+                'id'     => $user['id'],
+                'pseudo' => $user['pseudo'],
+                'email'  => $user['email']
+            ];
+
+            // Redirection vers la page account.php pour les utilisateurs connectés
+            // pour ajouter avatar et autres infos utilisateur
+            header("Location: " . ROOT . "/user/account");
+            exit;
+        } else {
+            // Message d'erreur si email ou mot de passe incorrect
+            $message = "Email ou mot de passe incorrect.";
+            include('views/users/login.php');
+        }
+    } else {
+        // Si le formulaire n'est pas soumis, afficher la page de connexion
         include('views/users/login.php');       
     }
+}
 }
 
    
