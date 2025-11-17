@@ -1,6 +1,5 @@
 <?php
 $pageTitle = "Tous les livres disponibles";
-
 // Démarrage de la mise en tampon de sortie
 ob_start(); ?>
 <section class="available-books">
