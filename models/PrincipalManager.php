@@ -20,6 +20,8 @@ class PrincipalManager {
     protected function add($table, $data) {
         //implode crée chaîne de caractères contenant les clés du tableau $data séparés par des virgules
         $columns = implode(", ", array_keys($data));
+        // Crée une chaîne de caractères des paramètres nommés pour la requête préparée 
+        // ":" évite les injections SQL
         $params = ":" . implode(", :", array_keys($data));
         // Requête d'insertion dynamique
         $query = "INSERT INTO $table ($columns) VALUES ($params)";

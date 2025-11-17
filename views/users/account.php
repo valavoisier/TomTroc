@@ -19,7 +19,8 @@ ob_start(); ?>
                         <img src="<?= ROOT ?>/public/img/nathalire.jpg" alt="Photo de profil">
                     </div>
                     <label for="upload-avatar" class="edit-avatar-link">Modifier</label>
-                    <input type="hidden" id="upload-avatar" class="upload-avatar" accept="image/*">
+                    <input type="hidden" name="MAX_FILE_SIZE" value="10000000">
+                    <input type="file" id="upload-avatar" class="upload-avatar" accept="image/*">
                 </div>
 
                 <!-- Séparateur -->

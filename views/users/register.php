@@ -7,8 +7,11 @@ ob_start(); ?>
 <section class="login">
     <div class="login-container">
         <div class="login-form-area">
+            <?php if (!empty($message)): ?>
+                <p class="error-message"><?= $message ?></p>
+            <?php endif; ?>
             <h1 class="login-title">Inscription</h1>
-            <form class="login-form">
+            <form class="login-form" method="POST" action="<?= ROOT ?>/user/register">
                 <div class="form-group">
                     <label for="email">Pseudo</label>
                     <input type="text" id="pseudo" name="pseudo">
@@ -22,7 +25,7 @@ ob_start(); ?>
                     <input type="password" id="password" name="password">
                 </div>
                 <button type="submit" class="btn-primary login-btn">S'inscrire</button>
-                <p class="register-link">Déjà inscrit ? <a href="<?=ROOT?>/user/login">Connectez-vous</a></p>
+                <p class="register-link">Déjà inscrit ? <a href="<?= ROOT ?>/user/login">Connectez-vous</a></p>
             </form>
         </div>
         <div class="login-image">

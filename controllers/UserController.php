@@ -1,5 +1,10 @@
 <?php
 class UserController {
+    private $users;
+
+    public function __construct() {
+        $this->users = new Users('users');
+    }
     public function index() {
         include ('views/users/account.php'); 
     }
@@ -7,12 +12,78 @@ class UserController {
      public function publicAccount() {
         include ('views/users/publicAccount.php'); 
     }
-
     public function register() {
-        include ('views/users/register.php');       
+        // Vérification que le formulaire est soumis
+        // superglobale $_SERVER qui contient la méthode HTTP pour envoyer la requête vers le serveur
+        // pour vérifier la méthode de la requête actuelle = POST
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Validation des données
+            if (empty($_POST['pseudo']) || !ctype_alpha($_POST['pseudo'])) {
+                $message = "Le pseudo est obligatoire, il doit être composé d'une chaîne de caractères alphabétiques.";
+                include('views/users/register.php');
+                return;
+            } elseif (empty($_POST['email']) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+                $message = "L'email est obligatoire et doit être valide.";
+                include('views/users/register.php');
+                return;
+            } elseif (empty($_POST['password'])) {
+                $message = "Le mot de passe est obligatoire.";
+                include('views/users/register.php');
+                return;
+            }
+            // Vérification de la complexité du mot de passe
+            $passwordPlain = $_POST['password'];
+            $pattern = "/^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{6,}$/";
+
+            if (!preg_match($pattern, $passwordPlain)) {
+                $message = "Le mot de passe doit contenir au moins 6 caractères dont une majuscule, un chiffre et un caractère spécial.";
+                include('views/users/register.php');
+                return;
+            }
+
+            // Nettoyage des données pour éviter XSS
+            $pseudo   = htmlspecialchars($_POST['pseudo'], ENT_QUOTES, 'UTF-8');
+            $email    = htmlspecialchars($_POST['email'], ENT_QUOTES, 'UTF-8');
+            $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+
+            // Vérification si l'email existe déjà
+            //appel de la méthode findByEmail() du modèle UserManager
+            $existingUser = $this->users->findByEmail($email);
+            if ($existingUser) {
+                $message = "Cet email est déjà utilisé.";
+                include('views/users/register.php');
+                return;
+            }
+
+            // Préparation des données à insérer dans la BDD
+            $data = [
+                "pseudo"     => $pseudo,
+                "email"      => $email,
+                "password"   => $password,
+                "created_at" => date("Y-m-d H:i:s")
+            ];
+
+            // Appel de la méthode registerUserBdd() du modèle Users pour enregistrer l'utilisateur
+            $isRegistered = $this->users->registerUserBdd($data);
+
+            if ($isRegistered) {
+                // Redirection vers la page de login
+                header("Location: " . ROOT . "/user/login");
+                exit;
+            } else {
+                // Message d'erreur affiché dans la vue
+                $message = "Erreur lors de l'inscription.";
+                include('views/users/register.php');
+            }
+        } else {
+            // Si le formulaire n'est pas soumis, afficher la page d'inscription
+            include('views/users/register.php');       
+        }
     }
 
-   public function login() {
-        include ('views/users/login.php');       
+    public function login() {
+        include('views/users/login.php');       
     }
 }
+
+   
