@@ -20,6 +20,9 @@ ob_start(); ?>
                 <a href="<?= ROOT ?>/book/singleBook/<?= $book['id'] ?>" class="card-livre-link">
                     <div class="card-livre">
                         <img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($book['image']) ?>" alt="Livre <?= htmlspecialchars($book['title']) ?>" class="book-image">
+                        <?php if (empty($book['status'])): ?>
+                        <span class="not-available">non dispo.</span>
+                        <?php endif; ?>
                         <div class="card-content">
                             <h3 class="book-title"><?= htmlspecialchars($book['title']) ?></h3>
                             <h4 class="book-subtitle"><?= htmlspecialchars($book['author']) ?></h4>
