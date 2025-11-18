@@ -28,8 +28,10 @@ class UserController
         // pour vérifier la méthode de la requête actuelle = POST
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Vérification CSRF
-            if (!isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token']) ||
-                !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+            if (
+                !isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token']) ||
+                !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])
+            ) {
                 $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
                 $message = "Requête invalide (CSRF token incorrect).";
                 include('views/users/register.php');
@@ -110,8 +112,10 @@ class UserController
         // code éxécuté si formulaire validé
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Vérification CSRF
-            if (!isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token']) ||
-                !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+            if (
+                !isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token']) ||
+                !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])
+            ) {
                 $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
                 $message = "Requête invalide (CSRF token incorrect).";
                 include('views/users/login.php');
