@@ -7,13 +7,11 @@ class UserController
     {
         $this->users = new Users('users');
     }
+
     public function index()
     {
-        include('views/users/account.php');
-    }
-    public function account()
-    {
-        include('views/users/account.php');
+        // Redirection vers la méthode account pour éviter la duplication de code
+        $this->account();
     }
 
     public function publicAccount()
