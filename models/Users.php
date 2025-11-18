@@ -20,5 +20,12 @@ class Users extends UserManager {
         return $this->add($this->table, $data);
     }
 
+    /*
+    * Méthode pour mettre à jour les informations de l'utilisateur dans la BDD
+    */
+    public function updateUserInfo($id, $data) {
+    return $this->update($this->table, $data, $id);
+    }
+
       
 }

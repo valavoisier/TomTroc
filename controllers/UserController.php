@@ -176,4 +176,41 @@ class UserController
     header("Location: " . ROOT . "/user/login");
     exit;
 }
+    /*
+* Méthode pour mettre à jour les informations de l'utilisateur dans son compte
+*/
+    public function updateInfo()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $email    = trim($_POST['email']);
+            $pseudo   = trim($_POST['pseudo']);
+            $password = trim($_POST['password']);
+
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $message = "Email invalide.";
+                include('views/users/account.php');
+                return;
+            }
+
+            $data = [
+                "email"  => htmlspecialchars($email, ENT_QUOTES, 'UTF-8'),
+                "pseudo" => htmlspecialchars($pseudo, ENT_QUOTES, 'UTF-8'),
+                "updated_at" => date("Y-m-d H:i:s")
+            ];
+
+            if (!empty($password)) {
+                $data["password"] = password_hash($password, PASSWORD_DEFAULT);
+            }
+
+            $id = $_SESSION['user']['id'];
+            $this->users->updateUserInfo($id, $data);
+
+            // Mise à jour session
+            $_SESSION['user']['email']  = $data["email"];
+            $_SESSION['user']['pseudo'] = $data["pseudo"];
+
+            header("Location: " . ROOT . "/user/account");
+            exit;
+        }
+    }
 }

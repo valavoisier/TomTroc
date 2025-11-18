@@ -76,5 +76,36 @@ class PrincipalManager {
         $result = $req->fetch(PDO::FETCH_ASSOC);
         return $result;
     }   
+    /**
+ * Méthode générique pour mettre à jour un enregistrement dans une table donnée
+ * @param string $table : nom de la table
+ * @param array $data : tableau associatif colonnes => valeurs
+ * @param int $id : identifiant de l'enregistrement à mettre à jour
+ * @return bool : true si la mise à jour a réussi, false sinon
+ */
+protected function update($table, $data, $id) {
+    // Construction dynamique de la clause SET
+    $set = [];
+    foreach ($data as $key => $value) {
+        $set[] = "$key = :$key";
+    }
+    $setString = implode(", ", $set);
+
+    // Requête SQL
+    $query = "UPDATE $table SET $setString WHERE id = :id";
+
+    // Connexion PDO
+    $dbConnection = $this->db->getConnection();
+    $req = $dbConnection->prepare($query);
+
+    // Liaison des paramètres
+    foreach ($data as $key => &$value) {
+        $req->bindParam(":$key", $value);
+    }
+    $req->bindParam(":id", $id, PDO::PARAM_INT);
+
+    // Exécution
+    return $req->execute();
+}  
      
 }
