@@ -20,4 +20,10 @@ class Books extends BookManager {
         return $this->add($this->table, $data);
     }
       
+    // Méthode pour mettre à jour un livre en BDD
+    public function updateBookBdd($id, $data) {
+        // Appel de la méthode update() du PrincipalManager
+        return $this->update($this->table, $data, $id);
+    }
+      
 }

@@ -33,21 +33,21 @@ ob_start(); ?>
                 <div class="edit-right">
                     <div class="form-group">
                         <label for="title">Titre</label>
-                        <input type="text" id="title" name="title">
+                        <input type="text" id="title" name="title" value="<?= htmlspecialchars($book['title']) ?>">
                     </div>
                     <div class="form-group">
                         <label for="author">Auteur</label>
-                        <input type="text" id="author" name="author">
+                        <input type="text" id="author" name="author" value="<?= htmlspecialchars($book['author']) ?>">
                     </div>
                     <div class="form-group">
                         <label for="description">Commentaire</label>
-                        <textarea id="description" name="description" rows="5"></textarea>
+                        <textarea id="description" name="description" rows="5"><?= htmlspecialchars($book['description']) ?></textarea>
                     </div>
                     <div class="form-group">
                         <label for="status">Disponibilité</label>
                         <select id="status" name="status">
-                            <option value="disponible">Disponible</option>
-                            <option value="non-dispo.">Non disponible</option>
+                            <option value="1" <?= $book['status'] == 1 ? 'selected' : '' ?>>Disponible</option>
+                            <option value="0" <?= $book['status'] == 0 ? 'selected' : '' ?>>Non disponible</option>
                         </select>
                     </div>
                     <button type="submit" class="btn-primary validate-btn">Valider</button>

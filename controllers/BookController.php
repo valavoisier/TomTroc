@@ -140,8 +140,85 @@ class BookController
         }
     }
 
-    public function editBook()
+    public function editBook($id = null)
     {
+        // Si GET : afficher le formulaire avec les données du livre
+        if ($_SERVER['REQUEST_METHOD'] === 'GET' && $id !== null) {
+            $bookManager = new BookManager();
+            $book = $bookManager->getBookById($id);
+            
+            if ($book) {
+                include('views/books/editBook.php');
+            } else {
+                echo "Livre introuvable.";
+            }
+        }
+        // Si POST : traiter la modification du livre
+        elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && $id !== null) {
+            // Validation des données
+            if (empty($_POST['title'])) {
+                $message = "Le titre est obligatoire.";
+                $bookManager = new BookManager();
+                $book = $bookManager->getBookById($id);
+                include('views/books/editBook.php');
+                return;
+            } elseif (empty($_POST['author'])) {
+                $message = "L'auteur est obligatoire.";
+                $bookManager = new BookManager();
+                $book = $bookManager->getBookById($id);
+                include('views/books/editBook.php');
+                return;
+            } elseif (empty($_POST['description'])) {
+                $message = "La description est obligatoire.";
+                $bookManager = new BookManager();
+                $book = $bookManager->getBookById($id);
+                include('views/books/editBook.php');
+                return;
+            }
+
+            // Préparation des données à mettre à jour
+            $data = [
+                'title' => htmlspecialchars($_POST['title'], ENT_QUOTES, 'UTF-8'),
+                'author' => htmlspecialchars($_POST['author'], ENT_QUOTES, 'UTF-8'),
+                'description' => htmlspecialchars($_POST['description'], ENT_QUOTES, 'UTF-8'),
+                'status' => isset($_POST['status']) ? (int)$_POST['status'] : 1,
+                'updated_at' => date('Y-m-d H:i:s')
+            ];
+
+            // Gestion de l'image si une nouvelle est uploadée
+            if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+                if (preg_match("#jpeg|jpg|png#", $_FILES['image']['type'])) {
+                    // Supprimer l'ancienne image
+                    $bookManager = new BookManager();
+                    $oldBook = $bookManager->getBookById($id);
+                    if ($oldBook && file_exists('public/img/' . $oldBook['image'])) {
+                        unlink('public/img/' . $oldBook['image']);
+                    }
+
+                    // Uploader la nouvelle image
+                    $dateHour = date('YmdHHis');
+                    $image = $dateHour . '_' . $_FILES['image']['name'];
+                    $path = "public/img/";
+                    move_uploaded_file($_FILES['image']['tmp_name'], $path . $image);
+                    $data['image'] = $image;
+                }
+            }
+
+            // Instanciation du modèle et mise à jour
+            $booksModel = new Books('books');
+            $isUpdated = $booksModel->updateBookBdd($id, $data);
+
+            if ($isUpdated) {
+                header('Location: ' . ROOT . '/user/account');
+                exit;
+            } else {
+                $message = "Erreur lors de la modification du livre.";
+                $bookManager = new BookManager();
+                $book = $bookManager->getBookById($id);
         include('views/books/editBook.php');
+            }
+        } else {
+            echo "Requête invalide.";
+        }
     }
 }
