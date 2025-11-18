@@ -14,7 +14,9 @@ class Users extends UserManager {
     
     }
 
-    // Méthode pour enregistrer un utilisateur en BDD
+    /*
+    * Méthode pour enregistrer un utilisateur en BDD
+    */
     public function registerUserBdd($data){
         // Appel de la méthode add() du modèle principal pour insérer les données dans la table
         return $this->add($this->table, $data);
