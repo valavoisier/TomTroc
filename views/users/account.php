@@ -30,13 +30,13 @@ ob_start(); ?>
 
                 <!-- Bloc identité complet -->
                 <div class="identity-block">
-                    <p class="pseudo">nathalire</p>
-                    <p class="member-since">Membre depuis 1 an</p>
+                    <p class="pseudo"><?= htmlspecialchars($_SESSION['user']['pseudo'] ?? '') ?></p>
+                    <p class="member-since"><?= $memberSince ?></p>
                     <div class="library-block">
                         <p class="library-label">BIBLIOTHÈQUE</p>
                         <div class="library-info">
                             <img src="<?= ROOT ?>/public/img/livres.svg" alt="Livres" class="library-icon">
-                            <p class="library-count">4 livres</p>
+                            <p class="library-count"><?= $bookCount ?> livres</p>
                         </div>
                     </div>
                 </div>

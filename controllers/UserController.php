@@ -278,4 +278,31 @@ class UserController
             exit;
         }
     }
+
+    public function account(){
+        // Vérifier que l'utilisateur est connecté
+        if (!isset($_SESSION['user']['id'])) {
+            header("Location: " . ROOT . "/user/login");
+            exit;
+        }
+
+        // Instancier BookManager et récupérer le nombre de livres
+        $bookManager = new BookManager();
+        $bookCount = $bookManager->countBooksByUser($_SESSION['user']['id']);
+
+        // Calcul "Membre depuis"
+        $createdAt = new DateTime($_SESSION['user']['created_at']);
+        $now = new DateTime();
+        $interval = $createdAt->diff($now);
+        $memberSince = $interval->y > 0 
+            ? "Membre depuis {$interval->y} an" . ($interval->y > 1 ? "s" : "")
+            : "Membre depuis moins d'un an";
+
+        // Récupérer tous les livres de l'utilisateur
+        $userBooks = $bookManager->getBooksByUserId($_SESSION['user']['id']);
+
+        // Inclure la vue avec les variables disponibles
+        include('views/users/account.php');
+    }
+
 }

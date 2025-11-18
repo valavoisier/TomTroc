@@ -60,6 +60,31 @@ remplace la méthode getAll() générique du PrincipalManager qui ne récupérai
     return $req->fetchAll(PDO::FETCH_ASSOC);
 }
 
+    /*
+    * Méthode pour compter le nombre de livres ajoutés par un utilisateur spécifique
+    */
+    public function countBooksByUser($userId) {
+        $query = "SELECT COUNT(*) as total FROM books WHERE user_id = :id";
+        $dbConnection = $this->db->getConnection();
+        $req = $dbConnection->prepare($query);
+        $req->bindParam(':id', $userId, PDO::PARAM_INT);
+        $req->execute();
+        return $req->fetch(PDO::FETCH_ASSOC)['total'];
+    }
+
+    /*
+    * Méthode pour récupérer tous les livres d'un utilisateur spécifique
+    */
+    public function getBooksByUserId($userId) {
+        $dbConnection = $this->db->getConnection();
+        $query = "SELECT * FROM books WHERE user_id = :id ORDER BY created_at DESC";
+        $req = $dbConnection->prepare($query);
+        $req->bindParam(':id', $userId, PDO::PARAM_INT);
+        $req->execute();
+        return $req->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
     
     
 
