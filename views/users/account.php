@@ -14,14 +14,16 @@ ob_start(); ?>
             <!-- Colonne gauche -->
             <div class="account-left">
                 <!-- Bloc image + modifier -->
+                <form method="POST" action="<?= ROOT ?>/user/updateAvatar" enctype="multipart/form-data" id="avatar-form">
                 <div class="avatar-block">
                     <div class="avatar-wrapper">
-                        <img src="<?= ROOT ?>/public/img/nathalire.jpg" alt="Photo de profil">
+                            <img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($_SESSION['user']['avatar'] ?? 'user.png') ?>" alt="Photo de profil">
                     </div>
                     <label for="upload-avatar" class="edit-avatar-link">Modifier</label>
                     <input type="hidden" name="MAX_FILE_SIZE" value="10000000">
-                    <input type="file" id="upload-avatar" class="upload-avatar" accept="image/*">
+                        <input type="file" id="upload-avatar" class="upload-avatar" accept="image/*" name="avatar" onchange="if(confirm('Voulez-vous enregistrer cette nouvelle photo ?')) { document.getElementById('avatar-form').submit(); }">
                 </div>
+                </form>
 
                 <!-- Séparateur -->
                 <div class="separator-line"></div>

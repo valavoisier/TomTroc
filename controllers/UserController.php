@@ -213,4 +213,69 @@ class UserController
             exit;
         }
     }
+
+    /*
+    * Méthode pour mettre à jour l'avatar de l'utilisateur
+    */
+    public function updateAvatar()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Vérifier que l'utilisateur est connecté
+            if (!isset($_SESSION['user']['id'])) {
+                header("Location: " . ROOT . "/user/login");
+                exit;
+            }
+
+            // Vérifier qu'un fichier a été uploadé
+            if (isset($_FILES['avatar']) && $_FILES['avatar']['error'] === UPLOAD_ERR_OK) {
+                $file = $_FILES['avatar'];
+                $allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
+                
+                // Vérification du type de fichier
+                if (!in_array($file['type'], $allowedTypes)) {
+                    $_SESSION['error'] = "Format de fichier non autorisé. Utilisez JPG, PNG ou GIF.";
+                    header("Location: " . ROOT . "/user/account");
+                    exit;
+                }
+
+                // Vérification de la taille (max 10Mo)
+                if ($file['size'] > 10000000) {
+                    $_SESSION['error'] = "Le fichier est trop volumineux (max 10Mo).";
+                    header("Location: " . ROOT . "/user/account");
+                    exit;
+                }
+
+                // Générer un nom unique pour le fichier
+                $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+                $newFileName = 'avatar_' . $_SESSION['user']['id'] . '_' . time() . '.' . $extension;
+                $uploadPath = 'public/img/' . $newFileName;
+
+                // Déplacer le fichier uploadé
+                if (move_uploaded_file($file['tmp_name'], $uploadPath)) {
+                    // Supprimer l'ancien avatar s'il existe et n'est pas l'avatar par défaut
+                    if (isset($_SESSION['user']['avatar']) && 
+                        $_SESSION['user']['avatar'] !== 'user.png' && 
+                        file_exists('public/img/' . $_SESSION['user']['avatar'])) {
+                        unlink('public/img/' . $_SESSION['user']['avatar']);
+                    }
+
+                    // Mettre à jour en BDD
+                    $data = [
+                        "avatar" => $newFileName,
+                        "updated_at" => date("Y-m-d H:i:s")
+                    ];
+                    $this->users->updateUserInfo($_SESSION['user']['id'], $data);
+
+                    // Mettre à jour la session
+                    $_SESSION['user']['avatar'] = $newFileName;
+                    $_SESSION['success'] = "Avatar mis à jour avec succès !";
+                } else {
+                    $_SESSION['error'] = "Erreur lors du téléchargement du fichier.";
+                }
+            }
+
+            header("Location: " . ROOT . "/user/account");
+            exit;
+        }
+    }
 }
