@@ -138,15 +138,16 @@ class UserController
             $user = $this->users->findByEmail($email);
             // Vérification du mot de passe avec password_verify (comparaison avec le hash stocké)
             if ($user && password_verify($password, $user['password'])) {
-                // Création de la session utilisateur  (inclus id pour les requêtes futures)
+                // Création de la session utilisateur avec toutes les infos nécessaires
                 $_SESSION['user'] = [
-                    'id'     => $user['id'],
-                    'pseudo' => $user['pseudo'],
-                    'email'  => $user['email']
+                    'id'         => $user['id'],
+                    'pseudo'     => $user['pseudo'],
+                    'email'      => $user['email'],
+                    'avatar'     => $user['avatar'],
+                    'created_at' => $user['created_at']
                 ];
 
-                // Redirection vers la page account.php pour les utilisateurs connectés
-                // pour ajouter avatar et autres infos utilisateur
+                // Redirection vers la page account.php
                 header("Location: " . ROOT . "/user/account");
                 exit;
             } else {
