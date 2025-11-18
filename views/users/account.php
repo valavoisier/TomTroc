@@ -45,25 +45,28 @@ ob_start(); ?>
             <div class="account-right">
                 <h2 class="personal-title">Vos informations personnelles</h2>
 
-                <form class="account-form">
+                <form class="account-form" method="POST" action="<?= ROOT ?>/user/updateInfo">
                     <div class="form-group">
                         <label for="email">Adresse email</label>
-                        <input type="email" id="email" name="email">
+                        <input type="email" id="email" name="email"
+                            value="<?= htmlspecialchars($_SESSION['user']['email'] ?? '') ?>">
                     </div>
 
                     <div class="form-group">
                         <label for="password">Mot de passe</label>
-                        <input type="password" id="password" name="password">
+                        <input type="password" id="password" name="password" placeholder="••••••••">
                     </div>
 
                     <div class="form-group">
                         <label for="pseudo">Pseudo</label>
-                        <input type="text" id="pseudo" name="pseudo">
+                        <input type="text" id="pseudo" name="pseudo"
+                            value="<?= htmlspecialchars($_SESSION['user']['pseudo'] ?? '') ?>">
                     </div>
 
                     <button type="submit" class="btn-account">Enregistrer</button>
                 </form>
             </div>
+
         </div>
         <div class="table-container">
             <table class="book-table">
