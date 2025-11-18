@@ -33,7 +33,9 @@ remplace la méthode getAll() générique du PrincipalManager qui ne récupérai
         return $req->fetch(PDO::FETCH_ASSOC);
     }
     
-     // Méthode pour récupérer les détails d'un livre spécifique par son ID avec les informations de l'utilisateur (pseudo, avatar)
+     /*
+     * Méthode pour récupérer les détails d'un livre spécifique par son ID avec les informations de l'utilisateur (pseudo, avatar)
+     */
      public function getBookById($id)
     {
         $dbConnection = $this->db->getConnection();
@@ -46,7 +48,9 @@ remplace la méthode getAll() générique du PrincipalManager qui ne récupérai
         return $req->fetch(PDO::FETCH_ASSOC);
     }
 
-    // Méthode pour récupérer les 4 derniers livres ajoutés avec les informations de l'utilisateur (pseudo, avatar)
+    /*
+    * Méthode pour récupérer les 4 derniers livres ajoutés avec les informations de l'utilisateur (pseudo, avatar)
+    */
      public function getLastBooks($limit = 4){
     $dbConnection = $this->db->getConnection();
     $query = "SELECT books.*, users.pseudo, users.avatar, users.id AS user_id
