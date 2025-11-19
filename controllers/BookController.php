@@ -146,7 +146,7 @@ class BookController
         if ($_SERVER['REQUEST_METHOD'] === 'GET' && $id !== null) {
             $bookManager = new BookManager();
             $book = $bookManager->getBookById($id);
-            
+
             if ($book) {
                 include('views/books/editBook.php');
             } else {
@@ -178,9 +178,9 @@ class BookController
 
             // Préparation des données à mettre à jour
             $data = [
-                'title' => htmlspecialchars($_POST['title'], ENT_QUOTES, 'UTF-8'),
-                'author' => htmlspecialchars($_POST['author'], ENT_QUOTES, 'UTF-8'),
-                'description' => htmlspecialchars($_POST['description'], ENT_QUOTES, 'UTF-8'),
+                'title' => $_POST['title'],
+                'author' => $_POST['author'],
+                'description' => $_POST['description'],
                 'status' => isset($_POST['status']) ? (int)$_POST['status'] : 1,
                 'updated_at' => date('Y-m-d H:i:s')
             ];
