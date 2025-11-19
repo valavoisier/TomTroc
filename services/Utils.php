@@ -29,4 +29,14 @@ class Utils{
     {
         return "onchange=\"if(confirm('$message')) { document.getElementById('$formId').submit(); }\"";
     }
+
+    /**
+     * Cette méthode retourne le code js pour afficher un aperçu d'image et soumettre le formulaire après confirmation.
+     * @param string $imagePreviewId : l'ID de l'élément img où afficher l'aperçu.
+     * @return string : le code js à insérer dans l'input file.
+     */
+    public static function previewImage(string $imagePreviewId): string
+    {
+        return "onchange=\"const file = event.target.files[0]; if (file) { const reader = new FileReader(); reader.onload = function(e) { document.getElementById('$imagePreviewId').src = e.target.result; }; reader.readAsDataURL(file); }\"";
+    }
 }

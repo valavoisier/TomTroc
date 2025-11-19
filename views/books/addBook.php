@@ -19,18 +19,17 @@ ob_start(); ?>
         <!-- Bloc principal blanc -->
         <div class="edit-content-box">
            
-            <form action="<?= ROOT ?>/book/registerBook" method="POST" enctype="multipart/form-data" class="edit-form">
+            <form action="<?= ROOT ?>/book/registerBook" method="POST" enctype="multipart/form-data" class="edit-form" id="add-book-form">
 
                 <!-- Partie gauche -->
                 <div class="edit-left">
                     <p class="section-label">Photos</p>
                     <div class="book-image-wrapper">
-                        <img src="<?= ROOT ?>/public/img/edit-book.jpg" alt="The Kinfolk Table">
+                        <img src="<?= ROOT ?>/public/img/edit-book.jpg" alt="Aperçu du livre" id="preview-image">
                     </div>
                     <label for="upload-book-image" class="edit-photo-link">Modifier la photo</label>
                     <input type="hidden" name="MAX_FILE_SIZE" value="10000000">
-                    <input type="file" name="image" id="upload-book-image" class="upload-book-image" accept="image/*" <?= Utils::askConfirmationOnChange('Voulez-vous enregistrer cette nouvelle photo ?', 'add-book-form') ?>>
-
+                    <input type="file" name="image" id="upload-book-image" class="upload-book-image" accept="image/*" <?= Utils::previewImage('preview-image') ?>>
 
 
                 </div>
