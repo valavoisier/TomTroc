@@ -7,14 +7,14 @@ ob_start(); ?>
 <section class="edit-book">
     <div class="edit-book-container">
         <!-- Lien retour -->
-        <a href="<?= ROOT ?>/book/availableBooks" class="back-link">← Retour</a>
+        <a href="<?= ROOT ?>/user/account" class="back-link">← Retour</a>
 
         <!-- Titre principal -->
         <h1 class="edit-title">Modifier les informations</h1>
 
         <!-- Bloc principal blanc -->
         <div class="edit-content-box">
-            <form action="<?= ROOT ?>/book/editBook/<?= $book['id'] ?>" method="POST" enctype="multipart/form-data" class="edit-form">
+            <form action="<?= ROOT ?>/book/editBook/<?= $book['id'] ?>" method="POST" enctype="multipart/form-data" class="edit-form" id="edit-book-form">
 
                 <!-- Partie gauche -->
                 <div class="edit-left">
@@ -22,9 +22,9 @@ ob_start(); ?>
                     <div class="book-image-wrapper">
                         <img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($book['image']) ?>" alt="<?= htmlspecialchars($book['title']) ?>">
                     </div>
-
+                    <label for="upload-book-image" class="edit-photo-link">Modifier la photo</label>
                     <input type="hidden" name="MAX_FILE_SIZE" value="10000000">
-                    <input type="file" name="image" id="image" accept="image/*">
+                    <input type="file" name="image" id="upload-book-image" class="upload-book-image" accept="image/*" onchange="if(confirm('Voulez-vous enregistrer cette nouvelle photo ?')) { document.getElementById('edit-book-form').submit(); }">
 
 
                 </div>

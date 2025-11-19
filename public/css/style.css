@@ -963,16 +963,15 @@ footer{
   font-size: 12px;
   font-weight: 400;
   color: #292929;
-  margin-top: 20px;
-  display: inline-block;
-  margin-left: auto;
+  text-decoration: underline;
+  cursor: pointer;
+  display: block;
+  text-align: right;
+  margin-top: 15px;
 }
 
-.upload-photo {
-  margin-top: 10px;
-  font-size: 14px;
-  font-family: "Inter", sans-serif;
-  color: #292929;
+.upload-book-image {
+  display: none;
 }
 
 /* Partie droite */
