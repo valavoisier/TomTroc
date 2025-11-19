@@ -24,7 +24,7 @@ ob_start(); ?>
                     </div>
                     <label for="upload-book-image" class="edit-photo-link">Modifier la photo</label>
                     <input type="hidden" name="MAX_FILE_SIZE" value="10000000">
-                    <input type="file" name="image" id="upload-book-image" class="upload-book-image" accept="image/*" onchange="if(confirm('Voulez-vous enregistrer cette nouvelle photo ?')) { document.getElementById('edit-book-form').submit(); }">
+                    <input type="file" name="image" id="upload-book-image" class="upload-book-image" accept="image/*" <?= Utils::askConfirmationOnChange('Voulez-vous enregistrer cette nouvelle photo ?', 'edit-book-form') ?>>
 
 
                 </div>

@@ -17,4 +17,16 @@ class Utils{
     {
         return "onclick=\"return confirm('$message');\"";
     }
+
+    /**
+     * Cette méthode retourne le code js à insérer en attribut d'un input file.
+     * pour ouvrir une popup "confirm" et soumettre le formulaire si l'utilisateur clique sur "ok".
+     * @param string $message : le message à afficher dans la popup.
+     * @param string $formId : l'ID du formulaire à soumettre.
+     * @return string : le code js à insérer dans l'input.
+     */
+    public static function askConfirmationOnChange(string $message, string $formId): string
+    {
+        return "onchange=\"if(confirm('$message')) { document.getElementById('$formId').submit(); }\"";
+    }
 }

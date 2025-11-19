@@ -21,7 +21,7 @@ ob_start(); ?>
                         </div>
                         <label for="upload-avatar" class="edit-avatar-link">Modifier</label>
                         <input type="hidden" name="MAX_FILE_SIZE" value="10000000">
-                        <input type="file" id="upload-avatar" class="upload-avatar" accept="image/*" name="avatar" onchange="if(confirm('Voulez-vous enregistrer cette nouvelle photo ?')) { document.getElementById('avatar-form').submit(); }">
+                        <input type="file" id="upload-avatar" class="upload-avatar" accept="image/*" name="avatar" <?= Utils::askConfirmationOnChange('Voulez-vous enregistrer cette nouvelle photo ?', 'avatar-form') ?>>
                     </div>
                 </form>
 
@@ -99,7 +99,7 @@ ob_start(); ?>
                                 </td>
                                 <td>
                                     <a href="<?= ROOT ?>/book/editBook/<?= $book['id'] ?>" class="edit-link">Éditer</a>
-                                    <a href="<?= ROOT ?>/book/deleteBook/<?= $book['id'] ?>" class="delete-link" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce livre ?')">Supprimer</a>
+                                    <a href="<?= ROOT ?>/book/deleteBook/<?= $book['id'] ?>" class="delete-link" <?= Utils::askConfirmation('Êtes-vous sûr de vouloir supprimer ce livre ?') ?>>Supprimer</a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
