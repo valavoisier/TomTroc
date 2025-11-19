@@ -31,6 +31,7 @@ class Autoload {
             'views/',
             'core/',
             'core/db/',
+            'services/',
             '/'
         ];
         // On parcourt le tableau des répertoires
