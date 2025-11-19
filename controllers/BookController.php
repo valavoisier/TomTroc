@@ -19,6 +19,12 @@ class BookController
         // superglobale $_SERVER qui contient la méthode HTTP pour envoyer la requête vers le serveur
         // pour vérifier la méthode de la requête actuelle = POST
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Vérifier que l'utilisateur est connecté
+            if (!isset($_SESSION['user']['id'])) {
+                header('Location: ' . ROOT . '/user/login');
+                exit;
+            }
+
             // Validation des données du formulaire
             if (empty($_POST['title'])) {
                 $message = "Le titre est obligatoire.";
@@ -40,11 +46,11 @@ class BookController
                 // Préparation des données à insérer dans la BDD
                 // Tableau associatif des données du livre / récupération données du formulaire
                 $data = [
-                    'user_id' => $_POST['user_id'],
+                    'user_id' => $_SESSION['user']['id'],
                     'title' => $_POST['title'],
                     'author' => $_POST['author'],
                     'description' => $_POST['description'],
-                    'status' => $_POST['status'],
+                    'status' => 1, // Par défaut disponible
                     'created_at' => date('Y-m-d H:i:s'),
                     'updated_at' => date('Y-m-d H:i:s')
 
@@ -67,7 +73,7 @@ class BookController
                     // message de succès ou redirection
                     //echo "Livre enregistré avec succès.";
                     //redirection vers la liste des livres disponibles
-                    header('Location: ' . ROOT . '/book/availableBooks');
+                    header('Location: ' . ROOT . '/user/account');
                 } else {
                     // Message d'erreur
                     $message = "Erreur lors de l'enregistrement du livre.";
