@@ -13,20 +13,20 @@ ob_start(); ?>
                 <!-- Bloc image -->
                 <div class="avatar-block">
                     <div class="avatar-wrapper">
-                        <img src="img/nathalire.jpg" alt="Photo de profil">
+                        <img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($user['avatar'] ?? 'user.png') ?>" alt="Photo de profil">
                     </div>
                 </div>
                 <!-- Séparateur -->
                 <div class="separator-line"></div>
                 <!-- Bloc identité complet -->
                 <div class="identity-block">
-                    <p class="pseudo">nathalire</p>
-                    <p class="member-since">Membre depuis 1 an</p>
+                    <p class="pseudo"><?= htmlspecialchars($user['pseudo']) ?></p>
+                    <p class="member-since"><?= $memberSince ?></p>
                     <div class="library-block">
                         <p class="library-label">BIBLIOTHÈQUE</p>
                         <div class="library-info">
-                            <img src="img/livres.svg" alt="Livres" class="library-icon">
-                            <p class="library-count">4 livres</p>
+                            <img src="<?= ROOT ?>/public/img/livres.svg" alt="Livres" class="library-icon">
+                            <p class="library-count"><?= $bookCount ?> livres</p>
                         </div>
                     </div>
                 </div>
@@ -44,71 +44,25 @@ ob_start(); ?>
                             <th>DESCRIPTION</th>
                         </tr>
                     </thead>
-                    <tbody> <!-- Ligne 1 -->
+                    <tbody> <!-- Ligne -->                
+                       <?php if (!empty($userBooks)): ?>
+                        <?php foreach ($userBooks as $index => $book): ?>
+                            <tr <?= ($index === count($userBooks) - 1) ? 'class="last-row"' : '' ?>>
+                                <td><img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($book['image'] ?? 'default-book.jpg') ?>" alt="<?= htmlspecialchars($book['title']) ?>"></td>
+                                <td><?= htmlspecialchars($book['title']) ?></td>
+                                <td><?= htmlspecialchars($book['author']) ?></td>
+                                <td class="description">
+                                    <?= htmlspecialchars($book['description']) ?>
+                                </td>                               
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
                         <tr>
-                            <td><img src="img/kinfolk_table.jpg" alt="Kinfolk Table"></td>
-                            <td>The Kinfolk Table</td>
-                            <td>Nathan Williams</td>
-                            <td class="description"> J'ai récemment plongé dans les pages de 'The Kinfolk Table'
-                                et j'ai été enchanté par cette œuvre captivante. Ce livre va bien au-delà d'une
-                                simple collection de recettes ; il célèbre l'art de partager des moments
-                                authentiques autour de la table. Les photographies magnifiques et le ton
-                                chaleureux captivent dès le départ, transportant le lecteur dans un voyage à
-                                travers des recettes et des histoires qui mettent en avant la beauté de la
-                                simplicité et de la convivialité. Chaque page est une invitation à ralentir, à
-                                savourer et à créer des souvenirs durables avec les êtres chers. 'The Kinfolk
-                                Table' incarne parfaitement l'esprit de la cuisine et de la camaraderie, et il
-                                est certain que ce livre trouvera une place spéciale dans le cœur de tout
-                                amoureux de la cuisine et des rencontres inspirantes. </td>
-                        </tr> <!-- Ligne 2 -->
-                        <tr>
-                            <td><img src="img/kinfolk_table.jpg" alt="Kinfolk Table"></td>
-                            <td>The Kinfolk Table</td>
-                            <td>Nathan Williams</td>
-                            <td class="description"> J'ai récemment plongé dans les pages de 'The Kinfolk Table'
-                                et j'ai été enchanté par cette œuvre captivante. Ce livre va bien au-delà d'une
-                                simple collection de recettes ; il célèbre l'art de partager des moments
-                                authentiques autour de la table. Les photographies magnifiques et le ton
-                                chaleureux captivent dès le départ, transportant le lecteur dans un voyage à
-                                travers des recettes et des histoires qui mettent en avant la beauté de la
-                                simplicité et de la convivialité. Chaque page est une invitation à ralentir, à
-                                savourer et à créer des souvenirs durables avec les êtres chers. 'The Kinfolk
-                                Table' incarne parfaitement l'esprit de la cuisine et de la camaraderie, et il
-                                est certain que ce livre trouvera une place spéciale dans le cœur de tout
-                                amoureux de la cuisine et des rencontres inspirantes. </td>
-                        </tr> <!-- Ligne 3 -->
-                        <tr>
-                            <td><img src="img/kinfolk_table.jpg" alt="Kinfolk Table"></td>
-                            <td>The Kinfolk Table</td>
-                            <td>Nathan Williams</td>
-                            <td class="description"> J'ai récemment plongé dans les pages de 'The Kinfolk Table'
-                                et j'ai été enchanté par cette œuvre captivante. Ce livre va bien au-delà d'une
-                                simple collection de recettes ; il célèbre l'art de partager des moments
-                                authentiques autour de la table. Les photographies magnifiques et le ton
-                                chaleureux captivent dès le départ, transportant le lecteur dans un voyage à
-                                travers des recettes et des histoires qui mettent en avant la beauté de la
-                                simplicité et de la convivialité. Chaque page est une invitation à ralentir, à
-                                savourer et à créer des souvenirs durables avec les êtres chers. 'The Kinfolk
-                                Table' incarne parfaitement l'esprit de la cuisine et de la camaraderie, et il
-                                est certain que ce livre trouvera une place spéciale dans le cœur de tout
-                                amoureux de la cuisine et des rencontres inspirantes. </td>
-                        </tr> <!-- Ligne 4 (avec radius bas) -->
-                        <tr class="last-row">
-                            <td><img src="img/kinfolk_table.jpg" alt="Kinfolk Table"></td>
-                            <td>The Kinfolk Table</td>
-                            <td>Nathan Williams</td>
-                            <td class="description"> J'ai récemment plongé dans les pages de 'The Kinfolk Table'
-                                et j'ai été enchanté par cette œuvre captivante. Ce livre va bien au-delà d'une
-                                simple collection de recettes ; il célèbre l'art de partager des moments
-                                authentiques autour de la table. Les photographies magnifiques et le ton
-                                chaleureux captivent dès le départ, transportant le lecteur dans un voyage à
-                                travers des recettes et des histoires qui mettent en avant la beauté de la
-                                simplicité et de la convivialité. Chaque page est une invitation à ralentir, à
-                                savourer et à créer des souvenirs durables avec les êtres chers. 'The Kinfolk
-                                Table' incarne parfaitement l'esprit de la cuisine et de la camaraderie, et il
-                                est certain que ce livre trouvera une place spéciale dans le cœur de tout
-                                amoureux de la cuisine et des rencontres inspirantes. </td>
+                            <td colspan="6" style="text-align: center; padding: 20px;">
+                                Cet utilisateur ne propose pas de livres actuellement.
+                            </td>
                         </tr>
+                    <?php endif; ?>
                     </tbody>
                 </table>
             </div>

@@ -24,7 +24,7 @@ ob_start(); ?>
                 <h3 class="section-title">PROPRIÉTAIRE</h3>
 
                 <!-- Lien vers le compte du propriétaire -->
-                <a href="#" class="owner-profile-link">
+                <a href="<?= ROOT ?>/user/publicAccount/<?= $book['user_id'] ?>" class="owner-profile-link">
                     <div class="owner-profile">
                         <img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($book['avatar'] ?? 'user.png') ?>" alt="<?= htmlspecialchars($book['pseudo']) ?>" class="owner-avatar">
                         <span class="owner-name"><?= htmlspecialchars($book['pseudo']) ?></span>

@@ -14,8 +14,38 @@ class UserController
         $this->account();
     }
 
-    public function publicAccount()
+    public function publicAccount($id = null)
     {
+        // Vérifier que l'ID est fourni
+        if ($id === null) {
+            header("Location: " . ROOT . "/book/availableBooks");
+            exit;
+        }
+
+        // Récupérer les informations de l'utilisateur
+        $user = $this->users->getUserById($id);
+        
+        if (!$user) {
+            echo "Utilisateur introuvable.";
+            return;
+        }
+
+        // Instancier BookManager et récupérer le nombre de livres
+        $bookManager = new BookManager();
+        $bookCount = $bookManager->countBooksByUser($id);
+
+        // Calcul "Membre depuis"
+        $createdAt = new DateTime($user['created_at']);
+        $now = new DateTime();
+        $interval = $createdAt->diff($now);
+        $memberSince = $interval->y > 0 
+            ? "Membre depuis {$interval->y} an" . ($interval->y > 1 ? "s" : "")
+            : "Membre depuis moins d'un an";
+
+        // Récupérer tous les livres de l'utilisateur
+        $userBooks = $bookManager->getBooksByUserId($id);
+
+        // Inclure la vue avec les variables disponibles
         include('views/users/publicAccount.php');
     }
     /*

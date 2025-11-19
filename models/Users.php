@@ -29,6 +29,13 @@ class Users extends UserManager {
     return $this->update($this->table, $data, $id);
     }
 
+    /*
+    * Méthode pour récupérer un utilisateur par son ID
+    */
+    public function getUserById($id) {
+        return $this->getById($this->table, $id);
+    }
+
 
       
 }
