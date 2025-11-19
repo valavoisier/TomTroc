@@ -48,13 +48,6 @@ ob_start(); ?>
                         <label for="description">Commentaire</label>
                         <textarea id="description" name="description" rows="5"></textarea>
                     </div>
-                    <div class="form-group">
-                        <label for="status">Disponibilité</label>
-                        <select id="status" name="status">
-                            <option value="disponible">Disponible</option>
-                            <option value="non-dispo.">Non disponible</option>
-                        </select>
-                    </div>
                     <button type="submit" class="btn-primary validate-btn">Valider</button>
 
                 </div>

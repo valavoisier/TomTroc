@@ -19,7 +19,7 @@ class Books extends BookManager {
         // Appel de la méthode add() du modèle principal pour insérer les données dans la table
         return $this->add($this->table, $data);
     }
-      
+
     // Méthode pour mettre à jour un livre en BDD
     public function updateBookBdd($id, $data) {
         // Appel de la méthode update() du PrincipalManager

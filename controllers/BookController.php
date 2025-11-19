@@ -215,7 +215,7 @@ class BookController
                 $message = "Erreur lors de la modification du livre.";
                 $bookManager = new BookManager();
                 $book = $bookManager->getBookById($id);
-        include('views/books/editBook.php');
+                include('views/books/editBook.php');
             }
         } else {
             echo "Requête invalide.";

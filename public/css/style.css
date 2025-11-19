@@ -1108,6 +1108,8 @@ footer{
   font-family: "Inter", sans-serif;
   font-size: 14px;
   color: #A6A6A6;
+  border: none;
+  background: none;
   text-decoration: underline;
   cursor: pointer;
 }

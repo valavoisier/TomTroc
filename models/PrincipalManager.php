@@ -75,7 +75,7 @@ class PrincipalManager {
         // Récupération du résultat sous forme de tableau associatif
         $result = $req->fetch(PDO::FETCH_ASSOC);
         return $result;
-    }   
+    } 
     /**
  * Méthode générique pour mettre à jour un enregistrement dans une table donnée
  * @param string $table : nom de la table

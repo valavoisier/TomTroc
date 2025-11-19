@@ -167,17 +167,18 @@ class UserController
     /*
     * Méthode pour gérer la déconnexion des utilisateurs
     */
-    public function logout() {
-    // Suppression des variables de session
-    $_SESSION = [];
+    public function logout()
+    {
+        // Suppression des variables de session
+        $_SESSION = [];
 
-    // Destruction de la session
-    session_destroy();
+        // Destruction de la session
+        session_destroy();
 
-    // Redirection vers la page de connexion
-    header("Location: " . ROOT . "/user/login");
-    exit;
-}
+        // Redirection vers la page de connexion
+        header("Location: " . ROOT . "/user/login");
+        exit;
+    }
     /*
 * Méthode pour mettre à jour les informations de l'utilisateur dans son compte
 */

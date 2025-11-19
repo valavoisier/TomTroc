@@ -15,14 +15,14 @@ ob_start(); ?>
             <div class="account-left">
                 <!-- Bloc image + modifier -->
                 <form method="POST" action="<?= ROOT ?>/user/updateAvatar" enctype="multipart/form-data" id="avatar-form">
-                <div class="avatar-block">
-                    <div class="avatar-wrapper">
+                    <div class="avatar-block">
+                        <div class="avatar-wrapper">
                             <img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($_SESSION['user']['avatar'] ?? 'user.png') ?>" alt="Photo de profil">
-                    </div>
-                    <label for="upload-avatar" class="edit-avatar-link">Modifier</label>
-                    <input type="hidden" name="MAX_FILE_SIZE" value="10000000">
+                        </div>
+                        <label for="upload-avatar" class="edit-avatar-link">Modifier</label>
+                        <input type="hidden" name="MAX_FILE_SIZE" value="10000000">
                         <input type="file" id="upload-avatar" class="upload-avatar" accept="image/*" name="avatar" onchange="if(confirm('Voulez-vous enregistrer cette nouvelle photo ?')) { document.getElementById('avatar-form').submit(); }">
-                </div>
+                    </div>
                 </form>
 
                 <!-- Séparateur -->
@@ -89,26 +89,26 @@ ob_start(); ?>
                                 <td><img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($book['image'] ?? 'default-book.jpg') ?>" alt="<?= htmlspecialchars($book['title']) ?>"></td>
                                 <td><?= htmlspecialchars($book['title']) ?></td>
                                 <td><?= htmlspecialchars($book['author']) ?></td>
-                        <td class="description">
+                                <td class="description">
                                     <?= htmlspecialchars($book['description']) ?>
-                        </td>
+                                </td>
                                 <td>
                                     <span class="tag <?= $book['status'] ? 'disponible' : 'non-dispo' ?>">
                                         <?= $book['status'] ? 'Disponible' : 'Non dispo.' ?>
                                     </span>
-                        </td>
-                        <td>
+                                </td>
+                                <td>
                                     <a href="<?= ROOT ?>/book/editBook/<?= $book['id'] ?>" class="edit-link">Éditer</a>
                                     <a href="<?= ROOT ?>/book/delete/<?= $book['id'] ?>" class="delete-link" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce livre ?')">Supprimer</a>
-                        </td>
-                    </tr>
+                                </td>
+                            </tr>
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr>
                             <td colspan="6" style="text-align: center; padding: 20px;">
                                 Vous n'avez pas encore ajouté de livres.
-                        </td>
-                    </tr>
+                            </td>
+                        </tr>
                     <?php endif; ?>
                 </tbody>
             </table>

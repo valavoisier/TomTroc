@@ -29,5 +29,6 @@ class Users extends UserManager {
     return $this->update($this->table, $data, $id);
     }
 
+
       
 }

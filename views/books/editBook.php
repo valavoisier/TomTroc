@@ -14,13 +14,13 @@ ob_start(); ?>
 
         <!-- Bloc principal blanc -->
         <div class="edit-content-box">
-            <form action="<?= ROOT ?>/book/registerBook" method="POST" enctype="multipart/form-data" class="edit-form">
+            <form action="<?= ROOT ?>/book/editBook/<?= $book['id'] ?>" method="POST" enctype="multipart/form-data" class="edit-form">
 
                 <!-- Partie gauche -->
                 <div class="edit-left">
                     <p class="section-label">Photos</p>
                     <div class="book-image-wrapper">
-                        <img src="<?= ROOT ?>/public/img/kinfolk_table.jpg" alt="The Kinfolk Table">
+                        <img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($book['image']) ?>" alt="<?= htmlspecialchars($book['title']) ?>">
                     </div>
 
                     <input type="hidden" name="MAX_FILE_SIZE" value="10000000">
