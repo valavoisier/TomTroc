@@ -106,6 +106,27 @@ protected function update($table, $data, $id) {
 
     // Exécution
     return $req->execute();
+}
+
+/**
+ * Méthode générique pour supprimer un enregistrement dans une table donnée
+ * @param string $table : nom de la table
+ * @param int $id : identifiant de l'enregistrement à supprimer
+ * @return bool : true si la suppression a réussi, false sinon
+ */
+protected function delete($table, $id) {
+    // Requête SQL
+    $query = "DELETE FROM $table WHERE id = :id";
+
+    // Connexion PDO
+    $dbConnection = $this->db->getConnection();
+    $req = $dbConnection->prepare($query);
+
+    // Liaison du paramètre
+    $req->bindParam(":id", $id, PDO::PARAM_INT);
+
+    // Exécution
+    return $req->execute();
 }  
      
 }

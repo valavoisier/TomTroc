@@ -221,4 +221,45 @@ class BookController
             echo "Requête invalide.";
         }
     }
+
+    /*
+    * Méthode pour supprimer un livre
+    */
+    public function deleteBook($id = null)
+    {
+        // Vérifier que l'utilisateur est connecté
+        if (!isset($_SESSION['user']['id'])) {
+            header('Location: ' . ROOT . '/user/login');
+            exit;
+        }
+
+        if ($id !== null) {
+            // Vérifier que le livre appartient à l'utilisateur
+            $bookManager = new BookManager();
+            $book = $bookManager->getBookById($id);
+
+            if ($book && $book['user_id'] == $_SESSION['user']['id']) {
+                // Supprimer l'image du livre
+                if (isset($book['image']) && file_exists('public/img/' . $book['image'])) {
+                    unlink('public/img/' . $book['image']);
+                }
+
+                // Supprimer le livre de la BDD
+                $booksModel = new Books('books');
+                $isDeleted = $booksModel->deleteBookBdd($id);
+
+                if ($isDeleted) {
+                    $_SESSION['success'] = "Livre supprimé avec succès.";
+                } else {
+                    $_SESSION['error'] = "Erreur lors de la suppression du livre.";
+                }
+            } else {
+                $_SESSION['error'] = "Vous n'êtes pas autorisé à supprimer ce livre.";
+            }
+        }
+
+        // Redirection vers le compte
+        header('Location: ' . ROOT . '/user/account');
+        exit;
+    }
 }

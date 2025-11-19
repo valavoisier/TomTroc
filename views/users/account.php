@@ -99,7 +99,7 @@ ob_start(); ?>
                                 </td>
                                 <td>
                                     <a href="<?= ROOT ?>/book/editBook/<?= $book['id'] ?>" class="edit-link">Éditer</a>
-                                    <a href="<?= ROOT ?>/book/delete/<?= $book['id'] ?>" class="delete-link" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce livre ?')">Supprimer</a>
+                                    <a href="<?= ROOT ?>/book/deleteBook/<?= $book['id'] ?>" class="delete-link" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce livre ?')">Supprimer</a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -113,7 +113,7 @@ ob_start(); ?>
                 </tbody>
             </table>
         </div>
-
+        <a href="<?= ROOT ?>/book/addBook" class="section-label">Ajouter un livre</a>
     </div>
 </section>
 

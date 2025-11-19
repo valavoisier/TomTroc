@@ -8,7 +8,7 @@ ob_start(); ?>
 <section class="edit-book">
     <div class="edit-book-container">
         <!-- Lien retour -->
-        <a href="<?= ROOT ?>/book/availableBooks" class="back-link">← Retour</a>
+        <a href="<?= ROOT ?>/user/account" class="back-link">← Retour</a>
 
         <!-- Titre principal -->
         <h1 class="edit-title">Ajouter un livre</h1>
@@ -27,9 +27,10 @@ ob_start(); ?>
                     <div class="book-image-wrapper">
                         <img src="<?= ROOT ?>/public/img/edit-book.jpg" alt="The Kinfolk Table">
                     </div>
-
+                    <label for="upload-book-image" class="edit-photo-link">Modifier la photo</label>
                     <input type="hidden" name="MAX_FILE_SIZE" value="10000000">
-                    <input type="file" name="image" id="image" accept="image/*">
+                    <input type="file" name="image" id="upload-book-image" class="upload-book-image" accept="image/*" onchange="if(confirm('Voulez-vous enregistrer cette nouvelle photo ?')) { document.getElementById('edit-book-form').submit(); }">
+
 
 
                 </div>

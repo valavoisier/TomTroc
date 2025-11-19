@@ -25,5 +25,11 @@ class Books extends BookManager {
         // Appel de la méthode update() du PrincipalManager
         return $this->update($this->table, $data, $id);
     }
+
+    // Méthode pour supprimer un livre en BDD
+    public function deleteBookBdd($id) {
+        // Appel de la méthode delete() du PrincipalManager
+        return $this->delete($this->table, $id);
+    }
       
 }
