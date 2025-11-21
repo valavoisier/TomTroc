@@ -30,7 +30,6 @@ class Autoload {
             'models/',
             'views/',
             'core/',
-            'core/db/',
             'services/',
             '/'
         ];
