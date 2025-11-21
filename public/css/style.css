@@ -505,7 +505,7 @@ footer{
 .footer-container li{
     margin-left: 40px;
 }
-/*============================================LOGIN PAGE======================================*/
+/*============================================LOGIN / REGISTER PAGES======================================*/
 .login {
     position: relative;
     max-width: 1440px;
@@ -572,11 +572,6 @@ footer{
     font-size: 16px;
     color: #292929;
     box-sizing: border-box;
-}
-
-.form-group input:focus {
-    outline: none;
-    border-color: #00AC66;
 }
 
 .login-btn {
@@ -805,21 +800,52 @@ footer{
     display: flex;
     align-items: center;
     gap: 15px;
-    padding: 6px;
+    padding-left: 6px;
     margin-top: 8px;
-    border-radius: 8px;
-    transition: background-color 0.3s ease;
+    border-radius: 114px;
+    transition: all 0.3s ease;
+    background-color: #FFFFFF;
 }
 
 .owner-profile:hover {
-    background-color: #F0F0F0;
+    background-color: #FFFFFF;
+}
+
+.owner-profile:hover .owner-name {
+    color: #00AC66;
 }
 
 .owner-avatar {
     width: 48px;
     height: 48px;
     border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+}
+
+.owner-avatar img {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
+    display: block;
+}
+
+.owner-avatar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 172, 102, 0.6);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.owner-profile:hover .owner-avatar::after {
+    opacity: 1;
 }
 
 .owner-name {
@@ -827,6 +853,7 @@ footer{
     font-weight: 400;
     font-size: 14px;
     color: #292929;
+    transition: color 0.3s ease;
 }
 
 .message-button {
@@ -1462,6 +1489,270 @@ footer{
 
 .public-table-container .book-table td img {
   margin-left: 60px;
+}
+/*============================================MESSAGES PAGE======================================*/
+/* Messages Section */
+.messages-section {
+    min-height: calc(100vh - 200px);
+}
+
+.messages-container {
+    max-width: 1144px;
+    margin: 0 auto;
+    display: flex;
+    gap: 20px;
+}
+
+/* Sidebar */
+.messages-sidebar {
+    width: 308px;
+    min-height: 893px;
+    background: #FAF9F7;
+    padding: 20px 0 ;
+}
+
+.messages-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    font-size: 26px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: #000000;
+    margin: 40px 0 30px 20px
+}
+
+/* Conversation List */
+.conversation-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.conversation-item {
+    width: 308px;
+    height: 84px;
+    background: #F9F9F9;
+    display: flex;
+    align-items: center;
+    padding: 18px 30px;
+
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.first {
+    background: #FFFFFF;
+}
+
+.conversation-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+.conversation-content {
+    flex: 1;
+    overflow: hidden;
+}
+
+.conversation-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.conversation-name {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: #292929;
+}
+
+.conversation-date {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: #292929;
+}
+
+.conversation-preview {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: #A6A6A6;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Messages Main Area */
+.messages-main {
+    flex: 1;
+    background: #F5F3EF;
+    min-height: 600px;
+}
+
+.messages-header {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    margin-top: 15px;
+}
+
+.messages-header-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+.messages-header-name {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: #292929;
+}
+
+.messages-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+/* Message Items */
+.message-item {
+    margin-bottom: 20px;
+}
+
+/* Sender (gauche) */
+.message-sender {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.message-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.message-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.message-time {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: #A6A6A6;
+}
+
+.message-bubble {
+    min-width: 500px;
+    min-height: 37px;
+    padding: 12px 16px;
+    border-radius: 3px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    color: #292929;
+    line-height: 100%;
+    letter-spacing: 0%;
+    box-sizing: border-box;
+}
+
+.message-bubble-sender {
+    background: #FFFFFF;
+    color: #292929;
+}
+
+/* Receiver (droite) */
+.message-receiver {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.message-header-receiver {
+    margin-bottom: 8px;
+}
+
+.message-bubble-receiver {
+    background: #EDF2F6;
+    color: #292929;
+}
+
+/* Messages Form */
+.messages-form {
+    display: flex;
+    padding: 20px;
+   
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.messages-input {
+    width: 628px;
+    height: 49px;
+    padding: 0 16px;
+    border: 1px solid #E5E5E5;
+    border-radius: 4px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    background: #FFFFFF;
+}
+
+.messages-input:focus {
+    outline: none;
+    border: 1px solid #E5E5E5;
+}
+
+.messages-input::placeholder {
+    color: #A6A6A6;
+}
+
+.messages-submit {
+    width: 132px;
+    height: 49px;
+    background: #00AC66;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 4px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.messages-submit:hover {
+    background: #006D41;
 }
 
 /* ____________________________________________________________________

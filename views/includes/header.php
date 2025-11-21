@@ -16,7 +16,7 @@
 
              <!-- Section droite : Menu utilisateur -->
              <nav class="nav-right">
-                 <a href="#" class="nav-link account-link">
+                 <a href="<?= ROOT ?>/message" class="nav-link account-link">
                      <img src="<?= ROOT ?>/public/img/messagerie.svg" alt="Messagerie" class="nav-icon">
                      Messagerie
                      <span class="message-counter">1</span>
