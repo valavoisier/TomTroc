@@ -1755,6 +1755,60 @@ footer{
     background: #006D41;
 }
 
+/*============================================ERROR 404 PAGE======================================*/
+.error-section {
+    background-color: #F5F3EF;
+    min-height: calc(100vh - 200px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 0;
+}
+
+.error-container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 150px;
+}
+
+.error-content {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.error-code {
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    font-size: 120px;
+    line-height: 1;
+    color: #00AC66;
+    margin: 0 0 20px 0;
+}
+
+.error-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    font-size: 36px;
+    line-height: 1.2;
+    color: #292929;
+    margin: 0 0 20px 0;
+}
+
+.error-message {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #292929;
+    margin: 0 0 40px 0;
+}
+
+.error-content .btn-primary {
+    display: inline-block;
+    text-decoration: none;
+}
+
 /* ____________________________________________________________________
 ====================RESPONSIVE : TABLETTE & MOBILE ==================== 
 ______________________________________________________________________*/

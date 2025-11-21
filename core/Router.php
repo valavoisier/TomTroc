@@ -3,6 +3,22 @@
 require_once 'config.php';
 class Router
 {
+    /**
+     * Affiche la page d'erreur 404
+     */
+    private function show404()
+    {
+        // Définir le code de réponse HTTP à 404 (Not Found)
+        // utilisation de la fonction native http_response_code() de PHP (remplace header("HTTP/1.1 404 Not Found"))
+        http_response_code(404);
+        // Inclusion de la vue de la page d'erreur 404
+        require_once 'views/errors/404.php';
+        exit;
+    }
+
+    /** 
+     * Méthode principale pour gérer le routage des requêtes entrantes
+     */
     public function routeRequest()
     {
         // Récupération de l'URL depuis les paramètres GET, par défaut '/' si non définie
@@ -71,7 +87,7 @@ class Router
                             //revient à l'Appel dynamique de la méthode du contrôleur  $controller->$action();
                         } else {
                             // Si le nombre de paramètres est insuffisant, on affiche une erreur
-                            echo "Erreur 404 - page non trouvée! - nombre de paramètres passés en URL insuffisant";
+                            $this->show404();
                         }
                     } else {
                         // Si la méthode n’attend aucun paramètre, on l’appelle directement sans arguments.
@@ -79,16 +95,16 @@ class Router
                         $controller->$action();
                     }
                 } else {
-                    // Si la méthode correspondant à l’action n’existe pas dans le contrôleur, on affiche une erreur.                    // Si la méthode n'existe pas, on affiche une erreur
-                    echo "Erreur 404 - page non trouvée! - méthode(action) non trouvée";
+                    // Si la méthode correspondant à l'action n'existe pas dans le contrôleur, on affiche une erreur.
+                    $this->show404();
                 }
             } else {
-                // Si la classe du contrôleur n’existe pas dans le fichier inclus, on affiche une erreur.
-                echo "Erreur 404 - page non trouvée! - classe non trouvée";
+                // Si la classe du contrôleur n'existe pas dans le fichier inclus, on affiche une erreur.
+                $this->show404();
             }
         } else {
-            // Si le fichier du contrôleur n’existe pas dans le dossier 'controllers/', on affiche une erreur.
-            echo "Erreur 404 - page non trouvée! - contrôleur non trouvé";
+            // Si le fichier du contrôleur n'existe pas dans le dossier 'controllers/', on affiche une erreur.
+            $this->show404();
         }
     }
 }

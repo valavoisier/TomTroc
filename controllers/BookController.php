@@ -119,7 +119,7 @@ class BookController
                 exit;
             } else {
                 $books = $bookManager->getAllBooksWithUser(); // récupère tous les livres
-                $message = "Erreur 404- Aucun livre trouvé.";
+                $message = "Aucun livre trouvé.";
                 include('views/books/availableBooks.php');
             }
         } else {
