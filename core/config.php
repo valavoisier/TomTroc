@@ -1,5 +1,4 @@
-    <?php
-     
+    <?php     
     /**
      * Fichier de configuration config.php
      * 
@@ -15,8 +14,7 @@
      * USAGE DANS LE ROUTER :
      * Le Router utilise ces constantes pour construire les URLs absolues,
      * rediriger correctement et adapter le comportement selon l'environnement.
-     */
-    
+     */    
 
     // Définition de la constante ROOT pour l'URL de base de l'application
     if ($_SERVER['SERVER_NAME'] == 'localhost') {

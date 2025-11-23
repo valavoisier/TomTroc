@@ -1,10 +1,22 @@
 <?php
 // Inclusion du fichier de configuration pour charger les constantes et configurations de l'application
 require_once 'config.php';
+/**
+ * Classe Router
+ *
+ * Cette classe est responsable du routage des requêtes HTTP entrantes
+ * vers le contrôleur et l'action appropriés.
+ */
 class Router
 {
     /**
-     * Affiche la page d'erreur 404
+     * Affiche la page d'erreur 404 (Not Found).
+     *
+     * Cette méthode :
+     * - Définit le code de réponse HTTP à 404 via http_response_code().
+     * - Inclut la vue correspondante (views/errors/404.php) pour afficher la page d'erreur.
+     * - Termine l'exécution du script avec exit afin d'éviter tout traitement supplémentaire.
+     * @return void
      */
     private function show404()
     {
@@ -16,8 +28,26 @@ class Router
         exit;
     }
 
-    /** 
-     * Méthode principale pour gérer le routage des requêtes entrantes
+    /**
+     * Méthode principale  routeRequest() pour gérer le routage des requêtes entrantes.
+     *
+     * Cette méthode :
+     * - Récupère l'URL depuis les paramètres GET (par défaut "/").
+     * - Découpe l'URL en segments pour déterminer :
+     *   - Le contrôleur à instancier (premier segment, ou HomeController par défaut).
+     *   - L'action/méthode à exécuter (deuxième segment, ou index par défaut).
+     *   - Les éventuels paramètres supplémentaires (segments suivants).
+     * - Vérifie l'existence du fichier du contrôleur et l'inclut.
+     * - Vérifie l'existence de la classe du contrôleur et l'instancie.
+     * - Vérifie l'existence de la méthode correspondant à l'action.
+     * - Analyse les paramètres attendus par la méthode via ReflectionMethod.
+     * - Appelle dynamiquement la méthode du contrôleur :
+     *   - Avec les paramètres si la méthode en attend.
+     *   - Sans paramètres si la méthode n'en attend aucun.
+     * - Si une étape échoue (fichier, classe, méthode ou paramètres manquants),
+     *   affiche la page d'erreur 404 via show404().
+     * @return void
+     * @see self::show404() Méthode appelée en cas d'erreur de routage.
      */
     public function routeRequest()
     {
