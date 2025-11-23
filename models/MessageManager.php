@@ -6,11 +6,23 @@ MANAGER pour les opérations spécifiques aux messages
 class MessageManager extends PrincipalManager {
     
     /**
-     * Envoie un nouveau message
-     * @param int $senderId ID de l'expéditeur
-     * @param int $receiverId ID du destinataire
-     * @param string $content Contenu du message
-     * @return bool Succès de l'envoi
+     * Méthode sendMessage() pour envoyer un nouveau message entre deux utilisateurs.
+     *
+     * Cette méthode :
+     * - Construit une requête SQL d'insertion dans la table `messages`.
+     * - Insère les informations suivantes :
+     *   - L'identifiant de l'expéditeur (`sender_id`).
+     *   - L'identifiant du destinataire (`receiver_id`).
+     *   - Le contenu du message (`content`).
+     *   - La date et l'heure d'envoi (`created_at`) générées automatiquement avec NOW().
+     * - Utilise une requête préparée pour sécuriser l'insertion et éviter les injections SQL.
+     * - Lie les paramètres avec leur type approprié (entier ou chaîne).
+     * - Exécute la requête et retourne un booléen indiquant le succès de l'opération.
+     *
+     * @param int    $senderId   ID de l'expéditeur du message.
+     * @param int    $receiverId ID du destinataire du message.
+     * @param string $content    Contenu textuel du message.
+     * @return bool  True si l'insertion réussit, False sinon.
      */
     public function sendMessage($senderId, $receiverId, $content) {
         // Requête SQL pour insérer un nouveau message dans la table messages
@@ -71,8 +83,7 @@ class MessageManager extends PrincipalManager {
                 INNER JOIN users receiver ON m.receiver_id = receiver.id
                 WHERE (m.sender_id = :userId AND m.receiver_id = :otherUserId)
                    OR (m.sender_id = :otherUserId AND m.receiver_id = :userId)
-                ORDER BY m.created_at ASC";// Tri par date croissante du plus ancien au plus récent
-        
+                ORDER BY m.created_at ASC";// Tri par date croissante du plus ancien au plus récent        
         $dbConnection = $this->db->getConnection();
         $stmt = $dbConnection->prepare($sql);
         // Liaison des paramètres pour la requête préparée évite injection SQL

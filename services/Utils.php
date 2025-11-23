@@ -1,17 +1,32 @@
 <?php
-
 /**
- * Classe utilitaire : cette classe ne contient que des méthodes statiques qui peuvent être appelées
- * directement sans avoir besoin d'instancier un objet Utils.
- * Exemple : Utils::redirect('home'); 
+ * Classe Utils
+ *
+ * Classe utilitaire contenant uniquement des méthodes statiques.
+ * Ces méthodes peuvent être appelées directement sans instancier un objet `Utils`.
+ * Exemple d'utilisation : `Utils::askConfirmation('Êtes-vous sûr ?');`
+ *
+ * Responsabilités principales :
+ * - Générer du code JavaScript à insérer dans des attributs HTML (onclick, onchange).
+ * - Faciliter l'intégration de comportements interactifs (confirmation, aperçu d'image).
+ * Méthodes :
+ * - askConfirmation() → confirmation sur bouton.
+ * - askConfirmationOnChange() → confirmation + soumission formulaire sur input file.
+ * - previewImage() → aperçu d’image sélectionnée dans un input file.
+ * 
+ * @property Utils $instance Instance de la classe Utils (non instanciable).
  */
 class Utils{
     /**
-     * Cette méthode retourne le code js a insérer en attribut d'un bouton.
-     * pour ouvrir une popup "confirm", et n'effectuer l'action que si l'utilisateur
-     * a bien cliqué sur "ok".
-     * @param string $message : le message à afficher dans la popup.
-     * @return string : le code js à insérer dans le bouton.
+     * Méthode askConfirmation() pour générer du code JavaScript de confirmation.
+     *
+     * Cette méthode :
+     * - Retourne une chaîne contenant un attribut `onclick`.
+     * - Affiche une popup de confirmation avec le message fourni.
+     * - Exécute l'action uniquement si l'utilisateur clique sur "OK".
+     *
+     * @param string $message Message à afficher dans la popup de confirmation.
+     * @return string Code JavaScript à insérer dans un bouton HTML.
      */
     public static function askConfirmation(string $message): string
     {
@@ -19,11 +34,16 @@ class Utils{
     }
 
     /**
-     * Cette méthode retourne le code js à insérer en attribut d'un input file.
-     * pour ouvrir une popup "confirm" et soumettre le formulaire si l'utilisateur clique sur "ok".
-     * @param string $message : le message à afficher dans la popup.
-     * @param string $formId : l'ID du formulaire à soumettre.
-     * @return string : le code js à insérer dans l'input.
+     * Méthode askConfirmationOnChange() pour générer du code JavaScript de confirmation sur un input file.
+     *
+     * Cette méthode :
+     * - Retourne une chaîne contenant un attribut `onchange`.
+     * - Affiche une popup de confirmation avec le message fourni.
+     * - Soumet le formulaire identifié par $formId uniquement si l'utilisateur clique sur "OK".
+     *
+     * @param string $message Message à afficher dans la popup de confirmation.
+     * @param string $formId  ID du formulaire à soumettre si confirmation.
+     * @return string         Code JavaScript à insérer dans un input file HTML.
      */
     public static function askConfirmationOnChange(string $message, string $formId): string
     {
@@ -31,9 +51,15 @@ class Utils{
     }
 
     /**
-     * Cette méthode retourne le code js pour afficher un aperçu d'image et soumettre le formulaire après confirmation.
-     * @param string $imagePreviewId : l'ID de l'élément img où afficher l'aperçu.
-     * @return string : le code js à insérer dans l'input file.
+     * Méthode previewImage() pour générer du code JavaScript d'aperçu d'image.
+     *
+     * Cette méthode :
+     * - Retourne une chaîne contenant un attribut `onchange`.
+     * - Charge le fichier sélectionné dans un input file.
+     * - Affiche un aperçu de l'image dans l'élément <img> identifié par $imagePreviewId.
+     *
+     * @param string $imagePreviewId ID de l'élément <img> où afficher l'aperçu.
+     * @return string                Code JavaScript à insérer dans un input file HTML.
      */
     public static function previewImage(string $imagePreviewId): string
     {

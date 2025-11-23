@@ -11,6 +11,7 @@ class HomeController
      * - Instancie BookManager pour accéder aux données des livres.
      * - Appelle BookManager::getLastBooks(4) afin de récupérer les 4 derniers livres ajoutés en base.
      * - Inclut la vue correspondante (views/books/index.php) pour afficher ces livres sur la page d'accueil.
+     * 
      * @return void
      * @uses BookManager::getLastBooks() Pour récupérer les derniers livres ajoutés.
      */

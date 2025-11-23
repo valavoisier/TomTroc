@@ -37,6 +37,7 @@ class BookController
      * - Redirige vers la page du compte utilisateur en cas de succès.
      * - Affiche un message d'erreur ou recharge le formulaire en cas d'échec ou de validation invalide.
      * - Si la requête n'est pas en POST, affiche directement la vue d'ajout de livre.
+     * 
      * @return void
      * @uses Books::registerBookBdd() Pour insérer le livre en base de données.
      */
@@ -119,6 +120,7 @@ class BookController
      * - Appelle BookManager::getAllBooksWithUser() afin de récupérer tous les livres avec leurs utilisateurs associés.
      * - Si des livres existent, inclut la vue correspondante (views/books/availableBooks.php) pour les afficher.
      * - Si aucun livre n'est trouvé, définit un message d'erreur et inclut la même vue.
+     * 
      * @return void
      * @uses BookManager::getAllBooksWithUser() Pour récupérer tous les livres avec leurs utilisateurs.
      */
@@ -149,6 +151,7 @@ class BookController
      * - Si aucun livre n'est trouvé, récupère la liste complète des livres avec leurs utilisateurs
      *   et affiche la vue correspondante avec un message d'erreur.
      * - Si le champ de recherche est vide, redirige vers la liste des livres disponibles.
+     * 
      * @return void
      * @uses BookManager::getBookByTitle() Pour rechercher un livre par son titre.
      * @uses BookManager::getAllBooksWithUser() Pour récupérer tous les livres si aucun résultat.
@@ -184,6 +187,7 @@ class BookController
      * - Si le livre existe, inclut la vue correspondante (views/books/singleBook.php).
      * - Si le livre n'existe pas, affiche un message d'erreur.
      * - Si aucun identifiant n'est fourni, affiche un message indiquant qu'aucun livre n'est sélectionné.
+     * 
      * @param int|null $id Identifiant du livre à afficher. Si null, aucun livre n'est sélectionné.
      * @return void
      * @uses BookManager::getBookById() Pour récupérer les informations du livre.
@@ -220,7 +224,8 @@ class BookController
      * - Prépare les données à mettre à jour (titre, auteur, description, statut, date).
      * - Gère l'image uploadée : suppression de l'ancienne et ajout de la nouvelle.
      * - Met à jour le livre en base via le modèle Books.
-     * - Définit des messages d'erreur ou de succès et effectue une redirection.     *
+     * - Définit des messages d'erreur ou de succès et effectue une redirection.
+     * 
      * @param int|null $id Identifiant du livre à modifier. Si null, la requête est considérée invalide.
      * @return void
      * @uses BookManager::getBookById() Pour récupérer les informations du livre.

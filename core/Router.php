@@ -16,6 +16,7 @@ class Router
      * - Définit le code de réponse HTTP à 404 via http_response_code().
      * - Inclut la vue correspondante (views/errors/404.php) pour afficher la page d'erreur.
      * - Termine l'exécution du script avec exit afin d'éviter tout traitement supplémentaire.
+     * 
      * @return void
      */
     private function show404()
@@ -46,6 +47,7 @@ class Router
      *   - Sans paramètres si la méthode n'en attend aucun.
      * - Si une étape échoue (fichier, classe, méthode ou paramètres manquants),
      *   affiche la page d'erreur 404 via show404().
+     * 
      * @return void
      * @see self::show404() Méthode appelée en cas d'erreur de routage.
      */

@@ -31,6 +31,7 @@ class UserController
      * - Sert de point d'entrée pour l'action "index".
      * - Redirige directement vers la méthode account() afin d'éviter la duplication de code.
      * - Permet de centraliser la logique de gestion du compte utilisateur dans une seule méthode.
+     * 
      * @return void
      * @see self::account() Méthode appelée pour afficher le compte utilisateur.
      */
@@ -53,6 +54,7 @@ class UserController
      * - Calcule la durée d'adhésion ("Membre depuis") à partir de la date de création du compte.
      * - Inclut la vue correspondante (views/users/publicAccount.php) avec les variables disponibles
      *   ($user, $bookCount, $memberSince, $userBooks).
+     * 
      * @param int|null $id Identifiant de l'utilisateur dont on veut afficher le profil public.
      *                     Si null, redirection vers la liste des livres disponibles.
      * @return void
@@ -106,6 +108,7 @@ class UserController
      * - Redirige vers la page de login en cas de succès.
      * - Affiche un message d'erreur et recharge la vue en cas d'échec ou de validation invalide.
      * - En GET, génère un nouveau token CSRF et affiche la vue d'inscription.
+     * 
      * @return void
      * @uses Users::findByEmail() Pour vérifier si l'email existe déjà.
      * @uses Users::registerUserBdd() Pour insérer un nouvel utilisateur en base.
@@ -205,6 +208,7 @@ class UserController
      *   - Redirige vers la page du compte utilisateur.
      * - Si les identifiants sont incorrects, affiche un message d'erreur et recharge la vue de connexion.
      * - En GET, génère un nouveau token CSRF et affiche la vue de connexion.
+     * 
      * @return void
      * @uses Users::findByEmail() Pour rechercher l'utilisateur par email.
      */
@@ -272,6 +276,7 @@ class UserController
      * - Supprime toutes les variables de session.
      * - Détruit la session en cours pour invalider l'authentification.
      * - Redirige l'utilisateur vers la page de connexion.
+     * 
      * @return void
      */
     public function logout()
@@ -298,6 +303,7 @@ class UserController
      * - Appelle Users::updateUserInfo() pour mettre à jour l'utilisateur en base.
      * - Met à jour les informations stockées en session (email, pseudo).
      * - Redirige vers la page du compte utilisateur après mise à jour.
+     * 
      * @return void
      * @uses Users::updateUserInfo() Pour mettre à jour les informations de l'utilisateur en base.
      */
@@ -345,6 +351,7 @@ class UserController
      * - Met à jour la session utilisateur avec le nouvel avatar.
      * - Définit un message de succès ou d'erreur en session.
      * - Redirige vers la page du compte utilisateur.
+     * 
      * @return void
      * @uses Users::updateUserInfo() Pour mettre à jour l'avatar de l'utilisateur en base.
      */
@@ -417,6 +424,7 @@ class UserController
      * - Calcule la durée d'adhésion ("Membre depuis") à partir de la date de création du compte.
      * - Inclut la vue correspondante (views/users/account.php) avec les variables disponibles :
      *   $bookCount, $memberSince, $userBooks et $_SESSION['user'].
+     * 
      * @return void
      * @uses BookManager::countBooksByUser() Pour compter le nombre de livres de l'utilisateur.
      * @uses BookManager::getBooksByUserId() Pour récupérer tous les livres de l'utilisateur.
