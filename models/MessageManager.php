@@ -32,13 +32,30 @@ class MessageManager extends PrincipalManager {
     }
     
     /**
-     * Récupère tous les messages d'une conversation entre deux utilisateurs (historique de conversation)
+     * Récupère tous les messages d'une conversation entre deux utilisateurs 
      * @param int $userId ID de l'utilisateur connecté
      * @param int $otherUserId ID de l'autre utilisateur
      * @return array Liste des messages triés par date
      * Jointure avec la table users pour obtenir les infos expéditeur et destinataire
      * Récupération des messages bidirectionnels entre deux utilisateurs
      * Tri des messages par ordre chronologique (du plus ancien au plus récent)
+     * ----------------------- Explication requête SQL:--------------------------------
+     * La requête sélectionne tous les champs de la table messages (m.*) ainsi que les pseudos et avatars des utilisateurs expéditeur et destinataire en utilisant des jointures internes (INNER JOIN) avec la table users.
+     * La clause WHERE filtre les messages pour inclure ceux envoyés par l'utilisateur connecté à l'autre utilisateur et vice versa, assurant ainsi que tous les messages pertinents sont récupérés.
+     * Les résultats sont ordonnés par la date de création (created_at) en ordre croissant (du plus ancien au plus récent).
+     * ---------En détails:---->
+     * sender est l'alias pour la table users représentant l'expéditeur (sender.pseudo  est la colonne pseudo de la table users de l'expéditeur qui s'appellera sender_pseudo au lieu de pseudo)
+     * receiver est l'alias pour la table users représentant le destinataire
+     * messages m correspond à la table principale, alias m
+     * explication avec sender (et idem pour receiver)
+     * INNER JOIN users sender correspond à la jointure de m avec la table users pour l’expéditeur,
+     * ON est la condition : m.receiver_id = receiver.id → relie chaque message à son destinataire 
+     * (m.sender_id → c’est la colonne dans la table messages qui stocke l’identifiant de l’expéditeur et .)
+     * La condition dit : relie chaque message à l’utilisateur dont l’identifiant correspond à sender_id.
+     * Filtrage des messages pour récupération de la conversation bilatérale:
+     * WHERE Cas 1 : :userId est l’expéditeur ET :otherUserId est le destinataire.
+     * OR Cas 2 : :otherUserId est l’expéditeur ET :userId est le destinataire.
+     * ORDER BY m.created_at ASC trie les messages par date croissante (du plus ancien au plus récent)
      */
     public function getConversationMessages($userId, $otherUserId) {
         // Requête SQL pour récupérer les messages entre les deux utilisateurs
@@ -58,7 +75,7 @@ class MessageManager extends PrincipalManager {
         
         $dbConnection = $this->db->getConnection();
         $stmt = $dbConnection->prepare($sql);
-        // Liaison des paramètres pour la requête préparée
+        // Liaison des paramètres pour la requête préparée évite injection SQL
         // bindValue utilise le type de données approprié pour chaque paramètre
         // PDO::PARAM_INT pour les entiers
         // PDO::PARAM_STR pour les chaînes de caractères
