@@ -1,16 +1,13 @@
 <?php
 $pageTitle = "Détails livre";
-
 // Démarrage de la mise en tampon de sortie
 ob_start(); ?>
-
 <section class="single-book">
     <div class="single-book-container">
         <!-- Partie gauche : Image -->
         <div class="book-image-section">
             <img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($book['image']) ?>" alt="<?= htmlspecialchars($book['title']) ?>" class="single-book-image">
         </div>
-
         <!-- Partie droite : Titre -->
         <div class="book-info-section">
             <div class="book-info-content">
@@ -22,7 +19,6 @@ ob_start(); ?>
                     <p><?= nl2br(htmlspecialchars($book['description'])) ?></p>
                 </div>
                 <h3 class="section-title">PROPRIÉTAIRE</h3>
-
                 <!-- Lien vers le compte du propriétaire -->
                 <a href="<?= ROOT ?>/user/publicAccount/<?= $book['user_id'] ?>" class="owner-profile-link">
                     <div class="owner-profile">
@@ -32,19 +28,16 @@ ob_start(); ?>
                         <span class="owner-name"><?= htmlspecialchars($book['pseudo']) ?></span>
                     </div>
                 </a>
-
-                <!-- Bouton messagerie -->
-                <a href="#" class="message-button">
+                <!-- Bouton messagerie envoi au propriétaire -->
+                <a href="<?= ROOT ?>/message/new/<?= $book['user_id'] ?>" class="message-button">
                     <button class="btn-message">Écrire un message</button>
                 </a>
             </div>
         </div>
     </div>
 </section>
-
 <?php
 // Récupération du contenu mis en tampon
 $content = ob_get_clean();
-
 // Inclusion du layout principal
 include('views/includes/template.php');

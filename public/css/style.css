@@ -1528,6 +1528,11 @@ footer{
     gap: 0;
 }
 
+.conversation-link {
+    text-decoration: none;
+    color: inherit;
+}
+
 .conversation-item {
     width: 308px;
     height: 84px;
@@ -1535,14 +1540,21 @@ footer{
     display: flex;
     align-items: center;
     padding: 18px 30px;
-
     box-sizing: border-box;
     cursor: pointer;
     transition: background-color 0.2s;
 }
 
+.conversation-item:hover {
+    background: #F0F0F0;
+}
+
 .first {
     background: #FFFFFF;
+}
+
+.first:hover {
+    background: #FAFAFA;
 }
 
 .conversation-avatar {
@@ -1755,6 +1767,29 @@ footer{
     background: #006D41;
 }
 
+/* No conversations / No messages styles */
+.no-conversations,
+.no-messages {
+    padding: 20px;
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: #A6A6A6;
+}
+
+.no-conversation-selected {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 600px;
+    text-align: center;
+}
+
+.no-conversation-selected p {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    color: #A6A6A6;
+}
 /*============================================ERROR 404 PAGE======================================*/
 .error-section {
     background-color: #F5F3EF;

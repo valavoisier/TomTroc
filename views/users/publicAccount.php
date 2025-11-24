@@ -1,9 +1,7 @@
 <?php
 $pageTitle = "Compte publique";
-
 // Démarrage de la mise en tampon de sortie
 ob_start(); ?>
-
 <section class="account-section">
     <div class="account-container">
         <!-- Bloc principal -->
@@ -30,8 +28,10 @@ ob_start(); ?>
                         </div>
                     </div>
                 </div>
-                <!-- Bouton Écrire un message -->
-                <a href="#" class="btn-message">Écrire un message</a>
+                <!-- Bouton messagerie envoi au propriétaire -->
+                <a href="<?= ROOT ?>/message/new/<?= $book['user_id'] ?>" class="message-button">
+                    <button class="btn-message">Écrire un message</button>
+                </a>
             </div>
             <!-- Colonne droite -->
             <div class="public-table-container">
@@ -44,34 +44,32 @@ ob_start(); ?>
                             <th>DESCRIPTION</th>
                         </tr>
                     </thead>
-                    <tbody> <!-- Ligne -->                
-                       <?php if (!empty($userBooks)): ?>
-                        <?php foreach ($userBooks as $index => $book): ?>
-                            <tr <?= ($index === count($userBooks) - 1) ? 'class="last-row"' : '' ?>>
-                                <td><img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($book['image'] ?? 'default-book.jpg') ?>" alt="<?= htmlspecialchars($book['title']) ?>"></td>
-                                <td><?= htmlspecialchars($book['title']) ?></td>
-                                <td><?= htmlspecialchars($book['author']) ?></td>
-                                <td class="description">
-                                    <?= htmlspecialchars($book['description']) ?>
-                                </td>                               
+                    <tbody> <!-- Ligne -->
+                        <?php if (!empty($userBooks)): ?>
+                            <?php foreach ($userBooks as $index => $book): ?>
+                                <tr <?= ($index === count($userBooks) - 1) ? 'class="last-row"' : '' ?>>
+                                    <td><img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($book['image'] ?? 'default-book.jpg') ?>" alt="<?= htmlspecialchars($book['title']) ?>"></td>
+                                    <td><?= htmlspecialchars($book['title']) ?></td>
+                                    <td><?= htmlspecialchars($book['author']) ?></td>
+                                    <td class="description">
+                                        <?= htmlspecialchars($book['description']) ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="6" style="text-align: center; padding: 20px;">
+                                    Cet utilisateur ne propose pas de livres actuellement.
+                                </td>
                             </tr>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <tr>
-                            <td colspan="6" style="text-align: center; padding: 20px;">
-                                Cet utilisateur ne propose pas de livres actuellement.
-                            </td>
-                        </tr>
-                    <?php endif; ?>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>
         </div>
 </section>
-
 <?php
 // Récupération du contenu mis en tampon
 $content = ob_get_clean();
-
 // Inclusion du layout principal
 include('views/includes/template.php');
