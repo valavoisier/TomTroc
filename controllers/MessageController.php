@@ -10,12 +10,42 @@ class MessageController {
         $this->userManager = new Users('users');
     }
 
-    /**
-     * Affiche la page des messages
+    /** Méthode index() pour afficher la page des messages avec la liste des conversations.
+     *
+     * Cette méthode :
+     * - Vérifie que l'utilisateur est connecté (présence de $_SESSION['user']).
+     *   - Si non connecté, redirige vers la page de connexion.
+     * - Récupère l'identifiant de l'utilisateur connecté depuis la session.
+     * - Récupère toutes les conversations de l'utilisateur via MessageManager.
+     * - Initialise les variables $selectedConversation et $messages.
+     * - Si des conversations existent :
+     *   - Sélectionne par défaut la première conversation.
+     *   - Récupère les messages échangés dans cette conversation.
+     * - Inclut la vue `views/messages/messages.php` pour afficher la liste des conversations et les messages.
+     *
+     * @return void Cette méthode ne retourne rien ; elle prépare les données et inclut une vue.
      */
     public function index()
     {
-             include('views/messages/messages.php');
+        // Vérifier si l'utilisateur est connecté
+        if (!isset($_SESSION['user'])) {
+            header('Location: ' . ROOT . '/user/login');
+            exit;
+        }
+        // Récupérer l'ID de l'utilisateur connecté 
+        $userId = $_SESSION['user']['id'];        
+        // Récupérer toutes les conversations
+        $conversations = $this->messageManager->getConversations($userId);        
+        // Si une conversation est sélectionnée, récupérer ses messages
+        $selectedConversation = null;//initialisation
+        $messages = [];       
+        if (!empty($conversations)) {
+            // Par défaut, sélectionner la première conversation
+            $selectedConversation = $conversations[0];
+            // Récupérer les messages de cette conversation
+            $messages = $this->messageManager->getConversationMessages($userId, $selectedConversation['user_id']);
+        }
+        include('views/messages/messages.php');
     }
 
     /**
