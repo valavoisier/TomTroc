@@ -112,7 +112,7 @@ class MessageManager extends PrincipalManager {
                     u.id as user_id, -- ID de l'autre utilisateur
                     u.pseudo, -- Pseudo de l'autre utilisateur
                     u.avatar, -- Avatar de l'autre utilisateur
-                    (SELECT m2.content -- sous requête m2récupère le contenu du dernier message échangé
+                    (SELECT m2.content -- sous requête m2 récupère le contenu du dernier message échangé
                      FROM messages m2 
                      WHERE (m2.sender_id = :userId AND m2.receiver_id = u.id) -- userId est expéditeur
                         OR (m2.sender_id = u.id AND m2.receiver_id = :userId) -- userId est destinataire
