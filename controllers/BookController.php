@@ -308,12 +308,9 @@ class BookController
         }
     }
 
-    /*
+    /**
     * Méthode deleteBook() pour supprimer un livre
-    * @param int|null $id Identifiant du livre à supprimer. Si null, aucune suppression n'est effectuée.    *
-    * @return void 
-    * @uses BookManager::getBookById() Pour récupérer les informations du livre.
-    * @uses Books::deleteBookBdd() Pour supprimer le livre de la base de données.
+    *
     * Cette méthode :
     * - Vérifie que l'utilisateur est connecté (via la session).
     * - Vérifie que l'identifiant du livre est fourni.
@@ -322,6 +319,11 @@ class BookController
     * - Supprime le livre de la base de données via le modèle Books.
     * - Définit un message de succès ou d'erreur dans la session.
     * - Redirige l'utilisateur vers la page de son compte.
+    *
+    * @param int|null $id Identifiant du livre à supprimer. Si null, aucune suppression n'est effectuée.    *
+    * @return void 
+    * @uses BookManager::getBookById() Pour récupérer les informations du livre.
+    * @uses Books::deleteBookBdd() Pour supprimer le livre de la base de données.    
     */
     public function deleteBook($id = null)
     {

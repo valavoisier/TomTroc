@@ -129,7 +129,7 @@ class BookManager extends PrincipalManager
     public function countBooksByUser($userId) {
         // Requête SQL qui compte le nombre de lignes dans la table "books"
         // filtrées par l'identifiant de l'utilisateur (user_id)
-        $query = "SELECT COUNT(*) as total FROM books WHERE user_id = :id";
+        $query = "SELECT COUNT(*) as total FROM books WHERE user_id = :id"; 
         // Récupération de la connexion à la base de données via l'objet $this->db
         $dbConnection = $this->db->getConnection();
          // Préparation de la requête SQL pour éviter les injections

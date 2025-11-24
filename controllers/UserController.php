@@ -198,8 +198,8 @@ class UserController
      * - Vérifie si la requête est envoyée en POST (soumission du formulaire).
      * - Effectue une vérification CSRF via un token stocké en session.
      * - Valide les champs obligatoires :
-     *   - Email (non vide et format valide).
-     *   - Mot de passe (non vide).
+     *  - Email (non vide et format valide).
+     *  - Mot de passe (non vide).
      * - Nettoie les données pour éviter les failles XSS.
      * - Recherche l'utilisateur en base via Users::findByEmail().
      * - Vérifie le mot de passe avec password_verify() par rapport au hash stocké.
