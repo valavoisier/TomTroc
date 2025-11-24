@@ -116,6 +116,7 @@ class MessageManager extends PrincipalManager {
                      FROM messages m2 
                      WHERE (m2.sender_id = :userId AND m2.receiver_id = u.id) -- userId est expéditeur
                         OR (m2.sender_id = u.id AND m2.receiver_id = :userId) -- userId est destinataire
+                     ORDER BY m2.created_at DESC -- Trie par date décroissante pour obtenir le plus récent en premier
                      LIMIT 1) as last_message, -- Prend seulement le 1er = le plus récent
                     (SELECT m3.created_at -- sous requête m3 récupère la date du dernier message échangé
                      FROM messages m3 

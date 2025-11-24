@@ -1,15 +1,12 @@
 <?php
 $pageTitle = "Messagerie";
-
 // Démarrage de la mise en tampon de sortie
 ob_start(); ?>
-
 <section class="messages-section">
     <div class="messages-container">
         <!-- Colonne de gauche : Liste des conversations -->
         <aside class="messages-sidebar">
             <h1 class="messages-title">Messagerie</h1>
-
             <div class="conversation-list">
                 <?php if (!empty($conversations)): ?>
                     <?php foreach ($conversations as $index => $conversation): ?>
@@ -31,7 +28,6 @@ ob_start(); ?>
                 <?php endif; ?>
             </div>
         </aside>
-
         <!-- Zone de conversation -->
         <div class="messages-main">
             <?php if (isset($selectedConversation) && !empty($selectedConversation)): ?>
@@ -40,7 +36,6 @@ ob_start(); ?>
                     <img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($selectedConversation['avatar'] ?? 'user.png') ?>" alt="Avatar" class="messages-header-avatar">
                     <span class="messages-header-name"><?= htmlspecialchars($selectedConversation['pseudo']) ?></span>
                 </div>
-
                 <!-- Contenu de la conversation sélectionnée -->
                 <div class="messages-content">
                     <?php if (!empty($messages)): ?>
@@ -49,7 +44,6 @@ ob_start(); ?>
                             $isSender = ($message['sender_id'] != $_SESSION['user']['id']);
                             $messageClass = $isSender ? 'message-sender' : 'message-receiver';
                             ?>
-
                             <?php if ($isSender): ?>
                                 <!-- Message du sender (gauche) -->
                                 <div class="message-item <?= $messageClass ?>">
@@ -77,7 +71,6 @@ ob_start(); ?>
                         <p class="no-messages">Démarrez la conversation en envoyant un message.</p>
                     <?php endif; ?>
                 </div>
-
                 <!-- Formulaire d'envoi de réponse au message reçu -->
                 <form class="messages-form" method="POST" action="<?= ROOT ?>/message/send">
                     <input type="hidden" name="receiver_id" value="<?= $selectedConversation['id'] ?? $selectedConversation['user_id'] ?>">
@@ -92,10 +85,8 @@ ob_start(); ?>
         </div>
     </div>
 </section>
-
 <?php
 // Récupération du contenu mis en tampon
 $content = ob_get_clean();
-
 // Inclusion du layout principal
 include('views/includes/template.php');
