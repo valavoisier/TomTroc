@@ -2,36 +2,57 @@
 $pageTitle = "Détails livre";
 // Démarrage de la mise en tampon de sortie
 ob_start(); ?>
+<!-- Fil d'Ariane -->
+<nav class="breadcrumb">
+    <div class="breadcrumb-container">
+        <a href="available-books.html">Nos livres</a>
+        <span class="breadcrumb-separator"> > </span>
+        <span class="breadcrumb-current"><?= htmlspecialchars($book->getTitle()) ?></span>
+    </div>
+</nav>
 <section class="single-book">
     <div class="single-book-container">
         <!-- Partie gauche : Image -->
         <div class="book-image-section">
-            <img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($book['image']) ?>" alt="<?= htmlspecialchars($book['title']) ?>" class="single-book-image">
+            <img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($book->getImage() ?? 'default-book.jpg') ?>"
+                alt="<?= htmlspecialchars($book->getTitle()) ?>"
+                class="single-book-image">
         </div>
         <!-- Partie droite : Titre -->
         <div class="book-info-section">
             <div class="book-info-content">
-                <h1><?= htmlspecialchars($book['title']) ?></h1>
-                <p class="book-info-author">par <?= htmlspecialchars($book['author']) ?></p>
-                <div class="separator-line"></div>
+                <h1><?= htmlspecialchars($book->getTitle()) ?></h1>
+                <p class="book-info-author">par <?= htmlspecialchars($book->getAuthor()) ?></p>
+                <div class="separator"></div>
                 <h3 class="section-title">DESCRIPTION</h3>
                 <div class="book-description">
-                    <p><?= nl2br(htmlspecialchars($book['description'])) ?></p>
+                    <p><?= nl2br(htmlspecialchars($book->getDescription())) ?></p>
                 </div>
                 <h3 class="section-title">PROPRIÉTAIRE</h3>
                 <!-- Lien vers le compte du propriétaire -->
-                <a href="<?= ROOT ?>/user/publicAccount/<?= $book['user_id'] ?>" class="owner-profile-link">
+                <a href="<?= ROOT ?>/user/publicAccount/<?= $book->getUserId() ?>" class="owner-profile-link">
                     <div class="owner-profile">
                         <div class="owner-avatar">
-                            <img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($book['avatar'] ?? 'user.png') ?>" alt="<?= htmlspecialchars($book['pseudo']) ?>">
+                            <img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($book->getAvatar() ?? 'user.png') ?>"
+                                alt="<?= htmlspecialchars($book->getPseudo()) ?>">
                         </div>
-                        <span class="owner-name"><?= htmlspecialchars($book['pseudo']) ?></span>
+                        <span class="owner-name"><?= htmlspecialchars($book->getPseudo()) ?></span>
                     </div>
                 </a>
-                <!-- Bouton messagerie envoi au propriétaire -->
-                <a href="<?= ROOT ?>/message/new/<?= $book['user_id'] ?>" class="message-button">
-                    <button class="btn-message">Écrire un message</button>
-                </a>
+                <!-- Bouton messagerie : lien vers la page messages -->
+                <?php if (isset($_SESSION['user'])): ?>
+                    <?php if ((int)$_SESSION['user']['id'] !== (int)$book->getUserId()): ?>
+                        <!-- Utilisateur connecté et ce n'est pas son propre livre -->
+                        <a href="<?= ROOT ?>/message/conversation/<?= (int)$book->getUserId() ?>" class="btn-message-large">
+                            Envoyer un message
+                        </a>
+                    <?php endif; ?>
+                <?php else: ?>
+                    <!-- Utilisateur non connecté : bouton redirige vers login -->
+                    <a href="<?= ROOT ?>/user/login" class="btn-message-large">
+                        Envoyer un message
+                    </a>
+                <?php endif; ?>
             </div>
         </div>
     </div>
