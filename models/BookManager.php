@@ -3,7 +3,7 @@ require_once './Autoload.php';
 /*
 MANAGER pour les opérations spécifiques aux livres
 */ 
-class BookManager extends PrincipalManager
+class BookManager extends AbstractManager
 {
     /**
      * Méthode getAllBooksWithUser() pour récupérer tous les livres avec le pseudo de l'utilisateur associé.
