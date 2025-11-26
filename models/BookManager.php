@@ -8,36 +8,79 @@ class BookManager extends AbstractManager
     /**
      * Méthode getAllBooksWithUser() pour récupérer tous les livres avec le pseudo de l'utilisateur associé.
      * - Exécute une requête SQL avec une jointure entre les tables `books` et `users` pour obtenir le pseudo de l'utilisateur associé à chaque livre.
-     * @return array Liste des livres avec les informations utilisateur (tableau associatif).
+     * @return array Liste des objets Books avec les informations utilisateur (pseudo, avatar).
      */
-    public function getAllBooksWithUser()
+    public function getAllBooksWithUser(): array
     {
         $dbConnection = $this->db->getConnection();
-        $query = "SELECT books.*, users.pseudo -- Récupère toutes les colonnes de la table books et le pseudo de l'utilisateur
-                  FROM books -- jointure entre les tables books et users sur user_id
-                  /*La condition ON books.user_id = users.id relie chaque livre à l’utilisateur qui l’a ajouté. Résultat : pour chaque livre, on récupère aussi le pseudo de l’utilisateur associé.*/
-                  JOIN users ON books.user_id = users.id"; 
-                  //(utilisation test avec LEFT JOIN avec user_id null en bdd hors session)
+        $query = "SELECT books.*, users.pseudo, users.avatar 
+                  FROM books 
+                  JOIN users ON books.user_id = users.id";
         $req = $dbConnection->prepare($query);
         $req->execute();
-        return $req->fetchAll(PDO::FETCH_ASSOC);
+        $rows = $req->fetchAll(PDO::FETCH_ASSOC);
+
+        $books = [];
+        foreach ($rows as $data) {
+            $book = new Books(
+                $data['id'],
+                $data['title'],
+                $data['author'],
+                $data['description'],
+                $data['image'],
+                $data['user_id'],
+                $data['created_at'],
+                $data['updated_at'],
+                $data['status']
+            );
+            $book->setPseudo($data['pseudo']);
+            $book->setAvatar($data['avatar']);
+            $books[] = $book;
+        }
+        return $books;
     }
 
     /**
      * Méthode getBookByTitle() pour rechercher un livre par son titre.
      * - Exécute une requête SQL pour rechercher un livre dont le titre correspond partiellement au paramètre fourni.
      * @param string $title Le titre (ou partie du titre) du livre à rechercher.
-     * @return array|false Les données du livre trouvé sous forme de tableau associatif, ou false si aucun livre trouvé.
+     * @return Books|null Retourne un objet Books si trouvé, sinon null.
      */
-    public function getBookByTitle($title)
+    // Récupère un livre par son titre (LIKE)
+    public function getBookByTitle($title): ?Books
     {
         $dbConnection = $this->db->getConnection();
-        // Requête pour rechercher un livre par son titre (utilisation de LIKE pour correspondance partielle)
-        $query = "SELECT * FROM books WHERE title LIKE :title LIMIT 1";
+
+        $query = "SELECT books.*, users.pseudo, users.avatar
+                  FROM books
+                  JOIN users ON books.user_id = users.id
+                  WHERE books.title LIKE :title
+                  LIMIT 1";
+
         $req = $dbConnection->prepare($query);
         $req->execute([':title' => "%$title%"]);
-        return $req->fetch(PDO::FETCH_ASSOC);
+        $data = $req->fetch(PDO::FETCH_ASSOC);
+
+        if ($data) {
+            $book = new Books(
+                $data['id'],
+                $data['title'],
+                $data['author'],
+                $data['description'],
+                $data['image'],
+                $data['user_id'],
+                $data['created_at'],
+                $data['updated_at'],
+                $data['status']
+            );
+            $book->setPseudo($data['pseudo']);
+            $book->setAvatar($data['avatar']);
+            return $book;
+        }
+
+        return null;
     }
+
     
      /**
      * Méthode getBookById() pour récupérer les détails d'un livre spécifique par son ID,
@@ -49,7 +92,7 @@ class BookManager extends AbstractManager
      * @return array|null Tableau associatif contenant les détails du livre et de l'utilisateur,
      *                    ou null si aucun livre n'est trouvé.
      */
-     public function getBookById($id)
+     public function getBookById($id): ?Books
     {
         $dbConnection = $this->db->getConnection();
         $query = "SELECT books.*, users.pseudo, users.avatar, users.id AS user_id -- Récupère toutes les colonnes de la table books et le pseudo, avatar de l'utilisateur
@@ -60,7 +103,25 @@ class BookManager extends AbstractManager
               WHERE books.id = :id";
         $req = $dbConnection->prepare($query);
         $req->execute([':id' => $id]);
-        return $req->fetch(PDO::FETCH_ASSOC);
+        return $req->fetch(PDO::FETCH_ASSOC);//un seul résultat attendu
+        if ($data) {
+            $book = new Books(
+                $data['id'],
+                $data['title'],
+                $data['author'],
+                $data['description'],
+                $data['image'],
+                $data['user_id'],
+                $data['created_at'],
+                $data['updated_at'],
+                $data['status']
+            );
+            $book->setPseudo($data['pseudo']);
+            $book->setAvatar($data['avatar']);
+            return $book;
+        }
+
+        return null;
     }
     
     /**
@@ -69,19 +130,43 @@ class BookManager extends AbstractManager
      * - Trie les résultats par ID de livre décroissant (livres les plus récents en premier).
      * - Limite le nombre de résultats retournés (par défaut 4).
      * @param int $limit Nombre maximum de livres à récupérer (par défaut 4).
-     * @return array Liste des livres avec les informations utilisateur (tableau associatif).
+     * @return array Liste des objets Books avec les informations utilisateur (pseudo, avatar).
      */
-     public function getLastBooks($limit = 4){
+      public function getLastBooks(int $limit = 4): array
+    {
         $dbConnection = $this->db->getConnection();
-        $query = "SELECT books.*, users.pseudo, users.avatar, users.id AS user_id -- Récupère toutes les colonnes de la table books et le pseudo, avatar de l'utilisateur
-                FROM books
-                JOIN users ON books.user_id = users.id -- La condition ON relie chaque livre à son propriétaire dont on récupère les infos associées.
-                ORDER BY books.id DESC
-                LIMIT :limit";
+
+        $query = "SELECT books.*, users.pseudo, users.avatar
+                  FROM books
+                  JOIN users ON books.user_id = users.id
+                  ORDER BY books.id DESC
+                  LIMIT :limit";
+
         $req = $dbConnection->prepare($query);
-        $req->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
+        $req->bindValue(':limit', $limit, PDO::PARAM_INT);
         $req->execute();
-        return $req->fetchAll(PDO::FETCH_ASSOC);
+
+        $rows = $req->fetchAll(PDO::FETCH_ASSOC);
+
+        $books = [];
+        foreach ($rows as $data) {
+            $book = new Books(
+                $data['id'],
+                $data['title'],
+                $data['author'],
+                $data['description'],
+                $data['image'],
+                $data['user_id'],
+                $data['created_at'],
+                $data['updated_at'],
+                $data['status']
+            );
+            $book->setPseudo($data['pseudo']);
+            $book->setAvatar($data['avatar']);
+            $books[] = $book;
+        }
+
+        return $books;
     }
 
     /**
@@ -117,16 +202,42 @@ class BookManager extends AbstractManager
      * - Trie les résultats par date de création décroissante (du plus récent au plus ancien).
      * - Retourne la liste des livres sous forme de tableau associatif.
      * @param int $userId Identifiant unique de l'utilisateur.
-     * @return array Liste des livres ajoutés par cet utilisateur (tableau associatif).
+     * @return array Liste des objets Books avec les informations utilisateur (pseudo, avatar).
      */
-    public function getBooksByUserId($userId) {
+   public function getBooksByUserId($userId): array
+    {
         $dbConnection = $this->db->getConnection();
-        // Requête SQL pour récupérer tous les livres d'un utilisateur spécifique, triés par date de création décroissante
-        $query = "SELECT * FROM books WHERE user_id = :id ORDER BY created_at DESC";
+
+        $query = "SELECT books.*, users.pseudo, users.avatar
+                  FROM books
+                  JOIN users ON books.user_id = users.id
+                  WHERE books.user_id = :userId
+                  ORDER BY books.id DESC";
+
         $req = $dbConnection->prepare($query);
-        $req->bindParam(':id', $userId, PDO::PARAM_INT);
-        $req->execute();
-        return $req->fetchAll(PDO::FETCH_ASSOC);
+        $req->execute([':userId' => $userId]);
+
+        $results = $req->fetchAll(PDO::FETCH_ASSOC);
+
+        $books = [];
+        foreach ($results as $data) {
+            $book = new Books(
+                $data['id'],
+                $data['title'],
+                $data['author'],
+                $data['description'],
+                $data['image'],
+                $data['user_id'],
+                $data['created_at'],
+                $data['updated_at'],
+                $data['status']
+            );
+            $book->setPseudo($data['pseudo']);
+            $book->setAvatar($data['avatar']);
+            $books[] = $book;
+        }
+
+        return $books;
     }
  /* -------------------- CRUD génériques -------------------- */
     /**

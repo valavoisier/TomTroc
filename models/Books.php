@@ -1,64 +1,55 @@
-<?php 
-/* 
-Modèle pour les opérations sur les livres
- */
-// Autochargement des classes
+<?php
 require_once './Autoload.php';
 
-class Books extends BookManager {
-    protected $table; // Nom de la table associée au modèle ici 'books'
+class Books {
+    private $id;
+    private $title;
+    private $author;
+    private $description;
+    private $image;
+    private $userId;
+    private $createdAt;
+    private $updatedAt;
+    private $status;
+    private $pseudo;
+    private $avatar;
 
-    public function __construct($table) {
-        parent::__construct(); // Appel du constructeur du modèle principal pour initialiser la connexion DB
-        $this->table = $table; // Initialisation du nom de la table
-    
+    public function __construct($id, $title, $author, $description, $image, $userId, $createdAt, $updatedAt, $status) {
+        $this->id = $id ? (int)$id : null;
+        $this->title = $title;
+        $this->author = $author;
+        $this->description = $description;
+        $this->image = $image;
+        $this->userId = (int)$userId;
+        $this->createdAt = $createdAt;
+        $this->updatedAt = $updatedAt;
+        $this->status = (int)$status;
     }
 
-    /**
-     * Méthode registerBookBdd() pour enregistrer un nouveau livre en base de données.
-     *
-     * Cette méthode :
-     * - Utilise la méthode générique add() du PrincipalManager.
-     * - Insère les données fournies dans la table définie par $this->table (ici `books`).
-     *
-     * @param array $data Données du livre à insérer (titre, auteur, description, etc.).
-     * @return bool Résultat de l'opération (true si l'insertion réussit, false sinon).
-     */
-    public function registerBookBdd($data){
-        // Appel de la méthode add() du modèle principal pour insérer les données dans la table
-        return $this->add($this->table, $data);
-    }
+    // Getters
+    public function getId() { return $this->id; }
+    public function getTitle() { return $this->title; }
+    public function getAuthor() { return $this->author; }
+    public function getDescription() { return $this->description; }
+    public function getImage() { return $this->image ?: 'default-book.jpg'; }
+    public function getUserId() { return $this->userId; }
+    public function getCreatedAt() { return $this->createdAt; }
+    public function getUpdatedAt() { return $this->updatedAt; }
+    public function getStatus() { return $this->status; }
 
-    /**
-     * Méthode updateBookBdd() pour mettre à jour un livre existant en base de données.
-     *
-     * Cette méthode :
-     * - Utilise la méthode générique update() du PrincipalManager.
-     * - Met à jour les colonnes de la table `books` avec les nouvelles données.
-     * - Cible le livre grâce à son identifiant unique.
-     *
-     * @param int   $id   Identifiant du livre à mettre à jour.
-     * @param array $data Données à modifier (titre, auteur, description, etc.).
-     * @return bool Résultat de l'opération (true si la mise à jour réussit, false sinon).
-     */
-    public function updateBookBdd($id, $data) {
-        // Appel de la méthode update() du PrincipalManager
-        return $this->update($this->table, $data, $id);
-    }
+    // Setters
+    public function setTitle($title) { $this->title = $title; }
+    public function setAuthor($author) { $this->author = $author; }
+    public function setDescription($description) { $this->description = $description; }
+    public function setImage($image) { $this->image = $image; }
+    public function setStatus($status) { $this->status = (int)$status; }
+    public function setUpdatedAt($updatedAt) { $this->updatedAt = $updatedAt; }
 
-    /**
-     * Méthode deleteBookBdd() pour supprimer un livre en base de données.
-     *
-     * Cette méthode :
-     * - Utilise la méthode générique delete() du PrincipalManager.
-     * - Supprime la ligne correspondante dans la table `books`.
-     *
-     * @param int $id Identifiant du livre à supprimer.
-     * @return bool Résultat de l'opération (true si la suppression réussit, false sinon).
-     */
-    public function deleteBookBdd($id) {
-        // Appel de la méthode delete() du PrincipalManager
-        return $this->delete($this->table, $id);
-    }
-      
+    // Utilisateur
+    public function getPseudo() { return $this->pseudo; }
+    public function setPseudo($pseudo) { $this->pseudo = $pseudo; }
+
+    public function getAvatar() { return $this->avatar ?: 'user.png'; }
+    public function setAvatar($avatar) { $this->avatar = $avatar; }
 }
+
