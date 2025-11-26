@@ -7,25 +7,17 @@ class BookManager extends PrincipalManager
 {
     /**
      * Méthode getAllBooksWithUser() pour récupérer tous les livres avec le pseudo de l'utilisateur associé.
-     *
-     * Cette méthode :
      * - Exécute une requête SQL avec une jointure entre les tables `books` et `users` pour obtenir le pseudo de l'utilisateur associé à chaque livre.
-     * - Retourne chaque livre avec toutes ses colonnes (`books.*`) et le pseudo de l'utilisateur.
-     * - Permet de remplacer la méthode générique getAll() qui ne renvoyait que l'user_id.
-     * - (Peut être adaptée en LEFT JOIN pour inclure les livres sans utilisateur associé dans le cadre du test d'ajout en dehors de la session avec user_id null en bdd).
-     *
      * @return array Liste des livres avec les informations utilisateur (tableau associatif).
      */
     public function getAllBooksWithUser()
     {
         $dbConnection = $this->db->getConnection();
-        // Requête pour récupérer tous les livres avec le pseudo de l'utilisateur
-        // jointure entre les tables books et users sur user_id
-        //La condition ON books.user_id = users.id relie chaque livre à l’utilisateur qui l’a ajouté. Résultat : pour chaque livre, on récupère aussi le pseudo de l’utilisateur associé.
-        $query = "SELECT books.*, users.pseudo 
-                  FROM books 
-                  JOIN users ON books.user_id = users.id";
-                  //utiliser LEFT JOIN pour inclure tous les livres même s'ils n'ont pas d'utilisateur associé dans le cadre du test d'ajout en dehors de la session avec user_id null en bdd
+        $query = "SELECT books.*, users.pseudo -- Récupère toutes les colonnes de la table books et le pseudo de l'utilisateur
+                  FROM books -- jointure entre les tables books et users sur user_id
+                  /*La condition ON books.user_id = users.id relie chaque livre à l’utilisateur qui l’a ajouté. Résultat : pour chaque livre, on récupère aussi le pseudo de l’utilisateur associé.*/
+                  JOIN users ON books.user_id = users.id"; 
+                  //(utilisation test avec LEFT JOIN avec user_id null en bdd hors session)
         $req = $dbConnection->prepare($query);
         $req->execute();
         return $req->fetchAll(PDO::FETCH_ASSOC);
@@ -33,11 +25,7 @@ class BookManager extends PrincipalManager
 
     /**
      * Méthode getBookByTitle() pour rechercher un livre par son titre.
-     *     
-     * Cette méthode :
      * - Exécute une requête SQL pour rechercher un livre dont le titre correspond partiellement au paramètre fourni.
-     * - Retourne uniquement les données de base pour identifier le livre.  
-     * 
      * @param string $title Le titre (ou partie du titre) du livre à rechercher.
      * @return array|false Les données du livre trouvé sous forme de tableau associatif, ou false si aucun livre trouvé.
      */
@@ -54,15 +42,9 @@ class BookManager extends PrincipalManager
      /**
      * Méthode getBookById() pour récupérer les détails d'un livre spécifique par son ID,
      * avec les informations de l'utilisateur associé (pseudo, avatar).
-     *
-     * Cette méthode :
      * - Exécute une requête SQL avec une jointure entre les tables `books` et `users`.
      * - Retourne toutes les colonnes du livre (`books.*`) ainsi que :
-     *   - Le pseudo de l'utilisateur.
-     *   - L'avatar de l'utilisateur.
-     *   - L'identifiant de l'utilisateur (alias `user_id`).
-     * - Permet d'obtenir une vue enrichie du livre incluant son auteur/utilisateur.
-     * 
+     *   - Le pseudo, l'avatar et identifiant de l'utilisateur (alias `user_id`).
      * @param int $id Identifiant unique du livre à récupérer.
      * @return array|null Tableau associatif contenant les détails du livre et de l'utilisateur,
      *                    ou null si aucun livre n'est trouvé.
@@ -70,14 +52,11 @@ class BookManager extends PrincipalManager
      public function getBookById($id)
     {
         $dbConnection = $this->db->getConnection();
-        // Requête pour récupérer un livre spécifique avec le pseudo et avatar de l'utilisateur (séléctionne toutes les colonnes de la table books et ajoute les colonnes pseudo et avatar)
-        // jointure entre les tables books et users sur user_id
-        // séléctionne l'ID de l'utilisateur (user.id et le renomme user_id pour éviter les conflits avec books.id)
-        // La condition ON books.user_id = users.id relie chaque livre à l’utilisateur qui l’a ajouté. Résultat : pour chaque livre, on récupère aussi les infos de l’utilisateur associé.
-        // WHERE books.id = :id (Filtre pour ne récupérer qu’un livre spécifique, identifié par son ID).:id est un paramètre nommé qui sera lié par execute([':id' => $id]).
-        $query = "SELECT books.*, users.pseudo, users.avatar, users.id AS user_id
+        $query = "SELECT books.*, users.pseudo, users.avatar, users.id AS user_id -- Récupère toutes les colonnes de la table books et le pseudo, avatar de l'utilisateur
               FROM books
-              JOIN users ON books.user_id = users.id
+              /* jointure entre les tables books et users sur user_id */
+              JOIN users ON books.user_id = users.id -- La condition ON relie chaque livre à son propriétaire dont on récupère les infos associées.
+              /*Filtre pour ne récupérer qu’un livre spécifique, identifié par son ID/ :id est un paramètre nommé qui sera lié par execute([':id' => $id]) */
               WHERE books.id = :id";
         $req = $dbConnection->prepare($query);
         $req->execute([':id' => $id]);
@@ -86,27 +65,17 @@ class BookManager extends PrincipalManager
     
     /**
      * Méthode getLastBooks() pour récupérer les 4 derniers livres ajoutés avec les informations de l'utilisateur associé.
-     *
-     * Cette méthode :
      * - Exécute une requête SQL avec une jointure entre les tables `books` et `users`.
-     * - Retourne toutes les colonnes du livre (`books.*`) ainsi que :
-     *   - Le pseudo de l'utilisateur.
-     *   - L'avatar de l'utilisateur.
-     *   - L'identifiant de l'utilisateur (alias `user_id`).
      * - Trie les résultats par ID de livre décroissant (livres les plus récents en premier).
      * - Limite le nombre de résultats retournés (par défaut 4).
-     * 
      * @param int $limit Nombre maximum de livres à récupérer (par défaut 4).
      * @return array Liste des livres avec les informations utilisateur (tableau associatif).
      */
      public function getLastBooks($limit = 4){
         $dbConnection = $this->db->getConnection();
-        // Requête pour récupérer les derniers livres avec le pseudo et avatar de l'utilisateur
-        // jointure entre les tables books et users sur user_id
-        // tri par id décroissant et limitation du nombre de résultats
-        $query = "SELECT books.*, users.pseudo, users.avatar, users.id AS user_id
+        $query = "SELECT books.*, users.pseudo, users.avatar, users.id AS user_id -- Récupère toutes les colonnes de la table books et le pseudo, avatar de l'utilisateur
                 FROM books
-                JOIN users ON books.user_id = users.id
+                JOIN users ON books.user_id = users.id -- La condition ON relie chaque livre à son propriétaire dont on récupère les infos associées.
                 ORDER BY books.id DESC
                 LIMIT :limit";
         $req = $dbConnection->prepare($query);
@@ -116,13 +85,10 @@ class BookManager extends PrincipalManager
     }
 
     /**
-    * Méthode pour compter le nombre de livres ajoutés par un utilisateur spécifique
-    *
-    * Cette méthode :
+    * Méthode pour compter le nombre de livres ajoutés par un utilisateur spécifique    
     * - Exécute une requête SQL sur la table `books` filtrée par l'identifiant utilisateur.
     * - Utilise la fonction d'agrégation COUNT(*) pour obtenir le nombre total de livres.
-    * - Retourne ce nombre sous forme d'entier.
-    * 
+    * - Retourne ce nombre sous forme d'entier.    * 
     * @param int $userId Identifiant unique de l'utilisateur.
     * @return int Nombre total de livres ajoutés par cet utilisateur.
     */
@@ -146,15 +112,12 @@ class BookManager extends PrincipalManager
     }
 
    /**
-     * Méthode getBooksByUserId() pour compter le nombre de livres ajoutés par un utilisateur spécifique.
-     *
-     * Cette méthode :
+     * Méthode getBooksByUserId() pour récupérer tous les livres ajoutés par un utilisateur spécifique.
      * - Exécute une requête SQL sur la table `books` filtrée par l'identifiant utilisateur.
-     * - Utilise une clause COUNT(*) pour obtenir le nombre total de livres associés.
-     * - Retourne ce nombre sous forme d'entier.
-     * 
-     * @param int $userId Identifiant unique de l'utilisateur dont on veut compter les livres.
-     * @return int Nombre total de livres ajoutés par l'utilisateur.
+     * - Trie les résultats par date de création décroissante (du plus récent au plus ancien).
+     * - Retourne la liste des livres sous forme de tableau associatif.
+     * @param int $userId Identifiant unique de l'utilisateur.
+     * @return array Liste des livres ajoutés par cet utilisateur (tableau associatif).
      */
     public function getBooksByUserId($userId) {
         $dbConnection = $this->db->getConnection();
@@ -164,6 +127,30 @@ class BookManager extends PrincipalManager
         $req->bindParam(':id', $userId, PDO::PARAM_INT);
         $req->execute();
         return $req->fetchAll(PDO::FETCH_ASSOC);
+    }
+ /* -------------------- CRUD génériques -------------------- */
+    /**
+     * Insère un livre en base.
+     */
+    public function registerBook(array $data): bool
+    {
+        return $this->add('books', $data);
+    }
+
+    /**
+     * Met à jour un livre existant.
+     */
+    public function updateBook(int $id, array $data): bool
+    {
+        return $this->update('books', $data, $id);
+    }
+
+    /**
+     * Supprime un livre.
+     */
+    public function deleteBook(int $id): bool
+    {
+        return $this->delete('books', $id);
     }
    
 }
