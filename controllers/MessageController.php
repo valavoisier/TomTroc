@@ -1,16 +1,25 @@
 <?php
-require_once './Autoload.php';
+require_once './Autoload.php';//chargement automatique des classes
+/**
+ * Classe MessageController
+ *
+ * Contrôleur responsable de la gestion de la messagerie :
+ * - Initialise les managers nécessaires (MessageManager et UserManager).
+ * - Orchestration entre les entités (Users, Messages), les managers et les vues.
+ * - Permet l’affichage des conversations, l’envoi de nouveaux messages
+ *   et la consultation d’une conversation spécifique.
+ */
 class MessageController {
-    private $messageManager;//instance de la classe Messages
-    private $userManager;//instance de la classe Users
+    private $messageManager;//instance MessageManager
+    private $userManager;//instance de la classe UserManager
 
-    //constructeur qui initialise l'instance de MessageManager
+    //constructeur  
     public function __construct() {
-        $this->messageManager = new Messages();
-        $this->userManager = new Users('users');
+        $this->messageManager = new MessageManager();
+        $this->userManager = new UserManager();
     }
-
-    /** Méthode index() pour afficher la page des messages avec la liste des conversations.
+    /**
+     * Méthode index() pour afficher la messagerie avec la liste des conversations.
      *
      * Cette méthode :
      * - Vérifie que l'utilisateur est connecté (présence de $_SESSION['user']).
@@ -20,10 +29,12 @@ class MessageController {
      * - Initialise les variables $selectedConversation et $messages.
      * - Si des conversations existent :
      *   - Sélectionne par défaut la première conversation.
-     *   - Récupère les messages échangés dans cette conversation.
-     * - Inclut la vue `views/messages/messages.php` pour afficher la liste des conversations et les messages.
+     *   - Récupère l'entité Users correspondant à l'autre participant.
+     *   - Marque les messages de cette conversation comme lus.
+     *   - Récupère les messages échangés sous forme d'entités Messages.
+     * - Inclut la vue `views/messages/messages.php` pour afficher la liste des conversations et le contenu de la conversation sélectionnée.
      *
-     * @return void Cette méthode ne retourne rien ; elle prépare les données et inclut une vue.
+     * @return void Prépare les données et inclut une vue.
      */
     public function index()
     {
@@ -40,29 +51,33 @@ class MessageController {
         $selectedConversation = null;//initialisation
         $messages = [];       
         if (!empty($conversations)) {
-            // Par défaut, sélectionner la première conversation
-            $selectedConversation = $conversations[0];
-            // Récupérer les messages de cette conversation
-            $messages = $this->messageManager->getConversationMessages($userId, $selectedConversation['user_id']);
+            $firstConversation = $conversations[0];
+            $selectedConversation = $this->userManager->getUserById($firstConversation['user_id']);
+            $this->messageManager->markMessagesAsRead($userId, $firstConversation['user_id']);
+            $messages = $this->messageManager->getConversationMessages($userId, $firstConversation['user_id']);
         }
         include('views/messages/messages.php');
     }
 
     /**
-     * Méthode send() pour envoyer un nouveau message.
+     * Méthode send() pour traiter l'envoi d'un nouveau message.
      *
      * Cette méthode :
-     * - Vérifie que l'utilisateur est connecté (présence de $_SESSION['user']).
-     *   - Si non connecté, redirige vers la page de connexion.
+     * - Vérifie que l'utilisateur est connecté (sinon redirection vers la page de connexion).
      * - Vérifie que la requête HTTP est bien de type POST.
      * - Récupère l'identifiant de l'expéditeur depuis la session.
      * - Récupère l'identifiant du destinataire et le contenu du message depuis $_POST.
-     * - Vérifie que l'identifiant du destinataire est valide et que le contenu n'est pas vide.
-     * - Appelle la méthode sendMessage() du MessageManager pour insérer le message en base.
-     * - Redirige ensuite vers la conversation avec le destinataire.
+     * - Valide les données :
+     *   - Si le destinataire est manquant, enregistre une erreur en session et redirige vers la messagerie.
+     *   - Si le contenu est vide, enregistre une erreur en session et redirige vers la conversation.
+     * - Si les données sont valides :
+     *   - Appelle la méthode sendMessage() du MessageManager pour insérer le message en base.
+     *   - Redirige vers la conversation avec le destinataire.
+     * - Si la requête n'est pas POST, redirige vers la messagerie.
      *
-     * @return void Cette méthode ne retourne rien ; elle effectue des actions (insertion + redirection).
+     * @return void Cette méthode ne retourne rien ; elle effectue des actions (validation, insertion, redirection).
      */
+
     public function send() {
         // Vérifier si l'utilisateur est connecté sinon redirection formulaire connexion 
         if (!isset($_SESSION['user'])) {
@@ -70,36 +85,42 @@ class MessageController {
             exit;
         }
         // Vérifier si la requête est de type POST
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Récupérer les données du formulaire
-            $senderId = $_SESSION['user']['id'];//ID de l'expéditeur
-            $receiverId = $_POST['receiver_id'] ?? null;//ID du destinataire
-            $content = $_POST['content'] ?? '';//Contenu du message
-            // Valider les données avant l'envoi
-            if ($receiverId && !empty(trim($content))) {
-                // Appeler la méthode sendMessage() du MessageManager pour insérer le message en base
-                $this->messageManager->sendMessage($senderId, $receiverId, trim($content));
-            }            
-            // Rediriger vers la conversation avec le destinataire
+         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $senderId   = $_SESSION['user']['id'];
+            $receiverId = isset($_POST['receiver_id']) ? (int) $_POST['receiver_id'] : null;
+            $content    = isset($_POST['content']) ? trim($_POST['content']) : '';
+            if (!$receiverId) {
+                $_SESSION['error'] = "Destinataire manquant.";
+                header('Location: ' . ROOT . '/message');
+                exit;
+            }
+            if ($content === '') {
+                $_SESSION['error'] = "Le message ne peut pas être vide.";
+                header('Location: ' . ROOT . '/message/conversation/' . $receiverId);
+                exit;
+            }
+            $this->messageManager->sendMessage($senderId, $receiverId, $content);
             header('Location: ' . ROOT . '/message/conversation/' . $receiverId);
             exit;
         }
+        header('Location: ' . ROOT . '/message');
+        exit;
     }
 
-    /**
+   /**
      * Méthode conversation() pour afficher une conversation spécifique entre l'utilisateur connecté et un autre utilisateur.
      *
      * Cette méthode :
-     * - Vérifie que l'utilisateur est connecté (présence de $_SESSION['user']).
-     *   - Si non connecté, redirige vers la page de connexion.
+     * - Vérifie que l'utilisateur est connecté (sinon redirection vers la page de connexion).
      * - Récupère l'identifiant de l'utilisateur connecté depuis la session.
      * - Récupère la liste de toutes les conversations de l'utilisateur (utile pour l'affichage global).
-     * - Récupère les informations de l'autre utilisateur ($otherUserId).
-     * - Récupère tous les messages échangés entre l'utilisateur connecté et cet autre utilisateur.
-     * - Inclut la vue `views/messages/messages.php` pour afficher la conversation.
+     * - Récupère l'entité Users correspondant à l'autre utilisateur ($otherUserId).
+     * - Marque les messages de cette conversation comme lus via MessageManager.
+     * - Récupère tous les messages échangés sous forme d'entités Messages.
+     * - Inclut la vue `views/messages/messages.php` pour afficher la liste des conversations et le contenu de la conversation sélectionnée.
      *
      * @param int $otherUserId Identifiant unique de l'autre utilisateur avec qui on converse.
-     * @return void            Cette méthode ne retourne rien ; elle prépare les données et inclut une vue.
+     * @return void            Prépare les données et inclut une vue.
      */
     public function conversation($otherUserId) {
         // Vérifier si l'utilisateur est connecté
@@ -113,6 +134,7 @@ class MessageController {
         $conversations = $this->messageManager->getConversations($userId);        
         // Récupérer les informations de l'utilisateur sélectionné
         $selectedConversation = $this->userManager->getUserById($otherUserId);
+        $this->messageManager->markMessagesAsRead($userId, $otherUserId);
         // Récupérer les messages de la conversation
         $messages = $this->messageManager->getConversationMessages($userId, $otherUserId);        
         include('views/messages/messages.php');
