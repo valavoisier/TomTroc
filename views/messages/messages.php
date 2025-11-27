@@ -11,7 +11,8 @@ ob_start(); ?>
                 <?php if (!empty($conversations)): ?>
                     <?php foreach ($conversations as $index => $conversation): ?>
                         <a href="<?= ROOT ?>/message/conversation/<?= $conversation['user_id'] ?>" class="conversation-link">
-                            <div class="conversation-item <?= ($index === 0 && !isset($selectedConversation)) || (isset($selectedConversation) && isset($selectedConversation['id']) && $selectedConversation['id'] == $conversation['user_id']) ? 'first' : '' ?>">
+                            <div class="conversation-item <?= ($index === 0 && !isset($selectedConversation)) 
+                                || (isset($selectedConversation) && $selectedConversation->getId() == $conversation['user_id']) ? 'first' : '' ?>">
                                 <img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($conversation['avatar'] ?? 'user.png') ?>" alt="Avatar" class="conversation-avatar">
                                 <div class="conversation-content">
                                     <div class="conversation-header">
@@ -33,36 +34,36 @@ ob_start(); ?>
             <?php if (isset($selectedConversation) && !empty($selectedConversation)): ?>
                 <!-- Header de la conversation -->
                 <div class="messages-header">
-                    <img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($selectedConversation['avatar'] ?? 'user.png') ?>" alt="Avatar" class="messages-header-avatar">
-                    <span class="messages-header-name"><?= htmlspecialchars($selectedConversation['pseudo']) ?></span>
+                    <img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($selectedConversation->getAvatar() ?? 'user.png', ENT_NOQUOTES, 'UTF-8') ?>" alt="Avatar" class="messages-header-avatar">
+                    <span class="messages-header-name"><?= htmlspecialchars($selectedConversation->getPseudo(), ENT_NOQUOTES, 'UTF-8') ?></span>
                 </div>
                 <!-- Contenu de la conversation sélectionnée -->
                 <div class="messages-content">
                     <?php if (!empty($messages)): ?>
                         <?php foreach ($messages as $message): ?>
                             <?php
-                            $isSender = ($message['sender_id'] != $_SESSION['user']['id']);
+                            $isSender = ($message->getSenderId() != $_SESSION['user']['id']);
                             $messageClass = $isSender ? 'message-sender' : 'message-receiver';
                             ?>
                             <?php if ($isSender): ?>
                                 <!-- Message du sender (gauche) -->
                                 <div class="message-item <?= $messageClass ?>">
                                     <div class="message-header">
-                                        <img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($message['sender_avatar'] ?? 'user.png') ?>" alt="Avatar" class="message-avatar">
-                                        <span class="message-time"><?= date('d.m H:i', strtotime($message['created_at'])) ?></span>
+                                        <img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($message->getSenderAvatar(), ENT_NOQUOTES, 'UTF-8') ?>" alt="<?= htmlspecialchars($message->getSenderPseudo(), ENT_NOQUOTES, 'UTF-8') ?>" class="message-avatar">
+                                        <span class="message-time"><?= date('d.m H:i', strtotime($message->getCreatedAt())) ?></span>
                                     </div>
                                     <div class="message-bubble message-bubble-sender">
-                                        <?= nl2br(htmlspecialchars($message['content'])) ?>
+                                        <?= nl2br(htmlspecialchars($message->getContent(), ENT_NOQUOTES, 'UTF-8')) ?>
                                     </div>
                                 </div>
                             <?php else: ?>
                                 <!-- Message du receiver (droite) -->
                                 <div class="message-item <?= $messageClass ?>">
                                     <div class="message-header-receiver">
-                                        <span class="message-time"><?= date('d.m H:i', strtotime($message['created_at'])) ?></span>
+                                        <span class="message-time"><?= date('d.m H:i', strtotime($message->getCreatedAt())) ?></span>
                                     </div>
                                     <div class="message-bubble message-bubble-receiver">
-                                        <?= nl2br(htmlspecialchars($message['content'])) ?>
+                                        <?= nl2br(htmlspecialchars($message->getContent(), ENT_NOQUOTES, 'UTF-8')) ?>
                                     </div>
                                 </div>
                             <?php endif; ?>
@@ -73,7 +74,7 @@ ob_start(); ?>
                 </div>
                 <!-- Formulaire d'envoi de réponse au message reçu -->
                 <form class="messages-form" method="POST" action="<?= ROOT ?>/message/send">
-                    <input type="hidden" name="receiver_id" value="<?= $selectedConversation['id'] ?? $selectedConversation['user_id'] ?>">
+                    <input type="hidden" name="receiver_id" value="<?= $selectedConversation->getId() ?>">
                     <input type="text" name="content" class="messages-input" placeholder="Tapez votre message ici" required>
                     <button type="submit" class="messages-submit">Envoyer</button>
                 </form>
