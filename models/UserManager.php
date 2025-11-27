@@ -1,46 +1,70 @@
 <?php
 require_once './Autoload.php';
-/**
- * Classe UserManager
- *
- * Cette classe gère les opérations spécifiques aux utilisateurs.
- * Elle hérite de PrincipalManager afin de réutiliser les méthodes génériques
- * (CRUD : Create, Read, Update, Delete) et ajoute des fonctionnalités propres
- * au modèle `users`.
- *
- * Responsabilités principales :
- * - Fournir des méthodes spécialisées pour interagir avec la table `users`.
- * - Étendre les méthodes génériques du PrincipalManager avec des requêtes ciblées.
- */
-class UserManager extends PrincipalManager{
 
-   /**
-     * Méthode findByEmail() pour rechercher un utilisateur par son adresse email.
-     *
-     * Cette méthode :
-     * - Construit une requête SQL `SELECT *` filtrée par l'email.
-     * - Prépare et exécute la requête via PDO pour sécuriser l'accès aux données.
-     * - Lie le paramètre `:email` à la valeur fournie afin d'éviter les injections SQL.
-     * - Retourne l'utilisateur correspondant sous forme de tableau associatif.
-     * - Retourne `false` si aucun utilisateur n'est trouvé.
-     *
-     * @param string $email Adresse email de l'utilisateur à rechercher.
-     * @return array|false  Tableau associatif représentant l'utilisateur trouvé,
-     *                      ou false si aucun résultat.
-     */
+class UserManager extends AbstractManager {
+
     public function findByEmail($email) {
-        // Requête pour récupérer un utilisateur par son email
-        $query = "SELECT * FROM users WHERE email = :email";
-        //stocke la connexion PDO
-        $dbConnection = $this->db->getConnection();
-        // Préparation et exécution de la requête
-        $req = $dbConnection->prepare($query);
-        // Liaison du paramètre email
-        $req->bindParam(':email', $email);
-        // Exécution de la requête        
-        $req->execute();
-        // Récupération du résultat sous forme de tableau associatif
-        return $req->fetch(PDO::FETCH_ASSOC);
+        $query = "SELECT * FROM users WHERE email = :email LIMIT 1";
+        $stmt = $this->db->getConnection()->prepare($query);
+        $stmt->bindParam(':email', $email);
+        $stmt->execute();
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($data) {
+            return new Users(
+                $data['id'],
+                $data['pseudo'],
+                $data['email'],
+                $data['password'],
+                $data['avatar'],
+                $data['created_at'],
+                $data['updated_at']
+            );
+        }
+        return null;
     }
 
+    public function getUserById($id) {
+        $query = "SELECT * FROM users WHERE id = :id";
+        $stmt = $this->db->getConnection()->prepare($query);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($data) {
+            return new Users(
+                $data['id'],
+                $data['pseudo'],
+                $data['email'],
+                $data['password'],
+                $data['avatar'],
+                $data['created_at'],
+                $data['updated_at']
+            );
+        }
+        return null;
+    }
+
+    public function registerUser(Users $user) {
+        $data = [
+            'pseudo'     => $user->getPseudo(),
+            'email'      => $user->getEmail(),
+            'password'   => $user->getPassword(),
+            'avatar'     => $user->getAvatar(),
+            'created_at' => $user->getCreatedAt(),
+            'updated_at' => $user->getUpdatedAt()
+        ];
+        return $this->add('users', $data);
+    }
+
+    public function updateUserInfo(Users $user) {
+        $data = [
+            'pseudo'     => $user->getPseudo(),
+            'email'      => $user->getEmail(),
+            'password'   => $user->getPassword(),
+            'avatar'     => $user->getAvatar(),
+            'updated_at' => $user->getUpdatedAt()
+        ];
+        return $this->update('users', $data, $user->getId());
+    }
 }
