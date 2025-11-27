@@ -6,19 +6,19 @@ ob_start(); ?>
     <div class="account-container">
         <!-- Bloc principal -->
         <div class="public-account-box">
-            <!-- Colonne gauche -->
+            <!-- Colonne gauche avatar/infos -->
             <div class="public-account-left">
-                <!-- Bloc image -->
+                <!-- Bloc avatar -->
                 <div class="avatar-block">
                     <div class="avatar-wrapper">
-                        <img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($user['avatar'] ?? 'user.png') ?>" alt="Photo de profil">
+                        <img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($user->getAvatar() ?? 'user.png') ?>" alt="Photo de profil">
                     </div>
                 </div>
                 <!-- Séparateur -->
                 <div class="separator-line"></div>
-                <!-- Bloc identité complet -->
+                <!-- Bloc identité infos complet -->
                 <div class="identity-block">
-                    <p class="pseudo"><?= htmlspecialchars($user['pseudo']) ?></p>
+                    <p class="pseudo"><?= htmlspecialchars($user->getPseudo()) ?></p>
                     <p class="member-since"><?= $memberSince ?></p>
                     <div class="library-block">
                         <p class="library-label">BIBLIOTHÈQUE</p>
@@ -29,11 +29,21 @@ ob_start(); ?>
                     </div>
                 </div>
                 <!-- Bouton messagerie envoi au propriétaire -->
-                <a href="<?= ROOT ?>/message/new/<?= $book['user_id'] ?>" class="message-button">
-                    <button class="btn-message">Écrire un message</button>
-                </a>
+                <?php if ($_SESSION['user']['id'] ?? null): ?>
+                    <?php if ($_SESSION['user']['id'] !== (int)$user->getId()): ?>
+                        <!-- Connecté et pas le propriétaire -->
+                        <a href="<?= ROOT ?>/message/conversation/<?= (int)$user->getId() ?>" class="message-button">
+                            <button class="btn-message">Écrire un message</button>
+                        </a>
+                    <?php endif; ?>
+                <?php else: ?>
+                    <!-- Non connecté -->
+                    <a href="<?= ROOT ?>/user/login" class="message-button">
+                        <button class="btn-message">Écrire un message</button>
+                    </a>
+                <?php endif; ?>
             </div>
-            <!-- Colonne droite -->
+            <!-- Colonne droite / liste des livres-->
             <div class="public-table-container">
                 <table class="book-table">
                     <thead>
@@ -48,17 +58,17 @@ ob_start(); ?>
                         <?php if (!empty($userBooks)): ?>
                             <?php foreach ($userBooks as $index => $book): ?>
                                 <tr <?= ($index === count($userBooks) - 1) ? 'class="last-row"' : '' ?>>
-                                    <td><img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($book['image'] ?? 'default-book.jpg') ?>" alt="<?= htmlspecialchars($book['title']) ?>"></td>
-                                    <td><?= htmlspecialchars($book['title']) ?></td>
-                                    <td><?= htmlspecialchars($book['author']) ?></td>
+                                    <td><img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($book->getImage() ?? 'default-book.jpg') ?>" alt="<?= htmlspecialchars($book->getTitle()) ?>"></td>
+                                    <td><?= htmlspecialchars($book->getTitle()) ?></td>
+                                    <td><?= htmlspecialchars($book->getAuthor()) ?></td>
                                     <td class="description">
-                                        <?= htmlspecialchars($book['description']) ?>
+                                        <?= htmlspecialchars($book->getDescription()) ?>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
                         <?php else: ?>
                             <tr>
-                                <td colspan="6" style="text-align: center; padding: 20px;">
+                                <td>
                                     Cet utilisateur ne propose pas de livres actuellement.
                                 </td>
                             </tr>
