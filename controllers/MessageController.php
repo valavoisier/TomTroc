@@ -120,7 +120,7 @@ class MessageController {
      * - Inclut la vue `views/messages/messages.php` pour afficher la liste des conversations et le contenu de la conversation sélectionnée.
      *
      * @param int $otherUserId Identifiant unique de l'autre utilisateur avec qui on converse.
-     * @return void            Prépare les données et inclut une vue.
+     * @return void Prépare les données et inclut une vue.
      */
     public function conversation($otherUserId) {
         // Vérifier si l'utilisateur est connecté
