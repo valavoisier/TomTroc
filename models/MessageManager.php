@@ -3,46 +3,22 @@ require_once './Autoload.php';
 /*
 MANAGER pour les opérations spécifiques aux messages
 */ 
-class MessageManager extends PrincipalManager {
+class MessageManager extends AbstractManager {
     
     /**
      * Méthode sendMessage() pour envoyer un nouveau message entre deux utilisateurs.
-     *
-     * Cette méthode :
-     * - Construit une requête SQL d'insertion dans la table `messages`.
-     * - Insère les informations suivantes :
-     *   - L'identifiant de l'expéditeur (`sender_id`).
-     *   - L'identifiant du destinataire (`receiver_id`).
-     *   - Le contenu du message (`content`).
-     *   - La date et l'heure d'envoi (`created_at`) générées automatiquement avec NOW().
-     * - Utilise une requête préparée pour sécuriser l'insertion et éviter les injections SQL.
-     * - Lie les paramètres avec leur type approprié (entier ou chaîne).
-     * - Exécute la requête et retourne un booléen indiquant le succès de l'opération.
-     *
-     * @param int    $senderId   ID de l'expéditeur du message.
-     * @param int    $receiverId ID du destinataire du message.
-     * @param string $content    Contenu textuel du message.
-     * @return bool  True si l'insertion réussit, False sinon.
      */
-    public function sendMessage($senderId, $receiverId, $content) {
-        // Requête SQL pour insérer un nouveau message dans la table messages
-        $sql = "INSERT INTO messages (sender_id, receiver_id, content, created_at) 
-                VALUES (:senderId, :receiverId, :content, NOW())";
-        // Préparation et exécution de la requête
-        $dbConnection = $this->db->getConnection();
-        // Préparation de la requête SQL
-        $stmt = $dbConnection->prepare($sql);
-        // Liaison des paramètres pour la requête préparée
-        // bindValue utilise le type de données approprié pour chaque paramètre
-        // PDO::PARAM_INT pour les entiers
-        // PDO::PARAM_STR pour les chaînes de caractères
-        $stmt->bindValue(':senderId', $senderId, PDO::PARAM_INT);
-        $stmt->bindValue(':receiverId', $receiverId, PDO::PARAM_INT);
-        $stmt->bindValue(':content', $content, PDO::PARAM_STR);
-        // Exécution de la requête et retour du résultat (true si succès, false sinon)
-        return $stmt->execute();
-    }
-    
+    public function sendMessage($senderId, $receiverId, $content): bool {
+            $data = [
+                'sender_id'   => $senderId,
+                'receiver_id' => $receiverId,
+                'content'     => $content,
+                'is_read'     => 0,
+                'created_at'  => date('Y-m-d H:i:s')
+            ];
+            return $this->add('messages', $data);
+        }
+        
     /**
      * Méthode getConversationMessages() Rpour récupérer tous les messages d'une conversation entre deux utilisateurs
      *  
@@ -58,7 +34,7 @@ class MessageManager extends PrincipalManager {
      * La clause WHERE filtre les messages pour inclure ceux envoyés par l'utilisateur connecté à l'autre utilisateur et vice versa, assurant ainsi que tous les messages pertinents sont récupérés.
      * Les résultats sont ordonnés par la date de création (created_at) en ordre croissant (du plus ancien au plus récent).
      */
-    public function getConversationMessages($userId, $otherUserId) {
+    public function getConversationMessages($userId, $otherUserId):array {
         // Requête SQL pour récupérer les messages entre les deux utilisateurs
         // Inclut les informations de l'expéditeur et du destinataire via des jointures
         $sql = "SELECT 
@@ -83,7 +59,12 @@ class MessageManager extends PrincipalManager {
         $stmt->bindValue(':userId', $userId, PDO::PARAM_INT);
         $stmt->bindValue(':otherUserId', $otherUserId, PDO::PARAM_INT);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $messages = [];
+        foreach ($rows as $row) {
+            $messages[] = new Messages($row);
+        }
+        return $messages;
     }
 
     /**
@@ -107,7 +88,7 @@ class MessageManager extends PrincipalManager {
      * @return array      Tableau associatif contenant la liste des conversations,
      *                    chaque élément représentant une conversation avec son dernier message.
      */
-    public function getConversations($userId) {
+    public function getConversations($userId): array {
         $sql = "SELECT DISTINCT
                     u.id as user_id, -- ID de l'autre utilisateur
                     u.pseudo, -- Pseudo de l'autre utilisateur
@@ -136,11 +117,57 @@ class MessageManager extends PrincipalManager {
                 ) -- Tri par date du dernier message (le plus récent en premier)
                 ORDER BY last_message_date DESC"; 
         
-        $dbConnection = $this->db->getConnection();
-        $stmt = $dbConnection->prepare($sql);
+        $stmt = $this->db->getConnection()->prepare($sql);
         $stmt->bindValue(':userId', $userId, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Méthode getUnreadConversationsCount() pour compter le nombre de conversations non lues pour un utilisateur donné.
+     * @param int $userId Identifiant unique de l'utilisateur connecté.
+     * @return int Nombre de conversations non lues.
+     * Cette méthode :
+     * - Construit une requête SQL pour compter les messages non lus (is_read = 0) destinés à l'utilisateur spécifié (receiver_id = :userId).
+     * - Prépare et exécute la requête via PDO pour sécuriser l'accès aux données.
+     * - Récupère le résultat de la requête, qui contient le nombre de messages non lus.
+     * - Retourne ce nombre sous forme d'entier.
+     */
+     public function getUnreadConversationsCount($userId): int {
+        $sql = "SELECT COUNT(*) as count
+                FROM messages
+                WHERE receiver_id = :userId AND is_read = 0";
+        $stmt = $this->db->getConnection()->prepare($sql);
+        $stmt->bindValue(':userId', $userId, PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return (int)$result['count'];
+    }
+
+    /**
+     * Méthode markMessagesAsRead() pour marquer les messages d'une conversation comme lus.
+     *
+     * Cette méthode :
+     * - Construit une requête SQL pour mettre à jour le statut des messages (is_read = 1) destinés à l'utilisateur spécifié (receiver_id = :userId) et envoyés par l'autre utilisateur (sender_id = :otherUserId).
+     * - Prépare et exécute la requête via PDO pour sécuriser l'accès aux données.
+     * - Retourne un booléen indiquant si l'opération a réussi (true si au moins une ligne a été affectée, false sinon).
+     *
+     * @param int $userId Identifiant unique de l'utilisateur connecté.
+     * @param int $otherUserId Identifiant unique de l'autre utilisateur dans la conversation.
+     * @return bool Indique si l'opération de mise à jour a réussi.
+     */
+    public function markMessagesAsRead($userId, $otherUserId): bool {
+        $sql = "UPDATE messages 
+                SET is_read = 1 
+                /* Filtrage des messages à mettre à jour : 
+                 * Destinés à l'utilisateur connecté (receiver_id = :userId)
+                 * Envoyés par l'autre utilisateur (sender_id = :otherUserId)
+                */
+                WHERE receiver_id = :userId AND sender_id = :otherUserId AND is_read = 0";
+        $stmt = $this->db->getConnection()->prepare($sql);
+        $stmt->bindValue(':userId', $userId, PDO::PARAM_INT);
+        $stmt->bindValue(':otherUserId', $otherUserId, PDO::PARAM_INT);
+        return $stmt->execute();
     }
 
 }
