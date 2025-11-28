@@ -5,17 +5,17 @@
  * Cette classe contient les méthodes pour afficher la liste des livres disponibles,
  * afficher le formulaire d'ajout de livre, et enregistrer un nouveau livre en base de données.
  */
-class BookController
+class BookController extends AbstractController
 {
     public function index()
     {
         $this->availableBooks();
     }
 
-    // Formulaire d’ajout de livre
+    // Formulaire d'ajout de livre
     public function addBook()
     {
-        include('views/books/addBook.php');
+        $this->render('views/books/addBook.php');
     }
 
     // Enregistrement d’un nouveau livre
@@ -31,19 +31,19 @@ class BookController
             // Validation des données du formulaire
             if (empty($_POST['title'])) {
                 $message = "Le titre est obligatoire.";
-                include('views/books/addBook.php');
+                $this->render('views/books/addBook.php', ['message' => $message]);
                 return;
             } elseif (empty($_POST['author'])) {
                 $message = "L'auteur est obligatoire.";
-                include('views/books/addBook.php');
+                $this->render('views/books/addBook.php', ['message' => $message]);
                 return;
             } elseif (empty($_POST['description'])) {
                 $message = "La description est obligatoire.";
-                include('views/books/addBook.php');
+                $this->render('views/books/addBook.php', ['message' => $message]);
                 return;
             } elseif (!isset($_FILES['image']) || !preg_match("#jpeg|jpg|png#", $_FILES['image']['type'])) {
                 $message = "L'image est obligatoire et doit être de type jpg, jpeg ou png.";
-                include('views/books/addBook.php');
+                $this->render('views/books/addBook.php', ['message' => $message]);
                 return;
             }
 
@@ -73,10 +73,10 @@ class BookController
                 exit;
             } else {
                 $message = "Erreur lors de l'enregistrement du livre.";
-                include('views/books/addBook.php');
+                $this->render('views/books/addBook.php', ['message' => $message]);
             }
         } else {
-            include('views/books/addBook.php');
+            $this->render('views/books/addBook.php');
         }
     }
 
@@ -87,10 +87,10 @@ class BookController
         $books = $bookManager->findAll();
 
         if ($books) {
-            include('views/books/availableBooks.php');
+            $this->render('views/books/availableBooks.php', ['books' => $books]);
         } else {
             $message = "Aucun livre trouvé.";
-            include('views/books/availableBooks.php');
+            $this->render('views/books/availableBooks.php', ['message' => $message]);
         }
     }
 
@@ -107,7 +107,7 @@ class BookController
             } else {
                 $books = $bookManager->findAll();
                 $message = "Aucun livre trouvé.";
-                include('views/books/availableBooks.php');
+                $this->render('views/books/availableBooks.php', ['books' => $books, 'message' => $message]);
             }
         } else {
             header('Location: ' . ROOT . '/book/availableBooks');
@@ -123,7 +123,7 @@ class BookController
             $book = $bookManager->getBookById($id);
 
             if ($book) {
-                include('views/books/singleBook.php');
+                $this->render('views/books/singleBook.php', ['book' => $book]);
             } else {
                 echo "Livre introuvable.";
             }
@@ -141,7 +141,7 @@ class BookController
         if ($_SERVER['REQUEST_METHOD'] === 'GET' && $id !== null) {
             $book = $bookManager->getBookById($id);
             if ($book) {
-                include('views/books/editBook.php');
+                $this->render('views/books/editBook.php', ['book' => $book]);
             } else {
                 echo "Livre introuvable.";
             }
@@ -158,15 +158,15 @@ class BookController
             // Validation des données
             if (empty($_POST['title'])) {
                 $message = "Le titre est obligatoire.";
-                include('views/books/editBook.php');
+                $this->render('views/books/editBook.php', ['book' => $book, 'message' => $message]);
                 return;
             } elseif (empty($_POST['author'])) {
                 $message = "L'auteur est obligatoire.";
-                include('views/books/editBook.php');
+                $this->render('views/books/editBook.php', ['book' => $book, 'message' => $message]);
                 return;
             } elseif (empty($_POST['description'])) {
                 $message = "La description est obligatoire.";
-                include('views/books/editBook.php');
+                $this->render('views/books/editBook.php', ['book' => $book, 'message' => $message]);
                 return;
             }
 
@@ -199,7 +199,7 @@ class BookController
                 exit;
             } else {
                 $message = "Erreur lors de la modification du livre.";
-                include('views/books/editBook.php');
+                $this->render('views/books/editBook.php', ['book' => $book, 'message' => $message]);
             }
         } else {
             echo "Requête invalide.";

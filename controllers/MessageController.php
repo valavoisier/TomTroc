@@ -5,15 +5,16 @@
  * Contrôleur responsable de la gestion de la messagerie :
  * - Initialise les managers nécessaires (MessageManager et UserManager).
  * - Orchestration entre les entités (Users, Messages), les managers et les vues.
- * - Permet l’affichage des conversations, l’envoi de nouveaux messages
- *   et la consultation d’une conversation spécifique.
+ * - Permet l'affichage des conversations, l'envoi de nouveaux messages
+ *   et la consultation d'une conversation spécifique.
  */
-class MessageController {
+class MessageController extends AbstractController {
     private $messageManager;//instance MessageManager
     private $userManager;//instance de la classe UserManager
 
     //constructeur  
     public function __construct() {
+        parent::__construct();
         $this->messageManager = new MessageManager();
         $this->userManager = new UserManager();
     }
@@ -46,16 +47,23 @@ class MessageController {
         $userId = $_SESSION['user']['id'];        
         // Récupérer toutes les conversations
         $conversations = $this->messageManager->getConversations($userId);        
-        // Si une conversation est sélectionnée, récupérer ses messages
-        $selectedConversation = null;//initialisation
+        // Auto-sélectionner la première conversation et marquer les messages comme lus
+        $selectedConversation = null;
         $messages = [];       
         if (!empty($conversations)) {
             $firstConversation = $conversations[0];
             $selectedConversation = $this->userManager->getUserById($firstConversation['user_id']);
             $this->messageManager->markMessagesAsRead($userId, $firstConversation['user_id']);
             $messages = $this->messageManager->getConversationMessages($userId, $firstConversation['user_id']);
+            
+            // Recalculer le compteur après avoir marqué les messages comme lus
+            $this->conversationsCount = $this->messageManager->getUnreadConversationsCount($userId);
         }
-        include('views/messages/messages.php');
+        $this->render('views/messages/messages.php', [
+            'conversations' => $conversations,
+            'selectedConversation' => $selectedConversation,
+            'messages' => $messages
+        ]);
     }
 
     /**
@@ -135,7 +143,15 @@ class MessageController {
         $selectedConversation = $this->userManager->getUserById($otherUserId);
         $this->messageManager->markMessagesAsRead($userId, $otherUserId);
         // Récupérer les messages de la conversation
-        $messages = $this->messageManager->getConversationMessages($userId, $otherUserId);        
-        include('views/messages/messages.php');
+        $messages = $this->messageManager->getConversationMessages($userId, $otherUserId);
+        
+        // Recalculer le compteur après avoir marqué les messages comme lus
+        $this->conversationsCount = $this->messageManager->getUnreadConversationsCount($userId);
+        
+        $this->render('views/messages/messages.php', [
+            'conversations' => $conversations,
+            'selectedConversation' => $selectedConversation,
+            'messages' => $messages
+        ]);
     }
 }

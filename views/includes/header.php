@@ -1,12 +1,8 @@
  <!-- Header-->
 <?php
-require_once './Autoload.php';
-// Compter les conversations si l'utilisateur est connecté
-$conversationsCount = 0;
-if (isset($_SESSION['user'])) {   
-    $messageManager = new MessageManager();
-    $conversationsCount = $messageManager->getUnreadConversationsCount($_SESSION['user']['id']);
-}
+// La variable $conversationsCount est passée automatiquement par AbstractController::render()
+// Valeur par défaut si non définie (cas des pages d'erreur)
+$conversationsCount = $conversationsCount ?? 0;
 ?>
 
  <body>

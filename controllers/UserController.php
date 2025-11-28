@@ -1,10 +1,11 @@
 <?php
-class UserController
+class UserController extends AbstractController
 {
     private $userManager;
 
     public function __construct()
     {
+        parent::__construct();
         $this->userManager = new UserManager();
     }
 
@@ -37,7 +38,12 @@ class UserController
             : "Membre depuis moins d'un an";
 
         // Passe un objet $user et la liste $userBooks à la vue
-        include('views/users/publicAccount.php');
+        $this->render('views/users/publicAccount.php', [
+            'user' => $user,
+            'bookCount' => $bookCount,
+            'userBooks' => $userBooks,
+            'memberSince' => $memberSince
+        ]);
     }
 
     public function register()
@@ -49,21 +55,21 @@ class UserController
             ) {
                 $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
                 $message = "Requête invalide (CSRF token incorrect).";
-                include('views/users/register.php');
+                $this->render('views/users/register.php', ['message' => $message]);
                 return;
             }
 
             if (empty($_POST['pseudo']) || !ctype_alpha($_POST['pseudo'])) {
                 $message = "Le pseudo est obligatoire, il doit être alphabétique.";
-                include('views/users/register.php');
+                $this->render('views/users/register.php', ['message' => $message]);
                 return;
             } elseif (empty($_POST['email']) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
                 $message = "L'email est obligatoire et doit être valide.";
-                include('views/users/register.php');
+                $this->render('views/users/register.php', ['message' => $message]);
                 return;
             } elseif (empty($_POST['password'])) {
                 $message = "Le mot de passe est obligatoire.";
-                include('views/users/register.php');
+                $this->render('views/users/register.php', ['message' => $message]);
                 return;
             }
 
@@ -71,7 +77,7 @@ class UserController
             $pattern = "/^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{6,}$/";
             if (!preg_match($pattern, $passwordPlain)) {
                 $message = "Le mot de passe doit contenir au moins 6 caractères dont une majuscule, un chiffre et un caractère spécial.";
-                include('views/users/register.php');
+                $this->render('views/users/register.php', ['message' => $message]);
                 return;
             }
 
@@ -82,7 +88,7 @@ class UserController
             $existingUser = $this->userManager->findByEmail($email);
             if ($existingUser) {
                 $message = "Cet email est déjà utilisé.";
-                include('views/users/register.php');
+                $this->render('views/users/register.php', ['message' => $message]);
                 return;
             }
 
@@ -103,11 +109,11 @@ class UserController
                 exit;
             } else {
                 $message = "Erreur lors de l'inscription.";
-                include('views/users/register.php');
+                $this->render('views/users/register.php', ['message' => $message]);
             }
         } else {
             $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-            include('views/users/register.php');
+            $this->render('views/users/register.php');
         }
     }
 
@@ -120,17 +126,17 @@ class UserController
             ) {
                 $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
                 $message = "Requête invalide (CSRF token incorrect).";
-                include('views/users/login.php');
+                $this->render('views/users/login.php', ['message' => $message]);
                 return;
             }
 
             if (empty($_POST['email']) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
                 $message = "Veuillez saisir une adresse email valide.";
-                include('views/users/login.php');
+                $this->render('views/users/login.php', ['message' => $message]);
                 return;
             } elseif (empty($_POST['password'])) {
                 $message = "Veuillez saisir votre mot de passe.";
-                include('views/users/login.php');
+                $this->render('views/users/login.php', ['message' => $message]);
                 return;
             }
 
@@ -151,11 +157,11 @@ class UserController
                 exit;
             } else {
                 $message = "Email ou mot de passe incorrect.";
-                include('views/users/login.php');
+                $this->render('views/users/login.php', ['message' => $message]);
             }
         } else {
             $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-            include('views/users/login.php');
+            $this->render('views/users/login.php');
         }
     }
 
@@ -181,7 +187,7 @@ class UserController
 
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $message = "Email invalide.";
-                include('views/users/account.php');
+                $this->render('views/users/account.php', ['message' => $message]);
                 return;
             }
 
@@ -189,7 +195,7 @@ class UserController
             $user = $this->userManager->getUserById($_SESSION['user']['id']);
             if (!$user) {
                 $message = "Utilisateur introuvable.";
-                include('views/users/account.php');
+                $this->render('views/users/account.php', ['message' => $message]);
                 return;
             }
 
@@ -290,6 +296,11 @@ class UserController
             ? "Membre depuis {$interval->y} an" . ($interval->y > 1 ? "s" : "")
             : "Membre depuis moins d'un an";
 
-        include('views/users/account.php');
+        $this->render('views/users/account.php', [
+            'user' => $user,
+            'bookCount' => $bookCount,
+            'userBooks' => $userBooks,
+            'memberSince' => $memberSince
+        ]);
     }
 }

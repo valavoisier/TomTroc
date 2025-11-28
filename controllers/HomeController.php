@@ -2,7 +2,7 @@
 /**
  * Contrôleur pour la page d'accueil
   */ 
-class HomeController
+class HomeController extends AbstractController
 {
     /**
      * Affiche la page d'accueil avec les 4 derniers livres ajoutés.
@@ -19,6 +19,6 @@ class HomeController
     {
         $bookManager = new BookManager();
         $lastBooks = $bookManager->getLastBooks(4);
-        require_once "views/books/index.php";
+        $this->render("views/books/index.php", ['lastBooks' => $lastBooks]);
     }
 }
