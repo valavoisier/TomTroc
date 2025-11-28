@@ -1,6 +1,4 @@
 <?php
-require_once './Autoload.php';
-
 class UserManager extends AbstractManager {
 
     public function findByEmail($email) {

@@ -1,5 +1,4 @@
 <?php
-require_once './Autoload.php';//chargement automatique des classes
 /**
  * Classe MessageController
  *

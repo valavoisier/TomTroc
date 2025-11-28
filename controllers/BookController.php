@@ -1,5 +1,4 @@
 <?php
-require_once './Autoload.php';
 /**
  * Contrôleur pour la gestion des livres
  * 

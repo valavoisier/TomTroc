@@ -1,6 +1,4 @@
 <?php
-require_once './Autoload.php';
-
 class BookManager extends AbstractManager
 {
     // Récupère tous les livres (avec pseudo et avatar)

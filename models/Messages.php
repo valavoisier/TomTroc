@@ -1,6 +1,4 @@
 <?php
-require_once './Autoload.php';
-
 class Messages {
     private $id;
     private $senderId;

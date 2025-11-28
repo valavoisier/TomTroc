@@ -1,6 +1,4 @@
 <?php
-require_once './Autoload.php';
-
 class Books {
     private $id;
     private $title;
