@@ -2,16 +2,13 @@
 /**
  * Classe AbstractController
  *
- * Classe de base pour tous les contrôleurs de l'application.
+ * Classe de base pour tous les contrôleurs de l'application qui en héritent
  * Centralise la logique commune à tous les contrôleurs :
  * - Préparation des données communes pour toutes les vues (ex: compteur de messages non lus)
  * - Gestion des dépendances communes
- * 
- * Tous les contrôleurs spécifiques (HomeController, BookController, UserController, MessageController)
- * héritent de cette classe.
  */
 abstract class AbstractController {
-    protected $conversationsCount = 0;
+    protected $conversationsCount = 0;//compteur de conversations non lues
 
     /**
      * Constructeur : prépare les données communes à toutes les vues
@@ -43,11 +40,9 @@ abstract class AbstractController {
      */
     protected function render(string $viewPath, array $data = []): void {
         // Rendre disponible le compteur pour la vue
-        $conversationsCount = $this->conversationsCount;
-        
+        $conversationsCount = $this->conversationsCount;        
         // Extraire les données spécifiques sous forme de variables
-        extract($data);
-        
+        extract($data);        
         // Inclure la vue
         require_once $viewPath;
     }

@@ -48,7 +48,7 @@ class MessageManager extends AbstractManager {
                 /*Filtrage des messages pour récupération de la conversation bilatérale:*/
                 WHERE (m.sender_id = :userId AND m.receiver_id = :otherUserId) -- Cas 1 : userId est l’expéditeur ET otherUserId est le destinataire
                    OR (m.sender_id = :otherUserId AND m.receiver_id = :userId) -- Cas 2 : otherUserId est l’expéditeur ET userId est le destinataire
-                ORDER BY m.created_at DESC";// Tri par date décroissante du plus récent au plus ancien        
+                ORDER BY m.created_at ASC";// Tri par date décroissante du plus récent au plus ancien        
         $dbConnection = $this->db->getConnection();
         $stmt = $dbConnection->prepare($sql);
         // Liaison des paramètres pour la requête préparée évite injection SQL
@@ -68,7 +68,7 @@ class MessageManager extends AbstractManager {
 
     /**
      * Méthode getConversations() pour récupérer toutes les conversations d'un utilisateur avec leur dernier message.
-     *
+     * colonne de gauche
      * Cette méthode :
      * - Sélectionne les utilisateurs avec lesquels l'utilisateur connecté ($userId) a échangé des messages (requête partie 3).
      * - Utilise une sous-requête m2 pour récupérer le contenu du dernier message échangé avec chaque utilisateur.
@@ -113,7 +113,7 @@ class MessageManager extends AbstractManager {
                         END as other_user_id -- Récupère les IDs des autres utilisateurs ayant échangé des messages avec userId
                     FROM messages
                     WHERE sender_id = :userId OR receiver_id = :userId -- Filtre les messages impliquant userId
-                ) -- Tri par date du dernier message (le plus récent en premier)
+                ) -- Tri par date du dernier message (le plus récent en premier - comlonne de gauche)
                 ORDER BY last_message_date DESC"; 
         
         $stmt = $this->db->getConnection()->prepare($sql);

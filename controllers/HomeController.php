@@ -18,7 +18,9 @@ class HomeController extends AbstractController
     public function index()
     {
         $bookManager = new BookManager();
+        // Récupérer les 4 derniers livres ajoutés
         $lastBooks = $bookManager->getLastBooks(4);
+        // Inclure la vue de la page d'accueil avec les derniers livres
         $this->render("views/books/index.php", ['lastBooks' => $lastBooks]);
     }
 }

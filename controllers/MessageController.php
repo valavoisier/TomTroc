@@ -7,6 +7,11 @@
  * - Orchestration entre les entités (Users, Messages), les managers et les vues.
  * - Permet l'affichage des conversations, l'envoi de nouveaux messages
  *   et la consultation d'une conversation spécifique.
+ * @extends AbstractController
+ * @uses MessageManager Pour la gestion des messages et conversations.
+ * @uses UserManager Pour la gestion des utilisateurs.
+ * @uses Users Entité représentant un utilisateur.
+ * @uses Messages Entité représentant un message.
  */
 class MessageController extends AbstractController {
     private $messageManager;//instance MessageManager
@@ -84,7 +89,6 @@ class MessageController extends AbstractController {
      *
      * @return void Cette méthode ne retourne rien ; elle effectue des actions (validation, insertion, redirection).
      */
-
     public function send() {
         // Vérifier si l'utilisateur est connecté sinon redirection formulaire connexion 
         if (!isset($_SESSION['user'])) {
@@ -143,15 +147,13 @@ class MessageController extends AbstractController {
         $selectedConversation = $this->userManager->getUserById($otherUserId);
         $this->messageManager->markMessagesAsRead($userId, $otherUserId);
         // Récupérer les messages de la conversation
-        $messages = $this->messageManager->getConversationMessages($userId, $otherUserId);
-        
+        $messages = $this->messageManager->getConversationMessages($userId, $otherUserId);        
         // Recalculer le compteur après avoir marqué les messages comme lus
         $this->conversationsCount = $this->messageManager->getUnreadConversationsCount($userId);
-        
         $this->render('views/messages/messages.php', [
-            'conversations' => $conversations,
-            'selectedConversation' => $selectedConversation,
-            'messages' => $messages
+            'conversations' => $conversations,//liste des conversations
+            'selectedConversation' => $selectedConversation,//utilisateur sélectionné
+            'messages' => $messages//messages de la conversation
         ]);
     }
 }
