@@ -11,13 +11,20 @@ ob_start(); ?>
                 <?php if (!empty($conversations)): ?>
                     <?php foreach ($conversations as $index => $conversation): ?>
                         <a href="<?= ROOT ?>/message/conversation/<?= $conversation['user_id'] ?>" class="conversation-link">
-                            <div class="conversation-item <?= ($index === 0 && !isset($selectedConversation)) 
-                                || (isset($selectedConversation) && $selectedConversation->getId() == $conversation['user_id']) ? 'first' : '' ?>">
+                            <div class="conversation-item <?= ($index === 0 && !isset($selectedConversation))
+                                                                || (isset($selectedConversation) && $selectedConversation->getId() == $conversation['user_id']) ? 'first' : '' ?>">
                                 <img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($conversation['avatar'] ?? 'user.png') ?>" alt="Avatar" class="conversation-avatar">
                                 <div class="conversation-content">
                                     <div class="conversation-header">
                                         <span class="conversation-name"><?= htmlspecialchars($conversation['pseudo']) ?></span>
-                                        <span class="conversation-date"><?= date('d.m', strtotime($conversation['last_message_date'])) ?></span>
+                                        <span class="conversation-date">
+                                            <?php
+                                            $messageDate = strtotime($conversation['last_message_date']);
+                                            $today = strtotime('today');
+                                            echo $messageDate >= $today ? date('H:i', $messageDate) : date('d.m', $messageDate);
+                                            ?>
+                                        </span>
+
                                     </div>
                                     <p class="conversation-preview"><?= htmlspecialchars(substr($conversation['last_message'], 0, 50)) ?><?= strlen($conversation['last_message']) > 50 ? '...' : '' ?></p>
                                 </div>

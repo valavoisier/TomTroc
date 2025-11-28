@@ -1,4 +1,13 @@
  <!-- Header-->
+<?php
+require_once './Autoload.php';
+// Compter les conversations si l'utilisateur est connecté
+$conversationsCount = 0;
+if (isset($_SESSION['user'])) {   
+    $messageManager = new MessageManager();
+    $conversationsCount = $messageManager->getUnreadConversationsCount($_SESSION['user']['id']);
+}
+?>
 
  <body>
      <header>
@@ -19,7 +28,9 @@
                  <a href="<?= ROOT ?>/message" class="nav-link account-link">
                      <img src="<?= ROOT ?>/public/img/messagerie.svg" alt="Messagerie" class="nav-icon">
                      Messagerie
-                     <span class="message-counter">1</span>
+                     <?php if (isset($_SESSION['user'])): ?>
+                         <span class="message-counter"><?= $conversationsCount ?></span>
+                     <?php endif; ?>
                  </a>
                  <a href="<?= ROOT ?>/user" class="nav-link">
                      <img src="<?= ROOT ?>/public/img/compte.svg" alt="Compte" class="nav-icon">
