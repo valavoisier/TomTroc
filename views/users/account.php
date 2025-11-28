@@ -23,7 +23,7 @@ ob_start(); ?>
                     </div>
                 </form>
                 <!-- Séparateur -->
-                <div class="separator-line"></div>
+                <div class="account-separator-line"></div>
                 <!-- Bloc Identité -->
                 <div class="identity-block">
                     <p class="pseudo"><?= htmlspecialchars(($user ? $user->getPseudo() : ($_SESSION['user']['pseudo'] ?? ''))) ?></p>

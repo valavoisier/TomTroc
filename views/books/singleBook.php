@@ -23,7 +23,7 @@ ob_start(); ?>
             <div class="book-info-content">
                 <h1><?= htmlspecialchars($book->getTitle()) ?></h1>
                 <p class="book-info-author">par <?= htmlspecialchars($book->getAuthor()) ?></p>
-                <div class="separator"></div>
+                <div class="book-separator-line"></div>
                 <h3 class="section-title">DESCRIPTION</h3>
                 <div class="book-description">
                     <p><?= nl2br(htmlspecialchars($book->getDescription())) ?></p>
@@ -43,13 +43,13 @@ ob_start(); ?>
                 <?php if (isset($_SESSION['user'])): ?>
                     <?php if ((int)$_SESSION['user']['id'] !== (int)$book->getUserId()): ?>
                         <!-- Utilisateur connecté et ce n'est pas son propre livre -->
-                        <a href="<?= ROOT ?>/message/conversation/<?= (int)$book->getUserId() ?>" class="btn-message-large">
+                        <a href="<?= ROOT ?>/message/conversation/<?= (int)$book->getUserId() ?>" class="btn-primary btn-message-large">
                             Envoyer un message
                         </a>
                     <?php endif; ?>
                 <?php else: ?>
                     <!-- Utilisateur non connecté : bouton redirige vers login -->
-                    <a href="<?= ROOT ?>/user/login" class="btn-message-large">
+                    <a href="<?= ROOT ?>/user/login" class="btn-primary btn-message-large">
                         Envoyer un message
                     </a>
                 <?php endif; ?>

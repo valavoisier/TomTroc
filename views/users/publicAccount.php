@@ -15,7 +15,7 @@ ob_start(); ?>
                     </div>
                 </div>
                 <!-- Séparateur -->
-                <div class="separator-line"></div>
+                <div class="account-separator-line"></div>
                 <!-- Bloc identité infos complet -->
                 <div class="identity-block">
                     <p class="pseudo"><?= htmlspecialchars($user->getPseudo()) ?></p>

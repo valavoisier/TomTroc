@@ -272,7 +272,7 @@ header {
 }
 
 .card-livre {
-    position: relative; /* Ajoutez cette propriété */
+    position: relative; 
     width: 200px;
     text-align: center;
 }
@@ -585,6 +585,7 @@ footer{
     font-family: "Inter", sans-serif;
     font-size: 14px;
     color: #292929;
+    font-weight: 400;
 }
 
 .register-link a {
@@ -751,7 +752,7 @@ footer{
     margin: 0 0 30px 0;
 }
 
-.separator-line {
+.book-separator-line {
     width: 27px;
     height: 1px;
     background-color: #A6A6A6;
@@ -764,7 +765,8 @@ footer{
     font-size: 8px;
     letter-spacing: 8%;
     color: #292929;
-    text-transform: uppercase;   
+    text-transform: uppercase;  
+    margin-bottom: 15px; 
 }
 
 .book-description {
@@ -861,26 +863,17 @@ footer{
     text-decoration: none;
 }
 
-.btn-message {
-    width: 100%;
-    max-width: 485px;
+.btn-message-large {
+    width: 485px;   
     height: 63px;
-    background-color: #00AC66;
-    color: white;
-    font-family: "Inter", sans-serif;
-    font-size: 16px;
-    font-weight: 600;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-top: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    margin-top: 80px;
+    padding: 0;
+    box-sizing: border-box;
 }
-
-.btn-message:hover {
-    background-color: #006D41;
-}
-
 /*--------------------BREADCRUMB---------------*/
 .breadcrumb {
     background-color: #F5F3EF;
@@ -1062,12 +1055,13 @@ footer{
 .validate-btn {
   width: 322px;
   height: 63px;
-  margin-top: 40px;
+  margin: 40px 0 0 55px;
+  align-self: flex-start;
 }
 /*============================================ACCOUNT PAGE======================================*/
 .account-section {
-  background-color: #F5F3EF;
-  padding: 80px 0;
+  background-color: #FAF9F7;
+  padding: 100px 0;
 }
 
 .account-container {
@@ -1081,14 +1075,15 @@ footer{
   font-weight: 400;
   font-size: 26px;
   color: #000;
-  margin-bottom: 40px;
+  margin-bottom: 50px;
+  margin-top: 17px;
 }
 
 .account-box {
   width: 1135px;
   height: 508px;
   display: flex;
-  gap: 40px;
+  gap: 35px;
 }
 
 /* Colonnes gauche et droite */
@@ -1144,12 +1139,13 @@ footer{
   display: none;
 }
 
-/* Séparateur */
-.separator-line {
+/* Séparateur account */
+.account-separator-line {
   width: 242px;
   height: 1px;
   background-color: #F5F3EF;
   margin-top: 45px;
+  margin-bottom: 45px;
   
 }
 
@@ -1178,7 +1174,7 @@ footer{
   font-size: 14px;
   color: #A6A6A6;
   text-align: center;
-  margin-top: 20px;
+  margin-top: 15px;
 }
 
 /* Bibliothèque */
@@ -1425,7 +1421,7 @@ footer{
 /* Layout spécifique pour la page compte public */
 .public-account-box {
   display: flex;
-  gap: 40px;
+  gap: 35px;
   align-items: flex-start;
 }
 
@@ -1770,8 +1766,7 @@ footer{
 /* No conversations / No messages styles */
 .no-conversations,
 .no-messages {
-    padding: 20px;
-    text-align: center;
+    text-align: left;
     font-family: 'Inter', sans-serif;
     font-size: 14px;
     color: #A6A6A6;
