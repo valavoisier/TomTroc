@@ -49,7 +49,7 @@ class MessageManager extends AbstractManager {
                 /*Filtrage des messages pour récupération de la conversation bilatérale:*/
                 WHERE (m.sender_id = :userId AND m.receiver_id = :otherUserId) -- Cas 1 : userId est l’expéditeur ET otherUserId est le destinataire
                    OR (m.sender_id = :otherUserId AND m.receiver_id = :userId) -- Cas 2 : otherUserId est l’expéditeur ET userId est le destinataire
-                ORDER BY m.created_at ASC";// Tri par date croissante du plus ancien au plus récent        
+                ORDER BY m.created_at DESC";// Tri par date décroissante du plus récent au plus ancien        
         $dbConnection = $this->db->getConnection();
         $stmt = $dbConnection->prepare($sql);
         // Liaison des paramètres pour la requête préparée évite injection SQL
