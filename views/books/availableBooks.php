@@ -25,8 +25,8 @@ ob_start(); ?>
                             <span class="not-available">non dispo.</span>
                         <?php endif; ?>
                         <div class="card-content">
-                            <h3 class="book-title"><?= htmlspecialchars($book->getTitle()) ?></h3>
-                            <h4 class="book-subtitle"><?= htmlspecialchars($book->getAuthor()) ?></h4>
+                            <p class="book-title"><?= htmlspecialchars($book->getTitle()) ?></p>
+                            <p class="book-subtitle"><?= htmlspecialchars($book->getAuthor()) ?></p>
                             <p class="book-author">Vendu par : <?= htmlspecialchars($book->getPseudo()) ?></p>
                         </div>
                     </div>

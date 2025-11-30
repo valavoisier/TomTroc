@@ -698,7 +698,7 @@ footer{
 .books-header h1 {
     font-family: "Playfair Display", serif;
     font-weight: 400;
-    font-size: 32px;
+    font-size: 36px;
     line-height: 1;
     color: var(--color-text-dark);
     margin: 0;
@@ -1250,8 +1250,10 @@ footer{
 
 /* Colonne droite */
 .personal-title {
+  font-family: "Inter", sans-serif;
   font-weight: 400;
   font-size: 16px;
+  line-height: 100%;
   color: var(--color-text-dark);
   margin-bottom: 30px;
   margin-left: 110px;
@@ -1266,14 +1268,22 @@ footer{
 
 /* Bouton secondaire */
 .btn-account {
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 100%;
+  text-align: center;
   width: 150px;
   height: 63px;
-  padding: 22px 38px;
+  padding: 0;
   margin-top: 18px;
-  font-size: 12px;
   color: var(--color-primary);
   background-color: var(--color-bg-light);
   border: 1px solid var(--color-primary);
+  border-radius: 10px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
   transition: background-color 0.3s ease;
 }
 
@@ -1334,7 +1344,7 @@ footer{
 }
 
 .book-table tbody tr:nth-child(even) {
-  background-color: var(--color-bg-light);
+  background-color: var(--color-bg-input);
 ;
 }
 
@@ -1727,14 +1737,17 @@ footer{
 }
 
 .messages-submit {
+    font-family: "Inter", sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 100%;
+    text-align: center;
     width: 132px;
     height: 49px;
     background: var(--color-primary);
-    color: var(--color-text-white);
+    color: #FFFFFF;
     border: none;
-    border-radius: 4px;
-    font-weight: 500;
-    font-size: 14px;
+    border-radius: 10px;
     cursor: pointer;
     transition: background-color 0.2s;
 }
