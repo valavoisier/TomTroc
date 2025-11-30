@@ -16,7 +16,7 @@ ob_start(); ?>
                         <div class="avatar-wrapper">
                             <img src="<?= ROOT ?>/public/img/<?= htmlspecialchars(($user ? $user->getAvatar() : ($_SESSION['user']['avatar'] ?? 'user.png'))) ?>" alt="Photo de profil">
                         </div>
-                        <label for="upload-avatar" class="edit-avatar-link">Modifier</label>
+                        <label for="upload-avatar" class="edit-avatar-link" aria-label="Télécharger une nouvelle photo de profil">Modifier</label>
                         <input type="hidden" name="MAX_FILE_SIZE" value="10000000">
                         <input type="file" id="upload-avatar" class="upload-avatar" accept="image/*" name="avatar" 
                                <?= Utils::askConfirmationOnChange('Voulez-vous enregistrer cette nouvelle photo ?', 'avatar-form') ?>>
@@ -31,7 +31,7 @@ ob_start(); ?>
                     <div class="library-block">
                         <p class="library-label">BIBLIOTHÈQUE</p>
                         <div class="library-info">
-                            <img src="<?= ROOT ?>/public/img/livres.svg" alt="Livres" class="library-icon">
+                            <img src="<?= ROOT ?>/public/img/livres.svg" alt="" class="library-icon" aria-hidden="true">
                             <p class="library-count"><?= $bookCount ?> livres</p>
                         </div>
                     </div>
@@ -44,7 +44,7 @@ ob_start(); ?>
                     <div class="form-group">
                         <label for="email">Adresse email</label>
                         <input type="email" id="email" name="email"
-                               value="<?= htmlspecialchars(($user ? $user->getEmail() : ($_SESSION['user']['email'] ?? ''))) ?>">
+                               value="<?= htmlspecialchars(($user ? $user->getEmail() : ($_SESSION['user']['email'] ?? ''))) ?>" aria-required="true">
                     </div>
                     <div class="form-group">
                         <label for="password">Mot de passe</label>
@@ -53,23 +53,24 @@ ob_start(); ?>
                     <div class="form-group">
                         <label for="pseudo">Pseudo</label>
                         <input type="text" id="pseudo" name="pseudo"
-                               value="<?= htmlspecialchars(($user ? $user->getPseudo() : ($_SESSION['user']['pseudo'] ?? ''))) ?>">
+                               value="<?= htmlspecialchars(($user ? $user->getPseudo() : ($_SESSION['user']['pseudo'] ?? ''))) ?>" aria-required="true">
                     </div>
-                    <button type="submit" class="btn-account">Enregistrer</button>
+                    <button type="submit" class="btn-account" aria-label="Enregistrer les modifications du compte">Enregistrer</button>
                 </form>
             </div>
         </div>
         <!-- Tableau des livres en dessous -->
         <div class="table-container">
             <table class="book-table">
+                <caption class="sr-only">Liste de vos livres</caption>
                 <thead>
                     <tr>
-                        <th>PHOTO</th>
-                        <th>TITRE</th>
-                        <th>AUTEUR</th>
-                        <th>DESCRIPTION</th>
-                        <th>DISPONIBILITÉ</th>
-                        <th>ACTION</th>
+                        <th scope="col">PHOTO</th>
+                        <th scope="col">TITRE</th>
+                        <th scope="col">AUTEUR</th>
+                        <th scope="col">DESCRIPTION</th>
+                        <th scope="col">DISPONIBILITÉ</th>
+                        <th scope="col">ACTION</th>
                     </tr>
                 </thead>
                 <tbody>

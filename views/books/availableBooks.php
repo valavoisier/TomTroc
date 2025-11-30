@@ -5,14 +5,14 @@ ob_start(); ?>
     <div class="available-books-container">
         <div class="books-header">
             <h1>Nos livres à l'échange</h1>
-            <form class="search-bar" action="<?= ROOT ?>/book/search" method="POST">
+            <form class="search-bar" action="<?= ROOT ?>/book/search" method="POST" role="search" aria-label="Rechercher un livre">
                 <div class="search-container">
-                    <img src="<?= ROOT ?>/public/img/loupe.svg" alt="Recherche" class="search-icon">
+                    <img src="<?= ROOT ?>/public/img/loupe.svg" alt="" class="search-icon" aria-hidden="true">
                     <input type="search" name="q" placeholder="Rechercher un livre..." class="search-input">
                 </div>
             </form>
             <?php if (isset($message)): ?>
-                <div class="alert alert-error"><?= htmlspecialchars($message) ?></div>
+                <div class="alert alert-error" role="alert"><?= htmlspecialchars($message) ?></div>
             <?php endif; ?>
         </div>
         <div class="books-grid">
@@ -22,7 +22,7 @@ ob_start(); ?>
                         <img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($book->getImage()) ?>" 
                              alt="Livre <?= htmlspecialchars($book->getTitle()) ?>" class="book-image">
                         <?php if ($book->getStatus() === 0): ?>
-                            <span class="not-available">non dispo.</span>
+                            <span class="not-available" aria-label="Livre non disponible">non dispo.</span>
                         <?php endif; ?>
                         <div class="card-content">
                             <p class="book-title"><?= htmlspecialchars($book->getTitle()) ?></p>

@@ -9,17 +9,17 @@ ob_start(); ?>
         <div class="login-form-area">
             <h1 class="login-title">Connexion</h1>
             <?php if (!empty($message)): ?>
-                <p class="error-message"><?= $message ?></p>
+                <p class="error-message" role="alert"><?= $message ?></p>
             <?php endif; ?>
             <form class="login-form" method="POST" action="<?= ROOT ?>/user/login">
                 <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                 <div class="form-group">
                     <label for="email">Adresse email</label>
-                    <input type="email" id="email" name="email" value="<?= htmlspecialchars($formData['email'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+                    <input type="email" id="email" name="email" value="<?= htmlspecialchars($formData['email'] ?? '', ENT_QUOTES, 'UTF-8') ?>" required aria-required="true">
                 </div>
                 <div class="form-group">
                     <label for="password">Mot de passe</label>
-                    <input type="password" id="password" name="password">
+                    <input type="password" id="password" name="password" required aria-required="true">
                 </div>
                 <button type="submit" class="btn-primary login-btn">Se connecter</button>
                 <p class="register-link">Pas de compte ? <a href="<?=ROOT?>/user/register">Inscrivez-vous</a></p>

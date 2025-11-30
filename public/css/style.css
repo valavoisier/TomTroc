@@ -46,6 +46,22 @@
     border-width: 0;
 }
 
+/* Focus visible global pour accessibilité WCAG 2.4.7 */
+a:focus,
+button:focus,
+input:focus,
+textarea:focus,
+select:focus,
+[tabindex]:focus {
+    outline: 2px solid var(--color-primary);
+}
+
+/* Focus visible pour les liens dans le contenu */
+a:focus-visible {
+    outline: 2px solid var(--color-primary);
+    text-decoration: underline;
+}
+
 body {
     font-family: "Inter", sans-serif;
     background-color: var(--color-bg-light);
@@ -740,7 +756,7 @@ footer{
 }
 
 .search-input:focus {
-    outline: none;
+    outline: 2px solid var(--color-primary);
     border-color: var(--color-primary);
 }
 
@@ -1060,12 +1076,12 @@ footer{
   width: 100%;
 }
 
-/* Neutraliser les effets de focus */
+/* Focus visible pour accessibilité */
 .edit-form input:focus,
 .edit-form textarea:focus,
 .edit-form select:focus {
-  outline: none;
-  border: 1px solid var(--color-border);
+  outline: 2px solid var(--color-primary);
+  border: 1px solid var(--color-primary);
   background-color: var(--color-bg-light);
 }
 
@@ -1728,8 +1744,8 @@ footer{
 }
 
 .messages-input:focus {
-    outline: none;
-    border: 1px solid var(--color-bg-input);
+    outline: 2px solid var(--color-primary);
+    border: 1px solid var(--color-primary);
 }
 
 .messages-input::placeholder {

@@ -8,7 +8,7 @@ ob_start(); ?>
         <h1 class="edit-title">Modifier les informations</h1>
 
         <?php if (isset($message)): ?>
-            <div class="alert alert-error"><?= htmlspecialchars($message) ?></div>
+            <div class="alert alert-error" role="alert"><?= htmlspecialchars($message) ?></div>
         <?php endif; ?>
 
         <div class="edit-content-box">
@@ -18,7 +18,7 @@ ob_start(); ?>
                     <div class="book-image-wrapper">
                         <img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($book->getImage()) ?>" alt="<?= htmlspecialchars($book->getTitle()) ?>" id="preview-image">
                     </div>
-                    <label for="upload-book-image" class="edit-photo-link">Modifier la photo</label>
+                    <label for="upload-book-image" class="edit-photo-link" aria-label="Télécharger une nouvelle photo du livre">Modifier la photo</label>
                     <input type="hidden" name="MAX_FILE_SIZE" value="10000000">
                     <input type="file" name="image" id="upload-book-image" class="upload-book-image" accept="image/*" <?= Utils::askConfirmationOnChange('Voulez-vous enregistrer cette nouvelle photo ?', 'edit-book-form') ?>>
                 </div>
@@ -26,15 +26,15 @@ ob_start(); ?>
                 <div class="edit-right">
                     <div class="form-group">
                         <label for="title">Titre</label>
-                        <input type="text" id="title" name="title" value="<?= htmlspecialchars($formData['title'] ?? $book->getTitle(), ENT_QUOTES, 'UTF-8') ?>">
+                        <input type="text" id="title" name="title" value="<?= htmlspecialchars($formData['title'] ?? $book->getTitle(), ENT_QUOTES, 'UTF-8') ?>" required aria-required="true">
                     </div>
                     <div class="form-group">
                         <label for="author">Auteur</label>
-                        <input type="text" id="author" name="author" value="<?= htmlspecialchars($formData['author'] ?? $book->getAuthor(), ENT_QUOTES, 'UTF-8') ?>">
+                        <input type="text" id="author" name="author" value="<?= htmlspecialchars($formData['author'] ?? $book->getAuthor(), ENT_QUOTES, 'UTF-8') ?>" required aria-required="true">
                     </div>
                     <div class="form-group">
                         <label for="description">Commentaire</label>
-                        <textarea id="description" name="description" rows="5"><?= htmlspecialchars($formData['description'] ?? $book->getDescription(), ENT_QUOTES, 'UTF-8') ?></textarea>
+                        <textarea id="description" name="description" rows="5" required aria-required="true"><?= htmlspecialchars($formData['description'] ?? $book->getDescription(), ENT_QUOTES, 'UTF-8') ?></textarea>
                     </div>
                     <div class="form-group">
                         <label for="status">Disponibilité</label>

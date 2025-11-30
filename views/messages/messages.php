@@ -80,9 +80,9 @@ ob_start(); ?>
                     <?php endif; ?>
                 </div>
                 <!-- Formulaire d'envoi de réponse au message reçu -->
-                <form class="messages-form" method="POST" action="<?= ROOT ?>/message/send">
+                <form class="messages-form" method="POST" action="<?= ROOT ?>/message/send" aria-label="Envoyer un message">
                     <input type="hidden" name="receiver_id" value="<?= $selectedConversation->getId() ?>">
-                    <input type="text" name="content" class="messages-input" placeholder="Tapez votre message ici" required>
+                    <input type="text" name="content" class="messages-input" placeholder="Tapez votre message ici" required aria-required="true">
                     <button type="submit" class="messages-submit">Envoyer</button>
                 </form>
             <?php else: ?>

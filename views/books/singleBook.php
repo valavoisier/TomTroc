@@ -3,7 +3,7 @@ $pageTitle = "Détails livre";
 // Démarrage de la mise en tampon de sortie
 ob_start(); ?>
 <!-- Fil d'Ariane -->
-<nav class="breadcrumb">
+<nav class="breadcrumb" aria-label="Fil d'ariane">
     <div class="breadcrumb-container">
         <a href="available-books.html">Nos livres</a>
         <span class="breadcrumb-separator"> > </span>

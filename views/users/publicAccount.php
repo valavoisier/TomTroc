@@ -24,7 +24,7 @@ ob_start(); ?>
                     <div class="library-block">
                         <p class="library-label">BIBLIOTHÈQUE</p>
                         <div class="library-info">
-                            <img src="<?= ROOT ?>/public/img/livres.svg" alt="Livres" class="library-icon">
+                            <img src="<?= ROOT ?>/public/img/livres.svg" alt="" class="library-icon" aria-hidden="true">
                             <p class="library-count"><?= $bookCount ?> livres</p>
                         </div>
                     </div>
@@ -47,12 +47,13 @@ ob_start(); ?>
             <!-- Colonne droite / liste des livres-->
             <div class="public-table-container">
                 <table class="book-table">
+                    <caption class="sr-only">Livres proposés par <?= htmlspecialchars($user->getPseudo()) ?></caption>
                     <thead>
                         <tr>
-                            <th>PHOTO</th>
-                            <th>TITRE</th>
-                            <th>AUTEUR</th>
-                            <th>DESCRIPTION</th>
+                            <th scope="col">PHOTO</th>
+                            <th scope="col">TITRE</th>
+                            <th scope="col">AUTEUR</th>
+                            <th scope="col">DESCRIPTION</th>
                         </tr>
                     </thead>
                     <tbody> <!-- Ligne -->

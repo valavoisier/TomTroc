@@ -8,22 +8,22 @@ ob_start(); ?>
     <div class="login-container">
         <div class="login-form-area">
             <?php if (!empty($message)): ?>
-                <p class="error-message"><?= $message ?></p>
+                <p class="error-message" role="alert"><?= $message ?></p>
             <?php endif; ?>
             <h1 class="login-title">Inscription</h1>
             <form class="login-form" method="POST" action="<?= ROOT ?>/user/register">
                 <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                 <div class="form-group">
                     <label for="pseudo">Pseudo</label>
-                    <input type="text" id="pseudo" name="pseudo" value="<?= htmlspecialchars($formData['pseudo'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+                    <input type="text" id="pseudo" name="pseudo" value="<?= htmlspecialchars($formData['pseudo'] ?? '', ENT_QUOTES, 'UTF-8') ?>" required aria-required="true">
                 </div>
                 <div class="form-group">
                     <label for="email">Adresse email</label>
-                    <input type="email" id="email" name="email" value="<?= htmlspecialchars($formData['email'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+                    <input type="email" id="email" name="email" value="<?= htmlspecialchars($formData['email'] ?? '', ENT_QUOTES, 'UTF-8') ?>" required aria-required="true">
                 </div>
                 <div class="form-group">
                     <label for="password">Mot de passe</label>
-                    <input type="password" id="password" name="password">
+                    <input type="password" id="password" name="password" required aria-required="true">
                 </div>
                 <button type="submit" class="btn-primary login-btn">S'inscrire</button>
                 <p class="register-link">Déjà inscrit ? <a href="<?= ROOT ?>/user/login">Connectez-vous</a></p>
