@@ -9,7 +9,7 @@ class UserManager extends AbstractManager {
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($data) {
-            return new Users(
+            return new User(
                 $data['id'],
                 $data['pseudo'],
                 $data['email'],
@@ -30,7 +30,7 @@ class UserManager extends AbstractManager {
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($data) {
-            return new Users(
+            return new User(
                 $data['id'],
                 $data['pseudo'],
                 $data['email'],
@@ -43,7 +43,7 @@ class UserManager extends AbstractManager {
         return null;
     }
 
-    public function registerUser(Users $user) {
+    public function registerUser(User $user) {
         $data = [
             'pseudo'     => $user->getPseudo(),
             'email'      => $user->getEmail(),
@@ -55,7 +55,7 @@ class UserManager extends AbstractManager {
         return $this->add('users', $data);
     }
 
-    public function updateUserInfo(Users $user) {
+    public function updateUserInfo(User $user) {
         $data = [
             'pseudo'     => $user->getPseudo(),
             'email'      => $user->getEmail(),

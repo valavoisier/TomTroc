@@ -1,5 +1,5 @@
 <?php
-class Messages {
+class Message {
     private $id;
     private $senderId;
     private $receiverId;

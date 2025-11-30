@@ -61,7 +61,7 @@ class MessageManager extends AbstractManager {
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $messages = [];
         foreach ($rows as $row) {
-            $messages[] = new Messages($row);
+            $messages[] = new Message($row);
         }
         return $messages;
     }

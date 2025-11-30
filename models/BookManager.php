@@ -16,7 +16,7 @@ class BookManager extends AbstractManager
 
         $books = [];
         while ($data = $req->fetch(PDO::FETCH_ASSOC)) {
-            $book = new Books(
+            $book = new Book(
                 $data['id'],
                 $data['title'],
                 $data['author'],
@@ -36,7 +36,7 @@ class BookManager extends AbstractManager
     }
 
     // Récupère un livre par son id
-    public function getBookById($id): ?Books
+    public function getBookById($id): ?Book
     {
         $dbConnection = $this->db->getConnection();
 
@@ -50,7 +50,7 @@ class BookManager extends AbstractManager
         $data = $req->fetch(PDO::FETCH_ASSOC);//un seul résultat attendu
 
         if ($data) {
-            $book = new Books(
+            $book = new Book(
                 $data['id'],
                 $data['title'],
                 $data['author'],
@@ -70,7 +70,7 @@ class BookManager extends AbstractManager
     }
 
     // Récupère un livre par son titre (LIKE)
-    public function getBookByTitle($title): ?Books
+    public function getBookByTitle($title): ?Book
     {
         $dbConnection = $this->db->getConnection();
 
@@ -85,7 +85,7 @@ class BookManager extends AbstractManager
         $data = $req->fetch(PDO::FETCH_ASSOC);
 
         if ($data) {
-            $book = new Books(
+            $book = new Book(
                 $data['id'],
                 $data['title'],
                 $data['author'],
@@ -123,7 +123,7 @@ class BookManager extends AbstractManager
 
         $books = [];
         foreach ($rows as $data) {
-            $book = new Books(
+            $book = new Book(
                 $data['id'],
                 $data['title'],
                 $data['author'],
@@ -143,7 +143,7 @@ class BookManager extends AbstractManager
     }
 
     // Insère un livre
-    public function registerBook(Books $book): bool
+    public function registerBook(Book $book): bool
     {       
         $data = [
             'user_id'    => $book->getUserId(),
@@ -159,7 +159,7 @@ class BookManager extends AbstractManager
     }
     
     // Met à jour un livre
-    public function updateBook(Books $book): bool
+    public function updateBook(Book $book): bool
     {
          $data = [
             'title'      => $book->getTitle(),
@@ -214,7 +214,7 @@ class BookManager extends AbstractManager
 
         $books = [];
         foreach ($results as $data) {
-            $book = new Books(
+            $book = new Book(
                 $data['id'],
                 $data['title'],
                 $data['author'],

@@ -93,7 +93,7 @@ class BookController extends AbstractController
              - 2e argument → destination finale (ici $path . $image)*/
             move_uploaded_file($_FILES['image']['tmp_name'], $path . $image);
             // Création de l’objet Books (avec les données du formulaire / colonnes de ta table books)
-            $book = new Books(
+            $book = new Book(
                 null, // ID auto-incrémenté → null
                 $_POST['title'],
                 $_POST['author'],

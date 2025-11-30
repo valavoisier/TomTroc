@@ -1,5 +1,5 @@
 <?php
-class Books {
+class Book {
     private $id;
     private $title;
     private $author;
@@ -50,4 +50,3 @@ class Books {
     public function getAvatar() { return $this->avatar ?: 'user.png'; }
     public function setAvatar($avatar) { $this->avatar = $avatar; }
 }
-

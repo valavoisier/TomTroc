@@ -162,7 +162,7 @@ class UserController extends AbstractController
             }
             // Créer un nouvel utilisateur
             $now = date("Y-m-d H:i:s"); //date actuelle pour created_at et updated_at
-            $user = new Users(
+            $user = new User(
                 0,
                 $pseudo,
                 $email,
