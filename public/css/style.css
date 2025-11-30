@@ -33,7 +33,7 @@
     padding: 0;
  }
 
-/* Screen reader only - masque visuellement mais reste accessible */
+/* Screen reader only - masque visuellement mais reste accessible utilisé pour w3c titre h1 publicAccount */
 .sr-only {
     position: absolute;
     width: 1px;
@@ -41,7 +41,7 @@
     padding: 0;
     margin: -1px;
     overflow: hidden;
-    clip: rect(0, 0, 0, 0);
+    clip-path: inset(50%);
     white-space: nowrap;
     border-width: 0;
 }
@@ -286,7 +286,6 @@ header {
     display: flex;
     align-items: center;
     justify-content: center;
-  /*padding-top: 84px;*/
 }
 
 .latest-books-container {
@@ -904,7 +903,7 @@ footer{
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(var(--color-primary), 0.6);
+    background-color: rgba(0, 172, 102, 0.6);
     border-radius: 50%;
     opacity: 0;
     transition: opacity 0.3s ease;
@@ -1818,38 +1817,54 @@ footer{
 }
 
 /* ____________________________________________________________________
-====================RESPONSIVE : TABLETTE & MOBILE ==================== 
+====================RESPONSIVE : TABLETTE & MOBILE ====================
+-------début responsive à améliorer et compléter ultérieurement--------
+-------facultatif dans ce projet---------------------------------------
 ______________________________________________________________________*/
 @media (max-width: 1024px) {
+  /* Containers padding */
   .header-container,
   .hero-container,
   .getting-started-container,
   .available-books-container,
   .library-banner-container,
   .breadcrumb-container,
-  .book-info-section {
+  .book-info-section,
+  .edit-book-container,
+  .account-container {
     padding: 0 40px;
   }
 
-  .steps-container {
-    flex-wrap: wrap;
-    justify-content: center;
+  /* Navigation */
+  .nav-left a,
+  .nav-right a {
+    font-size: 12px;
+    margin-left: 15px;
   }
 
+  /* Largeurs fixes → fluides */
+  .single-book-container,
+  .library-banner,
+  .edit-content-box,
+  .account-box,
+  .table-container {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Hero section */
   .hero-container {
     flex-direction: column;
     gap: 40px;
     text-align: center;
   }
 
-  .hero-content {
-    margin: 0 auto;
-  }
-
+  .hero-content,
   .hero-image {
     margin: 0 auto;
   }
 
+  /* Latest books */
   .latest-books {
     height: auto;
     padding-bottom: 40px;
@@ -1859,16 +1874,19 @@ ______________________________________________________________________*/
     margin-bottom: 40px;
   }
 
-  .books-grid {
-    justify-content: center;
-    gap: 20px;
-  }
-
+  .books-grid,
   .available-books .books-grid {
     justify-content: center;
     gap: 20px;
   }
 
+  /* Getting started */
+  .steps-container {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  /* Search bar */
   .books-header {
     flex-direction: column;
     align-items: flex-start;
@@ -1879,9 +1897,9 @@ ______________________________________________________________________*/
     width: 100%;
   }
 
+  /* Single book page */
   .single-book-container {
     flex-direction: column;
-    width: 100%;
   }
 
   .book-image-section,
@@ -1894,6 +1912,7 @@ ______________________________________________________________________*/
     max-width: 100%;
   }
 
+  /* Login/Register */
   .login-container {
     flex-direction: column;
     height: auto;
@@ -1912,11 +1931,80 @@ ______________________________________________________________________*/
     padding: 0 2rem;
   }
 
-  .library-banner {
-    width: 100%;
-    height: 180px;
+  /* Edit book page */
+  .edit-content-box {
+    flex-direction: column;
+    height: auto;
+    padding: 40px 20px;
   }
 
+  .edit-left,
+  .edit-right {
+    width: 100%;
+  }
+
+  .book-image-wrapper,
+  .edit-form input,
+  .edit-form textarea,
+  .edit-form select {
+    width: 100%;
+  }
+
+  .validate-btn {
+    width: 100%;
+    margin: 20px 0 0 0;
+  }
+
+  /* Account page */
+  .account-box {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .account-left,
+  .account-right {
+    width: 100%;
+    height: auto;
+    padding: 40px 20px;
+  }
+
+  .account-form input {
+    width: 100%;
+  }
+
+  /* Public account */
+  .public-account-box {
+    flex-direction: column;
+  }
+
+  .public-account-left,
+  .public-table-container {
+    width: 100%;
+  }
+
+  /* Messages page */
+  .messages-container {
+    flex-direction: column;
+  }
+
+  .messages-sidebar {
+    width: 100%;
+    min-height: auto;
+  }
+
+  .conversation-item {
+    width: 100%;
+  }
+
+  .messages-input {
+    width: calc(100% - 144px);
+  }
+
+  .message-bubble {
+    min-width: 100%;
+  }
+
+  /* Our values */
   .values-content {
     width: 90%;
   }
@@ -1927,6 +2015,12 @@ ______________________________________________________________________*/
     display: block;
   }
 
+  /* Library banner */
+  .library-banner {
+    height: 180px;
+  }
+
+  /* Footer */
   .footer-container {
     flex-direction: column;
     height: auto;
@@ -1938,9 +2032,14 @@ ______________________________________________________________________*/
     align-items: center;
     gap: 10px;
   }
+
+  .footer-container li {
+    margin-left: 0;
+  }
 }
 
 @media (max-width: 768px) {
+  /* Typography */
   h1 {
     font-size: 28px;
   }
@@ -1949,13 +2048,57 @@ ______________________________________________________________________*/
     font-size: 24px;
   }
 
-  .btn-primary,
-  .btn-secondary,
-  .btn-message {
-    padding: 16px 24px;
-    font-size: 14px;
+  /* Containers padding */
+  .header-container,
+  .hero-container,
+  .getting-started-container,
+  .available-books-container,
+  .breadcrumb-container,
+  .edit-book-container,
+  .account-container,
+  .error-container {
+    padding: 0 20px;
   }
 
+  /* Navigation */
+  .header-left {
+    gap: 20px;
+  }
+
+  .nav-left,
+  .nav-right {
+    gap: 15px;
+  }
+
+  .nav-left a,
+  .nav-right a {
+    font-size: 12px;
+    margin-left: 0;
+  }
+
+  /* Hero section */
+  .hero-content,
+  .hero-image {
+    max-width: 100%;
+    flex: 1;
+  }
+
+  /* Buttons */
+  .btn-primary,
+  .btn-secondary,
+  .btn-message,
+  .btn-account {
+    padding: 16px 24px;
+    font-size: 14px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .btn-message-large {
+    width: 100%;
+  }
+
+  /* Cards */
   .step-text {
     width: 100%;
     height: auto;
@@ -1964,6 +2107,8 @@ ______________________________________________________________________*/
 
   .card-livre {
     width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
   }
 
   .book-image {
@@ -1971,11 +2116,71 @@ ______________________________________________________________________*/
     height: auto;
   }
 
+  /* Forms */
+  .login-title,
+  .login-form,
+  .form-group input,
+  .account-form input,
+  .search-input {
+    width: 100%;
+  }
+
   .search-input {
     font-size: 14px;
   }
 
-  .breadcrumb-container {
-    padding: 0 20px;
+  /* Tables */
+  .book-table {
+    font-size: 10px;
+  }
+
+  .book-table th:first-child {
+    padding-left: 20px;
+  }
+
+  .book-table td img {
+    width: 60px;
+    height: 60px;
+    margin-left: 20px;
+  }
+
+  .description {
+    width: 80px;
+    font-size: 10px;
+    -webkit-line-clamp: 3;
+  }
+
+  /* Messages */
+  .messages-input {
+    width: calc(100% - 90px);
+    font-size: 12px;
+  }
+
+  .messages-submit {
+    width: 80px;
+    font-size: 12px;
+  }
+
+  .message-bubble {
+    min-width: 100%;
+    font-size: 11px;
+  }
+
+  /* Book info */
+  .book-description {
+    height: auto;
+  }
+
+  .owner-profile {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  /* Personal title alignment */
+  .personal-title {
+    margin-left: 0;
+    text-align: center;
+    align-self: center;
   }
 }
+
