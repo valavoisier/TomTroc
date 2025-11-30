@@ -26,7 +26,7 @@ ob_start(); ?>
                 <div class="book-separator-line"></div>
                 <h3 class="section-title">DESCRIPTION</h3>
                 <div class="book-description">
-                    <p><?= nl2br(htmlspecialchars($book->getDescription())) ?></p>
+                    <p><?= str_replace('<br />', '<br>', nl2br(htmlspecialchars($book->getDescription()))) ?></p>
                 </div>
                 <h3 class="section-title">PROPRIÉTAIRE</h3>
                 <!-- Lien vers le compte du propriétaire -->

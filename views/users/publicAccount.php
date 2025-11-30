@@ -3,6 +3,7 @@ $pageTitle = "Compte publique";
 // Démarrage de la mise en tampon de sortie
 ob_start(); ?>
 <section class="account-section">
+    <h1 class="sr-only">Compte public de <?= htmlspecialchars($user->getPseudo()) ?></h1>
     <div class="account-container">
         <!-- Bloc principal -->
         <div class="public-account-box">
@@ -32,14 +33,14 @@ ob_start(); ?>
                 <?php if ($_SESSION['user']['id'] ?? null): ?>
                     <?php if ($_SESSION['user']['id'] !== (int)$user->getId()): ?>
                         <!-- Connecté et pas le propriétaire -->
-                        <a href="<?= ROOT ?>/message/conversation/<?= (int)$user->getId() ?>" class="message-button">
-                            <button class="btn-message">Écrire un message</button>
+                        <a href="<?= ROOT ?>/message/conversation/<?= (int)$user->getId() ?>" class="btn-message">
+                            Écrire un message
                         </a>
                     <?php endif; ?>
                 <?php else: ?>
                     <!-- Non connecté -->
-                    <a href="<?= ROOT ?>/user/login" class="message-button">
-                        <button class="btn-message">Écrire un message</button>
+                    <a href="<?= ROOT ?>/user/login" class="btn-message">
+                        Écrire un message
                     </a>
                 <?php endif; ?>
             </div>
@@ -77,6 +78,7 @@ ob_start(); ?>
                 </table>
             </div>
         </div>
+    </div>
 </section>
 <?php
 // Récupération du contenu mis en tampon

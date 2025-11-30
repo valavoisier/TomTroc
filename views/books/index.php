@@ -7,7 +7,7 @@ ob_start(); ?>
         <div class="hero-content">
             <h1>Rejoignez nos lecteurs passionnés</h1>
             <p>Donnez une nouvelle vie à vos livres en les échangeant avec d'autres amoureux de la lecture. Nous croyons en la magie du partage de connaissances et d'histoires à travers les livres.</p>
-            <a href="<?= ROOT ?>/book/availableBooks"><button class="btn-primary">Découvrir</button></a>
+            <a href="<?= ROOT ?>/book/availableBooks" class="btn-primary">Découvrir</a>
         </div>
         <div class="hero-image">
             <img src="<?= ROOT ?>/public/img/hamza-nouasria.jpg" alt="Lecteur passionné">
@@ -34,7 +34,7 @@ ob_start(); ?>
                 </a>
             <?php endforeach; ?>
         </div>
-        <a href="<?= ROOT ?>/book/availableBooks"><button class="btn-primary">Voir tous les livres</button></a>
+        <a href="<?= ROOT ?>/book/availableBooks" class="btn-primary">Voir tous les livres</a>
     </div>
 </section>
 <!-- Section getting started -->
@@ -48,16 +48,16 @@ ob_start(); ?>
             <p class="step-text">Parcourez les livres disponibles chez d'autres membres.</p>
             <p class="step-text">Proposez un échange et discutez avec d'autres passionnés de lecture.</p>
         </div>
-        <a href="<?= ROOT ?>/book/availableBooks"><button class="btn-secondary">Voir tous les livres</button></a>
+        <a href="<?= ROOT ?>/book/availableBooks" class="btn-secondary">Voir tous les livres</a>
     </div>
 </section>
 
 <!-- Section library banner -->
-<section class="library-banner">
+<div class="library-banner">
     <div class="library-banner-container">
         <!-- Image de bannière gérée via CSS -->
     </div>
-</section>
+</div>
 
 <!-- Section Our Values -->
 <section class="our-values">
