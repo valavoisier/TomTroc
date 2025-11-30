@@ -14,12 +14,12 @@ ob_start(); ?>
             <form class="login-form" method="POST" action="<?= ROOT ?>/user/register">
                 <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                 <div class="form-group">
-                    <label for="email">Pseudo</label>
-                    <input type="text" id="pseudo" name="pseudo">
+                    <label for="pseudo">Pseudo</label>
+                    <input type="text" id="pseudo" name="pseudo" value="<?= htmlspecialchars($formData['pseudo'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
                 </div>
                 <div class="form-group">
                     <label for="email">Adresse email</label>
-                    <input type="email" id="email" name="email">
+                    <input type="email" id="email" name="email" value="<?= htmlspecialchars($formData['email'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
                 </div>
                 <div class="form-group">
                     <label for="password">Mot de passe</label>

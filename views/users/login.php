@@ -15,7 +15,7 @@ ob_start(); ?>
                 <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                 <div class="form-group">
                     <label for="email">Adresse email</label>
-                    <input type="email" id="email" name="email">
+                    <input type="email" id="email" name="email" value="<?= htmlspecialchars($formData['email'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
                 </div>
                 <div class="form-group">
                     <label for="password">Mot de passe</label>

@@ -121,21 +121,33 @@ class UserController extends AbstractController
                 // Régénérer un nouveau token CSRF
                 $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
                 $message = "Requête invalide (CSRF token incorrect).";
-                $this->render('views/users/register.php', ['message' => $message]);
+                $this->render('views/users/register.php', [
+                    'message' => $message,
+                    'formData' => $_POST
+                ]);
                 return;
             }
             // Validation des champs du formulaire
             if (empty($_POST['pseudo']) || !ctype_alpha($_POST['pseudo'])) {
                 $message = "Le pseudo est obligatoire, il doit être alphabétique.";
-                $this->render('views/users/register.php', ['message' => $message]);
+                $this->render('views/users/register.php', [
+                    'message' => $message,
+                    'formData' => $_POST
+                ]);
                 return;
             } elseif (empty($_POST['email']) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
                 $message = "L'email est obligatoire et doit être valide.";
-                $this->render('views/users/register.php', ['message' => $message]);
+                $this->render('views/users/register.php', [
+                    'message' => $message,
+                    'formData' => $_POST
+                ]);
                 return;
             } elseif (empty($_POST['password'])) {
                 $message = "Le mot de passe est obligatoire.";
-                $this->render('views/users/register.php', ['message' => $message]);
+                $this->render('views/users/register.php', [
+                    'message' => $message,
+                    'formData' => $_POST
+                ]);
                 return;
             }
             // Validation de la complexité du mot de passe
@@ -145,7 +157,10 @@ class UserController extends AbstractController
             // !preg_match() retourne true si le mot de passe ne correspond pas au pattern
             if (!preg_match($pattern, $passwordPlain)) {
                 $message = "Le mot de passe doit contenir au moins 6 caractères dont une majuscule, un chiffre et un caractère spécial.";
-                $this->render('views/users/register.php', ['message' => $message]);
+                $this->render('views/users/register.php', [
+                    'message' => $message,
+                    'formData' => $_POST
+                ]);
                 return;
             }
             // Sanitize et préparation des données utilisateur
@@ -157,7 +172,10 @@ class UserController extends AbstractController
             // Si l'utilisateur existe déjà, afficher un message d'erreur
             if ($existingUser) {
                 $message = "Cet email est déjà utilisé.";
-                $this->render('views/users/register.php', ['message' => $message]);
+                $this->render('views/users/register.php', [
+                    'message' => $message,
+                    'formData' => $_POST
+                ]);
                 return;
             }
             // Créer un nouvel utilisateur
@@ -179,7 +197,10 @@ class UserController extends AbstractController
                 exit;
             } else {
                 $message = "Erreur lors de l'inscription.";
-                $this->render('views/users/register.php', ['message' => $message]);
+                $this->render('views/users/register.php', [
+                    'message' => $message,
+                    'formData' => $_POST
+                ]);
             }
         } else {
             // Générer un token CSRF pour le formulaire
@@ -215,18 +236,27 @@ class UserController extends AbstractController
                 // Régénérer un nouveau token CSRF
                 $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
                 $message = "Requête invalide (CSRF token incorrect).";
-                $this->render('views/users/login.php', ['message' => $message]);
+                $this->render('views/users/login.php', [
+                    'message' => $message,
+                    'formData' => $_POST
+                ]);
                 return;
             }
             // Validation des champs du formulaire
             if (empty($_POST['email']) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
                 $message = "Veuillez saisir une adresse email valide.";
-                $this->render('views/users/login.php', ['message' => $message]);
+                $this->render('views/users/login.php', [
+                    'message' => $message,
+                    'formData' => $_POST
+                ]);
                 return;
                 // Si le mot de passe est vide
             } elseif (empty($_POST['password'])) {
                 $message = "Veuillez saisir votre mot de passe.";
-                $this->render('views/users/login.php', ['message' => $message]);
+                $this->render('views/users/login.php', [
+                    'message' => $message,
+                    'formData' => $_POST
+                ]);
                 return;
             }
             // Sanitize des données
@@ -250,7 +280,7 @@ class UserController extends AbstractController
             } else {
                 // Informations d'identification incorrectes
                 $message = "Email ou mot de passe incorrect.";
-                $this->render('views/users/login.php', ['message' => $message]);
+                $this->render('views/users/login.php', ['message' => $message, 'formData' => $_POST]);
             }
         } else {
             // Générer un token CSRF pour le formulaire

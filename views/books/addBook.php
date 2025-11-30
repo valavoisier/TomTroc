@@ -26,15 +26,15 @@ ob_start(); ?>
                 <div class="edit-right">
                     <div class="form-group">
                         <label for="title">Titre</label>
-                        <input type="text" id="title" name="title">
+                        <input type="text" id="title" name="title" value="<?= htmlspecialchars($formData['title'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
                     </div>
                     <div class="form-group">
                         <label for="author">Auteur</label>
-                        <input type="text" id="author" name="author">
+                        <input type="text" id="author" name="author" value="<?= htmlspecialchars($formData['author'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
                     </div>
                     <div class="form-group">
                         <label for="description">Commentaire</label>
-                        <textarea id="description" name="description" rows="5"></textarea>
+                        <textarea id="description" name="description" rows="5"><?= htmlspecialchars($formData['description'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
                     </div>
                     <button type="submit" class="btn-primary validate-btn">Valider</button>
                 </div>

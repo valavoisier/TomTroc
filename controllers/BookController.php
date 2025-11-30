@@ -67,19 +67,19 @@ class BookController extends AbstractController
             // Validation des données du formulaire
             if (empty($_POST['title'])) {
                 $message = "Le titre est obligatoire.";
-                $this->render('views/books/addBook.php', ['message' => $message]);
+                $this->render('views/books/addBook.php', ['message' => $message, 'formData' => $_POST]);
                 return;
             } elseif (empty($_POST['author'])) {
                 $message = "L'auteur est obligatoire.";
-                $this->render('views/books/addBook.php', ['message' => $message]);
+                $this->render('views/books/addBook.php', ['message' => $message, 'formData' => $_POST]);
                 return;
             } elseif (empty($_POST['description'])) {
                 $message = "La description est obligatoire.";
-                $this->render('views/books/addBook.php', ['message' => $message]);
+                $this->render('views/books/addBook.php', ['message' => $message, 'formData' => $_POST]);
                 return;
             } elseif (!isset($_FILES['image']) || !preg_match("#jpeg|jpg|png#", $_FILES['image']['type'])) {
                 $message = "L'image est obligatoire et doit être de type jpg, jpeg ou png.";
-                $this->render('views/books/addBook.php', ['message' => $message]);
+                $this->render('views/books/addBook.php', ['message' => $message, 'formData' => $_POST]);
                 return;
             }
             // Gestion de l'image uploadée
@@ -112,7 +112,7 @@ class BookController extends AbstractController
                 exit;
             } else {
                 $message = "Erreur lors de l'enregistrement du livre.";
-                $this->render('views/books/addBook.php', ['message' => $message]);
+                $this->render('views/books/addBook.php', ['message' => $message, 'formData' => $_POST]);
             }
         } else {
             // Si la requête n'est pas POST, afficher le formulaire d'ajout
@@ -248,15 +248,15 @@ class BookController extends AbstractController
             // Validation des données /champs obligatoires
             if (empty($_POST['title'])) {
                 $message = "Le titre est obligatoire.";
-                $this->render('views/books/editBook.php', ['book' => $book, 'message' => $message]);
+                $this->render('views/books/editBook.php', ['book' => $book, 'message' => $message, 'formData' => $_POST]);
                 return;
             } elseif (empty($_POST['author'])) {
                 $message = "L'auteur est obligatoire.";
-                $this->render('views/books/editBook.php', ['book' => $book, 'message' => $message]);
+                $this->render('views/books/editBook.php', ['book' => $book, 'message' => $message, 'formData' => $_POST]);
                 return;
             } elseif (empty($_POST['description'])) {
                 $message = "La description est obligatoire.";
-                $this->render('views/books/editBook.php', ['book' => $book, 'message' => $message]);
+                $this->render('views/books/editBook.php', ['book' => $book, 'message' => $message, 'formData' => $_POST]);
                 return;
             }
             // Mise à jour des propriétés de l’objet
@@ -293,7 +293,7 @@ class BookController extends AbstractController
                 // En cas d'erreur lors de la mise à jour
                 $message = "Erreur lors de la modification du livre.";
                 // Rendre à nouveau le formulaire avec le message d'erreur
-                $this->render('views/books/editBook.php', ['book' => $book, 'message' => $message]);
+                $this->render('views/books/editBook.php', ['book' => $book, 'message' => $message, 'formData' => $_POST]);
             }
         } else {
             // Si aucune requête valide ou pas d’ID → afficher un message d’erreur
