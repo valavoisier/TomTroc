@@ -12,7 +12,7 @@ ob_start(); ?>
             <?php endif; ?>
             <h1 class="login-title">Inscription</h1>
             <form class="login-form" method="POST" action="<?= ROOT ?>/user/register">
-                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                <?= Utils::csrfTokenField() ?>
                 <div class="form-group">
                     <label for="pseudo">Pseudo</label>
                     <input type="text" id="pseudo" name="pseudo" value="<?= htmlspecialchars($formData['pseudo'] ?? '', ENT_QUOTES, 'UTF-8') ?>" required aria-required="true">

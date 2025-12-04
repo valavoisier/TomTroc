@@ -6,6 +6,7 @@ ob_start(); ?>
         <div class="books-header">
             <h1>Nos livres à l'échange</h1>
             <form class="search-bar" action="<?= ROOT ?>/book/search" method="POST" role="search" aria-label="Rechercher un livre">
+                <?= Utils::csrfTokenField() ?>
                 <div class="search-container">
                     <img src="<?= ROOT ?>/public/img/loupe.svg" alt="" class="search-icon" aria-hidden="true">
                     <input type="search" name="q" placeholder="Rechercher un livre..." class="search-input">

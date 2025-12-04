@@ -12,6 +12,7 @@ ob_start(); ?>
             <div class="account-left">
                 <!-- Formulaire modification avatar -->
                 <form method="POST" action="<?= ROOT ?>/user/updateAvatar" enctype="multipart/form-data" id="avatar-form">
+                    <?= Utils::csrfTokenField() ?>
                     <div class="avatar-block">
                         <div class="avatar-wrapper">
                             <img src="<?= ROOT ?>/public/img/<?= htmlspecialchars(($user ? $user->getAvatar() : ($_SESSION['user']['avatar'] ?? 'user.png'))) ?>" alt="Photo de profil">
@@ -41,6 +42,7 @@ ob_start(); ?>
             <div class="account-right">
                 <h2 class="personal-title">Vos informations personnelles</h2>
                 <form class="account-form" method="POST" action="<?= ROOT ?>/user/updateInfo">
+                    <?= Utils::csrfTokenField() ?>
                     <div class="form-group">
                         <label for="email">Adresse email</label>
                         <input type="email" id="email" name="email"

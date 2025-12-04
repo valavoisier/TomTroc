@@ -66,7 +66,63 @@ class Utils{
         // Utilisation de l'API FileReader pour lire le fichier sélectionné et afficher l'aperçu
         // event.target.files[0] : récupère le premier fichier sélectionné dans l'input file par l'utilisateur
         // reader.readAsDataURL(file) : lit le fichier et déclenche l'événement onload une fois la lecture terminée
-        //reader.onload = function(e) { ... } : quand la lecture est terminée, on met à jour l’attribut src de l’image ciblée par $imagePreviewId.
+        //reader.onload = function(e) { ... } : quand la lecture est terminée, on met à jour l'attribut src de l'image ciblée par $imagePreviewId.
         return "onchange=\"const file = event.target.files[0]; if (file) { const reader = new FileReader(); reader.onload = function(e) { document.getElementById('$imagePreviewId').src = e.target.result; }; reader.readAsDataURL(file); }\"";
+    }
+
+    /**
+     * Génère un token CSRF unique et le stocke en session.
+     * 
+     * Cette méthode :
+     * - Génère un token aléatoire sécurisé de 32 octets (64 caractères hexadécimaux)
+     * - Stocke le token en session pour vérification ultérieure
+     * - Doit être appelé avant d'afficher un formulaire
+     * 
+     * @return string Le token CSRF généré
+     */
+    public static function generateCSRFToken(): string
+    {
+        if (!isset($_SESSION['csrf_token'])) {
+            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+        }
+        return $_SESSION['csrf_token'];
+    }
+
+    /**
+     * Vérifie la validité d'un token CSRF soumis via formulaire.
+     * 
+     * Cette méthode :
+     * - Compare le token soumis avec celui stocké en session
+     * - Retourne true si les tokens correspondent
+     * - Retourne false en cas de non-correspondance ou token manquant
+     * - Doit être appelé lors du traitement d'un formulaire POST
+     * 
+     * @param string|null $token Le token CSRF à vérifier (depuis $_POST)
+     * @return bool True si le token est valide, false sinon
+     */
+    public static function verifyCSRFToken(?string $token): bool
+    {
+        if (!isset($_SESSION['csrf_token']) || !$token) {
+            return false;
+        }
+        
+        // Utilisation de hash_equals pour éviter les timing attacks
+        return hash_equals($_SESSION['csrf_token'], $token);
+    }
+
+    /**
+     * Génère un champ input hidden contenant le token CSRF.
+     * 
+     * Cette méthode :
+     * - Génère automatiquement le token si nécessaire
+     * - Retourne le HTML d'un input hidden à insérer dans les formulaires
+     * - Simplifie l'ajout de protection CSRF dans les vues
+     * 
+     * @return string Code HTML de l'input hidden avec le token CSRF
+     */
+    public static function csrfTokenField(): string
+    {
+        $token = self::generateCSRFToken();
+        return '<input type="hidden" name="csrf_token" value="' . htmlspecialchars($token, ENT_QUOTES, 'UTF-8') . '">';
     }
 }

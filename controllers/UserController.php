@@ -109,105 +109,6 @@ class UserController extends AbstractController
      * @uses UserManager::findByEmail() Pour vérifier l'existence d'un utilisateur par email.
      * @uses UserManager::registerUser() Pour enregistrer un nouvel utilisateur.
      */
-    public function register()
-    {
-        // Gérer la soumission du formulaire d'inscription
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if (
-                // Vérification du token CSRF
-                !isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token']) ||
-                !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])
-            ) {
-                // Régénérer un nouveau token CSRF
-                $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-                $message = "Requête invalide (CSRF token incorrect).";
-                $this->render('views/users/register.php', [
-                    'message' => $message,
-                    'formData' => $_POST
-                ]);
-                return;
-            }
-            // Validation des champs du formulaire
-            if (empty($_POST['pseudo']) || !ctype_alpha($_POST['pseudo'])) {
-                $message = "Le pseudo est obligatoire, il doit être alphabétique.";
-                $this->render('views/users/register.php', [
-                    'message' => $message,
-                    'formData' => $_POST
-                ]);
-                return;
-            } elseif (empty($_POST['email']) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-                $message = "L'email est obligatoire et doit être valide.";
-                $this->render('views/users/register.php', [
-                    'message' => $message,
-                    'formData' => $_POST
-                ]);
-                return;
-            } elseif (empty($_POST['password'])) {
-                $message = "Le mot de passe est obligatoire.";
-                $this->render('views/users/register.php', [
-                    'message' => $message,
-                    'formData' => $_POST
-                ]);
-                return;
-            }
-            // Validation de la complexité du mot de passe
-            $passwordPlain = $_POST['password']; //mot de passe en clair
-            $pattern = "/^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{6,}$/"; //au moins 6 caractères, 1 majuscule, 1 chiffre, 1 caractère spécial
-            // Vérification du mot de passe avec l'expression régulière
-            // !preg_match() retourne true si le mot de passe ne correspond pas au pattern
-            if (!preg_match($pattern, $passwordPlain)) {
-                $message = "Le mot de passe doit contenir au moins 6 caractères dont une majuscule, un chiffre et un caractère spécial.";
-                $this->render('views/users/register.php', [
-                    'message' => $message,
-                    'formData' => $_POST
-                ]);
-                return;
-            }
-            // Sanitize et préparation des données utilisateur
-            $pseudo   = htmlspecialchars($_POST['pseudo'], ENT_QUOTES, 'UTF-8');
-            $email    = htmlspecialchars($_POST['email'], ENT_QUOTES, 'UTF-8');
-            $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-            // Vérifier si l'email est déjà utilisé
-            $existingUser = $this->userManager->findByEmail($email);
-            // Si l'utilisateur existe déjà, afficher un message d'erreur
-            if ($existingUser) {
-                $message = "Cet email est déjà utilisé.";
-                $this->render('views/users/register.php', [
-                    'message' => $message,
-                    'formData' => $_POST
-                ]);
-                return;
-            }
-            // Créer un nouvel utilisateur
-            $now = date("Y-m-d H:i:s"); //date actuelle pour created_at et updated_at
-            $user = new User(
-                0,
-                $pseudo,
-                $email,
-                $password,
-                'user.png',
-                $now,
-                $now
-            );
-            // Enregistrer l'utilisateur via UserManager
-            $isRegistered = $this->userManager->registerUser($user);
-            // Si l'inscription réussit, rediriger vers la page de connexion
-            if ($isRegistered) {
-                header("Location: " . ROOT . "/user/login");
-                exit;
-            } else {
-                $message = "Erreur lors de l'inscription.";
-                $this->render('views/users/register.php', [
-                    'message' => $message,
-                    'formData' => $_POST
-                ]);
-            }
-        } else {
-            // Générer un token CSRF pour le formulaire
-            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-            $this->render('views/users/register.php');
-        }
-    }
 
     /** 
      * Méthode login() pour gérer la connexion des utilisateurs.
@@ -289,8 +190,115 @@ class UserController extends AbstractController
         }
     }
 
+    /**
+     * Méthode register() pour gérer l'inscription des utilisateurs.
+     * 
+     * Cette méthode :
+     * - Gère l'affichage du formulaire d'inscription.
+     * - Valide les données soumises (pseudo, email, mot de passe).
+     * - Vérifie la présence et la validité du token CSRF.
+     * - Hash le mot de passe avant de créer un nouvel utilisateur via UserManager.
+     * - Redirige vers la page de connexion après une inscription réussie.
+     * - Affiche des messages d'erreur en cas de validation échouée.
+     * 
+     * @return void
+     * @uses UserManager::findByEmail() Pour vérifier l'existence d'un utilisateur par email.
+     * @uses UserManager::registerUser() Pour enregistrer un nouvel utilisateur.
+     */
+    public function register()
+    {
+        // Gérer la soumission du formulaire d'inscription
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Vérification du token CSRF
+            $this->verifyCSRF(ROOT . '/user/register');
+
+            // Validation des champs du formulaire
+            if (empty($_POST['pseudo'])) {
+                $message = "Le pseudo est obligatoire.";
+                $this->render('views/users/register.php', [
+                    'message' => $message,
+                    'formData' => $_POST
+                ]);
+                return;
+            } elseif (empty($_POST['email']) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+                $message = "Veuillez saisir une adresse email valide.";
+                $this->render('views/users/register.php', [
+                    'message' => $message,
+                    'formData' => $_POST
+                ]);
+                return;
+            } elseif (empty($_POST['password'])) {
+                $message = "Le mot de passe est obligatoire.";
+                $this->render('views/users/register.php', [
+                    'message' => $message,
+                    'formData' => $_POST
+                ]);
+                return;
+            }
+            
+            // Validation de la complexité du mot de passe
+            $passwordPlain = $_POST['password'];
+            $pattern = "/^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{6,}$/";
+            
+            if (!preg_match($pattern, $passwordPlain)) {
+                $message = "Le mot de passe doit contenir au moins 6 caractères dont une majuscule, un chiffre et un caractère spécial.";
+                $this->render('views/users/register.php', [
+                    'message' => $message,
+                    'formData' => $_POST
+                ]);
+                return;
+            }
+            
+            // Sanitize et préparation des données utilisateur
+            $pseudo   = htmlspecialchars($_POST['pseudo'], ENT_QUOTES, 'UTF-8');
+            $email    = htmlspecialchars($_POST['email'], ENT_QUOTES, 'UTF-8');
+            $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+            
+            // Vérifier si l'email est déjà utilisé
+            $existingUser = $this->userManager->findByEmail($email);
+            
+            if ($existingUser) {
+                $message = "Cet email est déjà utilisé.";
+                $this->render('views/users/register.php', [
+                    'message' => $message,
+                    'formData' => $_POST
+                ]);
+                return;
+            }
+            
+            // Créer un nouvel utilisateur
+            $now = date("Y-m-d H:i:s");
+            $user = new User(
+                0,
+                $pseudo,
+                $email,
+                $password,
+                'user.png',
+                $now,
+                $now
+            );
+            
+            // Enregistrer l'utilisateur via UserManager
+            $isRegistered = $this->userManager->registerUser($user);
+            
+            if ($isRegistered) {
+                header("Location: " . ROOT . "/user/login");
+                exit;
+            } else {
+                $message = "Erreur lors de l'inscription.";
+                $this->render('views/users/register.php', [
+                    'message' => $message,
+                    'formData' => $_POST
+                ]);
+            }
+        } else {
+            // Afficher le formulaire d'inscription
+            $this->render('views/users/register.php');
+        }
+    }
+
     /** 
-     * Méthode logout() pour gérer la déconnexion des utilisateurs.
+     * Méthode login() pour gérer la connexion des utilisateurs.
      * 
      * Cette méthode :
      * - Détruit la session utilisateur.

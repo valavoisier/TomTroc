@@ -58,6 +58,9 @@ class BookController extends AbstractController
     {
         // Vérifie si la requête est bien envoyée en POST (soumission du formulaire)
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Vérification du token CSRF
+            $this->verifyCSRF(ROOT . '/book/addBook');
+            
             // Vérifier que l'utilisateur est connecté
             if (!isset($_SESSION['user']['id'])) {
                 // Si non connecté → redirection vers la page de login
@@ -159,6 +162,11 @@ class BookController extends AbstractController
      */
     public function search()
     {
+        // Vérification du token CSRF
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->verifyCSRF(ROOT . '/book/availableBooks');
+        }
+        
         // Vérifier si une requête de recherche a été envoyée via POST
         // q : nom du champ de recherche dans le formulaire
         if (!empty($_POST['q'])) {
@@ -238,6 +246,9 @@ class BookController extends AbstractController
         }
         // Si la requête est en POST et qu'un ID est fourni → traiter la modification
         elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && $id !== null) {
+            // Vérification du token CSRF
+            $this->verifyCSRF(ROOT . '/book/editBook/' . $id);
+            
             // Récupérer le livre par son ID
             $book = $bookManager->getBookById($id);
             // Vérifier que le livre existe

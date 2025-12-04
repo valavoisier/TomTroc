@@ -13,6 +13,7 @@ ob_start(); ?>
 
         <div class="edit-content-box">
             <form action="<?= ROOT ?>/book/registerBook" method="POST" enctype="multipart/form-data" class="edit-form" id="add-book-form">
+                <?= Utils::csrfTokenField() ?>
                 <div class="edit-left">
                     <p class="section-label">Photos</p>
                     <div class="book-image-wrapper">

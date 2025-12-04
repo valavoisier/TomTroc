@@ -46,4 +46,32 @@ abstract class AbstractController {
         // Inclure la vue
         require_once $viewPath;
     }
+
+    /**
+     * Vérifie le token CSRF d'un formulaire POST.
+     * 
+     * Cette méthode :
+     * - Vérifie que le token CSRF soumis correspond à celui en session
+     * - Utilise Utils::verifyCSRFToken() pour la validation
+     * - Si invalide, enregistre une erreur en session et redirige
+     * 
+     * @param string $redirectUrl URL de redirection en cas d'échec (optionnel, par défaut page précédente)
+     * @return void Redirige si le token est invalide
+     */
+    protected function verifyCSRF(string $redirectUrl = null): void {
+        $token = $_POST['csrf_token'] ?? null;
+        
+        if (!Utils::verifyCSRFToken($token)) {
+            $_SESSION['error'] = "Requête invalide. Veuillez réessayer.";
+            
+            if ($redirectUrl) {
+                header('Location: ' . $redirectUrl);
+            } else {
+                // Redirection vers la page précédente par défaut
+                $referer = $_SERVER['HTTP_REFERER'] ?? ROOT;
+                header('Location: ' . $referer);
+            }
+            exit;
+        }
+    }
 }

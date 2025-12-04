@@ -83,6 +83,7 @@ ob_start(); ?>
                 </div>
                 <!-- Formulaire d'envoi de réponse au message reçu -->
                 <form class="messages-form" method="POST" action="<?= ROOT ?>/message/send" aria-label="Envoyer un message">
+                    <?= Utils::csrfTokenField() ?>
                     <input type="hidden" name="receiver_id" value="<?= $selectedConversation->getId() ?>">
                     <input type="text" name="content" class="messages-input" placeholder="Tapez votre message ici" required aria-required="true">
                     <button type="submit" class="messages-submit">Envoyer</button>

@@ -97,6 +97,9 @@ class MessageController extends AbstractController {
         }
         // Vérifier si la requête est de type POST
          if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Vérification du token CSRF
+            $this->verifyCSRF(ROOT . '/message');
+            
             $senderId   = $_SESSION['user']['id'];
             $receiverId = isset($_POST['receiver_id']) ? (int) $_POST['receiver_id'] : null;
             $content    = isset($_POST['content']) ? trim($_POST['content']) : '';

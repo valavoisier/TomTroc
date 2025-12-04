@@ -12,7 +12,7 @@ ob_start(); ?>
                 <p class="error-message" role="alert"><?= $message ?></p>
             <?php endif; ?>
             <form class="login-form" method="POST" action="<?= ROOT ?>/user/login">
-                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                <?= Utils::csrfTokenField() ?>
                 <div class="form-group">
                     <label for="email">Adresse email</label>
                     <input type="email" id="email" name="email" value="<?= htmlspecialchars($formData['email'] ?? '', ENT_QUOTES, 'UTF-8') ?>" required aria-required="true">
