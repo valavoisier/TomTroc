@@ -397,11 +397,11 @@ class UserController extends AbstractController
             if (isset($_FILES['avatar']) && $_FILES['avatar']['error'] === UPLOAD_ERR_OK) {
                 // Valider le fichier uploadé
                 $file = $_FILES['avatar']; //données du fichier uploadé
-                $allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif']; //types MIME autorisés
+                $allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'image/webp']; //types MIME autorisés
                 // Vérifier le type de fichier
                 if (!in_array($file['type'], $allowedTypes)) {
                     // Type de fichier non autorisé
-                    $_SESSION['error'] = "Format de fichier non autorisé. Utilisez JPG, PNG ou GIF.";
+                    $_SESSION['error'] = "Format de fichier non autorisé. Utilisez JPG, PNG, GIF ou WEBP.";
                     header("Location: " . ROOT . "/user/account");
                     exit;
                 }

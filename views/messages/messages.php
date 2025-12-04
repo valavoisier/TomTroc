@@ -10,23 +10,25 @@ ob_start(); ?>
             <div class="conversation-list">
                 <?php if (!empty($conversations)): ?>
                     <?php foreach ($conversations as $index => $conversation): ?>
-                        <a href="<?= ROOT ?>/message/conversation/<?= $conversation['user_id'] ?>" class="conversation-link">
+                        <a href="<?= ROOT ?>/message/conversation/<?= $conversation->getUserId() ?>" class="conversation-link">
                             <div class="conversation-item <?= ($index === 0 && !isset($selectedConversation))
-                                                                || (isset($selectedConversation) && $selectedConversation->getId() == $conversation['user_id']) ? 'first' : '' ?>">
-                                <img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($conversation['avatar'] ?? 'user.png') ?>" alt="Avatar" class="conversation-avatar">
+                                                                || (isset($selectedConversation) && $selectedConversation->getId() == $conversation->getUserId()) ? 'first' : '' ?>">
+                                <img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($conversation->getAvatarPath()) ?>" alt="Avatar" class="conversation-avatar">
                                 <div class="conversation-content">
                                     <div class="conversation-header">
-                                        <span class="conversation-name"><?= htmlspecialchars($conversation['pseudo']) ?></span>
+                                        <span class="conversation-name"><?= htmlspecialchars($conversation->getPseudo()) ?></span>
                                         <span class="conversation-date">
                                             <?php
-                                            $messageDate = strtotime($conversation['last_message_date']);
-                                            $today = strtotime('today');
-                                            echo $messageDate >= $today ? date('H:i', $messageDate) : date('d.m', $messageDate);
+                                            if ($conversation->getLastMessageDate()) {
+                                                $messageDate = strtotime($conversation->getLastMessageDate());
+                                                $today = strtotime('today');
+                                                echo $messageDate >= $today ? date('H:i', $messageDate) : date('d.m', $messageDate);
+                                            }
                                             ?>
                                         </span>
 
                                     </div>
-                                    <p class="conversation-preview"><?= htmlspecialchars(substr($conversation['last_message'], 0, 50)) ?><?= strlen($conversation['last_message']) > 50 ? '...' : '' ?></p>
+                                    <p class="conversation-preview"><?= htmlspecialchars($conversation->getPreview()) ?></p>
                                 </div>
                             </div>
                         </a>

@@ -84,8 +84,7 @@ class MessageManager extends AbstractManager {
      * - last_message_date→ Date de ce dernier message.
      *
      * @param int $userId Identifiant unique de l'utilisateur connecté.
-     * @return array      Tableau associatif contenant la liste des conversations,
-     *                    chaque élément représentant une conversation avec son dernier message.
+     * @return Conversation[] Tableau d'objets Conversation.
      */
     public function getConversations($userId): array {
         $sql = "SELECT DISTINCT
@@ -119,7 +118,15 @@ class MessageManager extends AbstractManager {
         $stmt = $this->db->getConnection()->prepare($sql);
         $stmt->bindValue(':userId', $userId, PDO::PARAM_INT);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        // Transformation des tableaux associatifs en objets Conversation
+        $conversations = [];
+        foreach ($results as $data) {
+            $conversations[] = new Conversation($data);
+        }
+        
+        return $conversations;
     }
 
     /**

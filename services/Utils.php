@@ -57,12 +57,16 @@ class Utils{
      * - Retourne une chaîne contenant un attribut `onchange`.
      * - Charge le fichier sélectionné dans un input file.
      * - Affiche un aperçu de l'image dans l'élément <img> identifié par $imagePreviewId.
-     *
+     * - L’image choisie par l’utilisateur est affichée immédiatement dans la page, sans envoi au serveur.
      * @param string $imagePreviewId ID de l'élément <img> où afficher l'aperçu.
-     * @return string                Code JavaScript à insérer dans un input file HTML.
+     * @return string  Code JavaScript intégré dans attribut onchange à insérer dans un input file HTML.
      */
     public static function previewImage(string $imagePreviewId): string
     {
+        // Utilisation de l'API FileReader pour lire le fichier sélectionné et afficher l'aperçu
+        // event.target.files[0] : récupère le premier fichier sélectionné dans l'input file par l'utilisateur
+        // reader.readAsDataURL(file) : lit le fichier et déclenche l'événement onload une fois la lecture terminée
+        //reader.onload = function(e) { ... } : quand la lecture est terminée, on met à jour l’attribut src de l’image ciblée par $imagePreviewId.
         return "onchange=\"const file = event.target.files[0]; if (file) { const reader = new FileReader(); reader.onload = function(e) { document.getElementById('$imagePreviewId').src = e.target.result; }; reader.readAsDataURL(file); }\"";
     }
 }

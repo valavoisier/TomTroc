@@ -57,9 +57,9 @@ class MessageController extends AbstractController {
         $messages = [];       
         if (!empty($conversations)) {
             $firstConversation = $conversations[0];
-            $selectedConversation = $this->userManager->getUserById($firstConversation['user_id']);
-            $this->messageManager->markMessagesAsRead($userId, $firstConversation['user_id']);
-            $messages = $this->messageManager->getConversationMessages($userId, $firstConversation['user_id']);
+            $selectedConversation = $this->userManager->getUserById($firstConversation->getUserId());
+            $this->messageManager->markMessagesAsRead($userId, $firstConversation->getUserId());
+            $messages = $this->messageManager->getConversationMessages($userId, $firstConversation->getUserId());
             
             // Recalculer le compteur après avoir marqué les messages comme lus
             $this->conversationsCount = $this->messageManager->getUnreadConversationsCount($userId);
