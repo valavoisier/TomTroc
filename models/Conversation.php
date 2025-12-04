@@ -4,6 +4,20 @@
  * Classe Conversation
  * Représente une conversation dans la messagerie avec les informations de l'interlocuteur
  * et le dernier message échangé.
+ * Responsabilités principales :
+ * - Stocker les propriétés d'une conversation (userId, pseudo, avatar, lastMessage, lastMessageDate).
+ * - Fournir des getters pour accéder à ces propriétés.
+ * @package Models
+ * @uses DateTime Pour la gestion des dates
+ * méthodes:
+ * - getUserId() : int - Retourne l'ID de l'utilisateur avec qui on converse
+ * - getPseudo() : string - Retourne le pseudo de l'interlocuteur
+ * - getAvatar() : ?string - Retourne l'avatar de l'interlocuteur
+ * - getLastMessage() : ?string - Retourne le contenu du dernier message échangé
+ * - getLastMessageDate() : ?string - Retourne la date du dernier message
+ * - getPreview() : string - Retourne un aperçu limité du dernier message (50 caractères max)
+ * - getTimeAgo() : string - Formate la date du dernier message de manière relative
+ * - getAvatarPath() : string - Retourne le nom du fichier avatar ou l'avatar par défaut
  */
 class Conversation
 {
@@ -32,7 +46,7 @@ class Conversation
      */
     public function getUserId(): int
     {
-        return $this->userId;
+        return $this->userId; 
     }
 
     /**
@@ -80,9 +94,9 @@ class Conversation
         if (!$this->lastMessage) {
             return 'Aucun message';
         }
-        return strlen($this->lastMessage) > 50 
-            ? substr($this->lastMessage, 0, 50) . '...' 
-            : $this->lastMessage;
+        return strlen($this->lastMessage) > 50 // Si le message fait plus de 50 caractères
+            ? substr($this->lastMessage, 0, 50) . '...' // On tronque et ajoute "..."
+            : $this->lastMessage; // Sinon on retourne le message complet
     }
 
     /**
@@ -90,18 +104,19 @@ class Conversation
      * @return string
      */
     public function getTimeAgo(): string
-    {
+    { // Si pas de date, on retourne une chaîne vide
         if (!$this->lastMessageDate) {
             return '';
         }
-
-        $date = new DateTime($this->lastMessageDate);
-        $now = new DateTime();
+        // Crée des objets DateTime pour la date du message et la date actuelle
+        $date = new DateTime($this->lastMessageDate);//date du dernier message
+        $now = new DateTime();//date actuelle
+        // Calcule la différence entre les deux dates
         $diff = $now->diff($date);
-
+        // Formate la différence en une chaîne lisible
         if ($diff->days > 7) {
             return $date->format('d/m/Y');
-        } elseif ($diff->days > 0) {
+        } elseif ($diff->days > 0) {            
             return 'Il y a ' . $diff->days . ' jour' . ($diff->days > 1 ? 's' : '');
         } elseif ($diff->h > 0) {
             return 'Il y a ' . $diff->h . ' heure' . ($diff->h > 1 ? 's' : '');

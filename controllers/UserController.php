@@ -131,15 +131,17 @@ class UserController extends AbstractController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Vérification du token CSRF
             if (
+                // token manquant ou non correspondant
                 !isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token']) ||
+                // hash_equals pour éviter les timing attacks
                 !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])
             ) {
                 // Régénérer un nouveau token CSRF
-                $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-                $message = "Requête invalide (CSRF token incorrect).";
+                $_SESSION['csrf_token'] = bin2hex(random_bytes(32));//64 caractères
+                $message = "Requête invalide (CSRF token incorrect).";//message d'erreur
                 $this->render('views/users/login.php', [
-                    'message' => $message,
-                    'formData' => $_POST
+                    'message' => $message,//message d'erreur
+                    'formData' => $_POST//préremplir le formulaire
                 ]);
                 return;
             }
@@ -147,16 +149,16 @@ class UserController extends AbstractController
             if (empty($_POST['email']) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
                 $message = "Veuillez saisir une adresse email valide.";
                 $this->render('views/users/login.php', [
-                    'message' => $message,
-                    'formData' => $_POST
+                    'message' => $message,//message d'erreur
+                    'formData' => $_POST//préremplir le formulaire
                 ]);
                 return;
                 // Si le mot de passe est vide
             } elseif (empty($_POST['password'])) {
                 $message = "Veuillez saisir votre mot de passe.";
                 $this->render('views/users/login.php', [
-                    'message' => $message,
-                    'formData' => $_POST
+                    'message' => $message,//message d'erreur
+                    'formData' => $_POST//préremplir le formulaire
                 ]);
                 return;
             }
@@ -211,52 +213,52 @@ class UserController extends AbstractController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Vérification du token CSRF
             $this->verifyCSRF(ROOT . '/user/register');
-
             // Validation des champs du formulaire
+            // Champ pseudo obligatoire
             if (empty($_POST['pseudo'])) {
                 $message = "Le pseudo est obligatoire.";
                 $this->render('views/users/register.php', [
-                    'message' => $message,
-                    'formData' => $_POST
+                    'message' => $message,//message d'erreur
+                    'formData' => $_POST//préremplir le formulaire
                 ]);
                 return;
+            // Champ email obligatoire et valide
             } elseif (empty($_POST['email']) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
                 $message = "Veuillez saisir une adresse email valide.";
                 $this->render('views/users/register.php', [
-                    'message' => $message,
-                    'formData' => $_POST
+                    'message' => $message,//message d'erreur
+                    'formData' => $_POST//préremplir le formulaire
                 ]);
                 return;
+            // Champ mot de passe obligatoire
             } elseif (empty($_POST['password'])) {
                 $message = "Le mot de passe est obligatoire.";
                 $this->render('views/users/register.php', [
-                    'message' => $message,
-                    'formData' => $_POST
+                    'message' => $message,//message d'erreur
+                    'formData' => $_POST//préremplir le formulaire
                 ]);
                 return;
-            }
-            
+            }            
             // Validation de la complexité du mot de passe
-            $passwordPlain = $_POST['password'];
+            $passwordPlain = $_POST['password'];//mot de passe en clair
+            //au moins 6 caractères, une majuscule, un chiffre, un caractère spécial
             $pattern = "/^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{6,}$/";
-            
+            // Si le mot de passe ne respecte pas les critères
+            //preg_match retourne 1 si correspondance, 0 sinon
             if (!preg_match($pattern, $passwordPlain)) {
                 $message = "Le mot de passe doit contenir au moins 6 caractères dont une majuscule, un chiffre et un caractère spécial.";
                 $this->render('views/users/register.php', [
-                    'message' => $message,
-                    'formData' => $_POST
+                    'message' => $message,//message d'erreur
+                    'formData' => $_POST//préremplir le formulaire
                 ]);
                 return;
-            }
-            
+            }            
             // Sanitize et préparation des données utilisateur
             $pseudo   = htmlspecialchars($_POST['pseudo'], ENT_QUOTES, 'UTF-8');
             $email    = htmlspecialchars($_POST['email'], ENT_QUOTES, 'UTF-8');
-            $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-            
+            $password = password_hash($_POST['password'], PASSWORD_DEFAULT);            
             // Vérifier si l'email est déjà utilisé
-            $existingUser = $this->userManager->findByEmail($email);
-            
+            $existingUser = $this->userManager->findByEmail($email);            
             if ($existingUser) {
                 $message = "Cet email est déjà utilisé.";
                 $this->render('views/users/register.php', [
@@ -264,8 +266,7 @@ class UserController extends AbstractController
                     'formData' => $_POST
                 ]);
                 return;
-            }
-            
+            }            
             // Créer un nouvel utilisateur
             $now = date("Y-m-d H:i:s");
             $user = new User(
@@ -276,19 +277,19 @@ class UserController extends AbstractController
                 'user.png',
                 $now,
                 $now
-            );
-            
+            );            
             // Enregistrer l'utilisateur via UserManager
             $isRegistered = $this->userManager->registerUser($user);
-            
+            // Si l'inscription a réussi, rediriger vers la page de connexion
             if ($isRegistered) {
                 header("Location: " . ROOT . "/user/login");
                 exit;
             } else {
                 $message = "Erreur lors de l'inscription.";
+                // Afficher le formulaire d'inscription avec le message d'erreur
                 $this->render('views/users/register.php', [
-                    'message' => $message,
-                    'formData' => $_POST
+                    'message' => $message,//message d'erreur
+                    'formData' => $_POST//préremplir le formulaire
                 ]);
             }
         } else {
@@ -339,10 +340,13 @@ class UserController extends AbstractController
                 exit;
             }
             // Validation des champs du formulaire
+            // TRIM pour supprimer espaces inutiles
             $email    = trim($_POST['email']);
             $pseudo   = trim($_POST['pseudo']);
             $password = trim($_POST['password']);
             //vérifier email valide
+            //FILTER_VALIDATE_EMAIL retourne false si invalide
+            //filter_var permet de valider et de filtrer les données
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $message = "Email invalide.";
                 $this->render('views/users/account.php', ['message' => $message]);
@@ -350,9 +354,11 @@ class UserController extends AbstractController
             }
 
             // Charger l'utilisateur courant
+            // Récupérer l'utilisateur par son ID
             $user = $this->userManager->getUserById($_SESSION['user']['id']);
             if (!$user) {
                 $message = "Utilisateur introuvable.";
+                // Afficher le formulaire de compte avec le message d'erreur
                 $this->render('views/users/account.php', ['message' => $message]);
                 return;
             }
@@ -421,7 +427,8 @@ class UserController extends AbstractController
                     exit;
                 }
                 // Déplacer le fichier uploadé vers le répertoire des avatars
-                $extension = pathinfo($file['name'], PATHINFO_EXTENSION); //extension du fichier uploadé
+                // Générer un nom de fichier unique
+                $extension = pathinfo($file['name'], PATHINFO_EXTENSION); //extension du fichier uploadé extrait avec pathinfo
                 $newFileName = 'avatar_' . $_SESSION['user']['id'] . '_' . time() . '.' . $extension; //nouveau nom de fichier unique
                 $uploadPath = 'public/img/' . $newFileName; //chemin de destination
                 // Déplacer le fichier uploadé
@@ -431,6 +438,7 @@ class UserController extends AbstractController
                         // Vérifier si un ancien avatar existe et n'est pas l'avatar par défaut
                         isset($_SESSION['user']['avatar']) &&
                         $_SESSION['user']['avatar'] !== 'user.png' &&
+                        // Vérifier si le fichier de l'ancien avatar existe
                         file_exists('public/img/' . $_SESSION['user']['avatar'])
                     ) {
                         // Supprimer l'ancien avatar

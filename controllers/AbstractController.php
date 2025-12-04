@@ -6,6 +6,10 @@
  * Centralise la logique commune à tous les contrôleurs :
  * - Préparation des données communes pour toutes les vues (ex: compteur de messages non lus)
  * - Gestion des dépendances communes
+ * - Méthodes utilitaires partagées (ex: rendu de vues, vérification CSRF)
+ * @package Controllers
+ * @uses MessageManager Pour récupérer le nombre de conversations non lues
+ * @uses Utils Pour la vérification des tokens CSRF *  
  */
 abstract class AbstractController {
     protected $conversationsCount = 0;//compteur de conversations non lues
@@ -26,8 +30,11 @@ abstract class AbstractController {
      * - Initialise la propriété $conversationsCount disponible pour toutes les vues
      */
     protected function prepareCommonData(): void {
+        // Vérifier si un utilisateur est connecté
         if (isset($_SESSION['user'])) {
+            // Instancier MessageManager pour accéder aux données des messages
             $messageManager = new MessageManager();
+            // Récupérer le nombre de conversations non lues pour l'utilisateur connecté
             $this->conversationsCount = $messageManager->getUnreadConversationsCount($_SESSION['user']['id']);
         }
     }
@@ -57,13 +64,15 @@ abstract class AbstractController {
      * 
      * @param string $redirectUrl URL de redirection en cas d'échec (optionnel, par défaut page précédente)
      * @return void Redirige si le token est invalide
-     */
+     */    
     protected function verifyCSRF(string $redirectUrl = null): void {
+        // Récupérer le token soumis via le formulaire si absent $token vaut null
         $token = $_POST['csrf_token'] ?? null;
-        
+        //veifyCSRFToken ompare le token soumis avec celui stocké en session et retourne true si le token est valide, false sinon
         if (!Utils::verifyCSRFToken($token)) {
+           // gestion de l'erreur CSRF
             $_SESSION['error'] = "Requête invalide. Veuillez réessayer.";
-            
+            // Redirection vers l'URL spécifiée $redirectUrl 
             if ($redirectUrl) {
                 header('Location: ' . $redirectUrl);
             } else {
@@ -71,7 +80,7 @@ abstract class AbstractController {
                 $referer = $_SERVER['HTTP_REFERER'] ?? ROOT;
                 header('Location: ' . $referer);
             }
-            exit;
+            exit;// arrêt exécution du script après la redirection
         }
     }
 }

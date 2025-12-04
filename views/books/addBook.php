@@ -35,7 +35,7 @@ ob_start(); ?>
                     </div>
                     <div class="form-group">
                         <label for="description">Commentaire</label>
-                        <textarea id="description" name="description" rows="5" required aria-required="true"><?= htmlspecialchars($formData['description'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
+                        <textarea id="description" name="description" rows="10" required aria-required="true"><?= htmlspecialchars($formData['description'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
                     </div>
                     <button type="submit" class="btn-primary validate-btn">Valider</button>
                 </div>

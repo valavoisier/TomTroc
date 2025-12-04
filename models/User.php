@@ -1,4 +1,12 @@
 <?php
+/**
+ * Modèle représentant un utilisateur.
+ * Responsabilités principales :
+ * - Stocker les propriétés d'un utilisateur (id, pseudo, email, password, avatar, createdAt, updatedAt).
+ * - Fournir des getters et setters pour accéder et modifier ces propriétés.
+ * @package Models
+ * 
+ */
 class User {
     private $id;
     private $pseudo;

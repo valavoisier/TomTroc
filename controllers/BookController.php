@@ -28,13 +28,13 @@
  */
 class BookController extends AbstractController
 {
-    // Page d’accueil redirigeant vers la liste des livres disponibles
+    /** Page d’accueil redirigeant vers la liste des livres disponibles */
     public function index()
     {
         $this->availableBooks();
     }
 
-    // Formulaire d'ajout de livre
+    /** Formulaire d'ajout de livre */
     public function addBook()
     {
         $this->render('views/books/addBook.php');
@@ -80,21 +80,28 @@ class BookController extends AbstractController
                 $message = "La description est obligatoire.";
                 $this->render('views/books/addBook.php', ['message' => $message, 'formData' => $_POST]);
                 return;
-            } elseif (!isset($_FILES['image']) || !preg_match("#jpeg|jpg|png#", $_FILES['image']['type'])) {
-                $message = "L'image est obligatoire et doit être de type jpg, jpeg ou png.";
-                $this->render('views/books/addBook.php', ['message' => $message, 'formData' => $_POST]);
-                return;
             }
-            // Gestion de l'image uploadée
-            $dateHour = date('YmdHHis'); // Génère un préfixe basé sur la date/heure pour éviter les doublons
-            // Préfixer le nom du fichier avec la date et l'heure pour éviter les conflits
-            //$_FILES['image'] : correspond au tableau superglobal qui contient les informations du fichier uploadé via un formulaire HTML avec enctype="multipart/form-data"
-            $image = $dateHour . '_' . $_FILES['image']['name']; // Nouveau nom du fichier
-            $path = "public/img/"; // Dossier de destination
-            /* move_uploaded_file déplace le fichier téléchargé vers le répertoire spécifié
-             - 1er argument → chemin temporaire ($_FILES['image']['tmp_name'])
-             - 2e argument → destination finale (ici $path . $image)*/
-            move_uploaded_file($_FILES['image']['tmp_name'], $path . $image);
+            
+            // Gestion de l'image uploadée (optionnelle)
+            $image = 'edit-book.jpg'; // Image par défaut
+            
+            // Si une image a été uploadée et est valide
+            if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+                // Vérifier le type MIME
+                if (preg_match("#jpeg|jpg|png#", $_FILES['image']['type'])) {
+                    $dateHour = date('YmdHHis'); // Génère un préfixe basé sur la date/heure pour éviter les doublons
+                    $image = $dateHour . '_' . $_FILES['image']['name']; // Nouveau nom du fichier
+                    $path = "public/img/"; // Dossier de destination
+                    /* move_uploaded_file déplace le fichier téléchargé vers le répertoire spécifié
+                     - 1er argument → chemin temporaire ($_FILES['image']['tmp_name'])
+                     - 2e argument → destination finale (ici $path . $image)*/
+                    move_uploaded_file($_FILES['image']['tmp_name'], $path . $image);
+                } else {
+                    $message = "L'image doit être de type jpg, jpeg ou png.";
+                    $this->render('views/books/addBook.php', ['message' => $message, 'formData' => $_POST]);
+                    return;
+                }
+            }
             // Création de l’objet Books (avec les données du formulaire / colonnes de ta table books)
             $book = new Book(
                 null, // ID auto-incrémenté → null
@@ -207,7 +214,9 @@ class BookController extends AbstractController
         // Vérifier qu’un identifiant est fourni
         if ($id !== null) {
             $bookManager = new BookManager();
+            // Récupérer le livre par son ID
             $book = $bookManager->getBookById($id);
+            // Si le livre est trouvé, rendre la vue avec les données du livre
             if ($book) {
                 $this->render('views/books/singleBook.php', ['book' => $book]);
             } else {
@@ -247,8 +256,7 @@ class BookController extends AbstractController
         // Si la requête est en POST et qu'un ID est fourni → traiter la modification
         elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && $id !== null) {
             // Vérification du token CSRF
-            $this->verifyCSRF(ROOT . '/book/editBook/' . $id);
-            
+            $this->verifyCSRF(ROOT . '/book/editBook/' . $id);            
             // Récupérer le livre par son ID
             $book = $bookManager->getBookById($id);
             // Vérifier que le livre existe
@@ -280,8 +288,8 @@ class BookController extends AbstractController
             if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
                 // Vérifier le type de l'image
                 if (preg_match("#jpeg|jpg|png#", $_FILES['image']['type'])) {
-                    // Supprimer l'ancienne image
-                    if ($book->getImage() && file_exists('public/img/' . $book->getImage())) {
+                    // Supprimer l'ancienne image (sauf si c'est l'image par défaut)
+                    if ($book->getImage() && $book->getImage() !== 'edit-book.jpg' && file_exists('public/img/' . $book->getImage())) {
                         // Supprimer l'ancienne image du serveur
                         unlink('public/img/' . $book->getImage());
                     }

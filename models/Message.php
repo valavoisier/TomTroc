@@ -1,4 +1,14 @@
 <?php
+/**
+ * Modèle représentant un message.
+ * Responsabilités principales :
+ * - Stocker les propriétés d'un message (id, senderId, receiverId, content, createdAt, isRead).
+ * - Fournir des getters pour accéder à ces propriétés.
+ * - Stocker et fournir des informations supplémentaires sur l'expéditeur et le destinataire (pseudo, avatar).
+ * @package Models
+ * @uses User Pour accéder aux informations de l'utilisateur (pseudo, avatar)
+ * 
+ */
 class Message {
     private $id;
     private $senderId;

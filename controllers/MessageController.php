@@ -54,20 +54,26 @@ class MessageController extends AbstractController {
         $conversations = $this->messageManager->getConversations($userId);        
         // Auto-sélectionner la première conversation et marquer les messages comme lus
         $selectedConversation = null;
-        $messages = [];       
+        // Initialiser le tableau des messages
+        $messages = [];  
+        // Si des conversations existent, sélectionner la première par défaut     
         if (!empty($conversations)) {
+            // Sélectionner la première conversation
             $firstConversation = $conversations[0];
+            // Récupérer les informations de l'utilisateur sélectionné
             $selectedConversation = $this->userManager->getUserById($firstConversation->getUserId());
+            // Marquer les messages comme lus
             $this->messageManager->markMessagesAsRead($userId, $firstConversation->getUserId());
-            $messages = $this->messageManager->getConversationMessages($userId, $firstConversation->getUserId());
-            
+            // Récupérer les messages de la conversation
+            $messages = $this->messageManager->getConversationMessages($userId, $firstConversation->getUserId());            
             // Recalculer le compteur après avoir marqué les messages comme lus
             $this->conversationsCount = $this->messageManager->getUnreadConversationsCount($userId);
         }
+        // Inclure la vue avec les données préparées
         $this->render('views/messages/messages.php', [
-            'conversations' => $conversations,
-            'selectedConversation' => $selectedConversation,
-            'messages' => $messages
+            'conversations' => $conversations,//liste des conversations
+            'selectedConversation' => $selectedConversation,//utilisateur sélectionné
+            'messages' => $messages//messages de la conversation sélectionnée
         ]);
     }
 
@@ -99,20 +105,23 @@ class MessageController extends AbstractController {
          if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Vérification du token CSRF
             $this->verifyCSRF(ROOT . '/message');
-            
-            $senderId   = $_SESSION['user']['id'];
-            $receiverId = isset($_POST['receiver_id']) ? (int) $_POST['receiver_id'] : null;
-            $content    = isset($_POST['content']) ? trim($_POST['content']) : '';
+            // Récupérer les données du formulaire 
+            $senderId   = $_SESSION['user']['id'];//ID de l'expéditeur
+            $receiverId = isset($_POST['receiver_id']) ? (int) $_POST['receiver_id'] : null;//ID du destinataire
+            $content    = isset($_POST['content']) ? trim($_POST['content']) : '';//Contenu du message
+            // Validation des données
             if (!$receiverId) {
                 $_SESSION['error'] = "Destinataire manquant.";
                 header('Location: ' . ROOT . '/message');
                 exit;
             }
+            // Vérifier que le contenu n'est pas vide
             if ($content === '') {
                 $_SESSION['error'] = "Le message ne peut pas être vide.";
                 header('Location: ' . ROOT . '/message/conversation/' . $receiverId);
                 exit;
             }
+            // Envoyer le message via le MessageManager
             $this->messageManager->sendMessage($senderId, $receiverId, $content);
             header('Location: ' . ROOT . '/message/conversation/' . $receiverId);
             exit;
