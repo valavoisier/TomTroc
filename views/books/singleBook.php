@@ -30,7 +30,14 @@ ob_start(); ?>
                 </div>
                 <h3 class="section-title">PROPRIÉTAIRE</h3>
                 <!-- Lien vers le compte du propriétaire -->
-                <a href="<?= ROOT ?>/user/publicAccount/<?= $book->getUserId() ?>" class="owner-profile-link">
+                <?php
+                // Si le livre appartient à l'utilisateur connecté, lien vers son compte
+                // Sinon, lien vers le profil public du propriétaire
+                $profileUrl = (isset($_SESSION['user']) && (int)$_SESSION['user']['id'] === (int)$book->getUserId())
+                    ? ROOT . '/user/account'
+                    : ROOT . '/user/publicAccount/' . $book->getUserId();
+                ?>
+                <a href="<?= $profileUrl ?>" class="owner-profile-link">
                     <div class="owner-profile">
                         <div class="owner-avatar">
                             <img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($book->getAvatar() ?? 'user.png') ?>"
