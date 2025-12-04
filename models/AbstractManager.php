@@ -24,8 +24,8 @@ abstract class AbstractManager {
         $query = "INSERT INTO $table ($columns) VALUES ($params)";
         $dbConnection = $this->db->getConnection();
         $req = $dbConnection->prepare($query);
-        foreach ($data as $key => &$value) {
-            $req->bindParam(":$key", $value);
+        foreach ($data as $key => $value) {
+            $req->bindValue(":$key", $value);
         }
         return $req->execute();
     }
@@ -66,10 +66,10 @@ abstract class AbstractManager {
         $query = "UPDATE $table SET $setString WHERE id = :id";
         $dbConnection = $this->db->getConnection();
         $req = $dbConnection->prepare($query);
-        foreach ($data as $key => &$value) {
-            $req->bindParam(":$key", $value);
+        foreach ($data as $key => $value) {
+            $req->bindValue(":$key", $value);
         }
-        $req->bindParam(":id", $id, PDO::PARAM_INT);
+        $req->bindValue(":id", $id, PDO::PARAM_INT);
         return $req->execute();
     }
 
