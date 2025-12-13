@@ -12,7 +12,7 @@ ob_start(); ?>
                 <!-- Bloc avatar -->
                 <div class="avatar-block">
                     <div class="avatar-wrapper">
-                        <img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($user->getAvatar() ?? 'user.png') ?>" alt="Photo de profil">
+                        <img src="<?= ROOT ?>/public/img/avatar/<?= htmlspecialchars($user->getAvatar() ?? 'user.png') ?>" alt="Photo de profil">
                     </div>
                 </div>
                 <!-- Séparateur -->
@@ -60,7 +60,7 @@ ob_start(); ?>
                         <?php if (!empty($userBooks)): ?>
                             <?php foreach ($userBooks as $index => $book): ?>
                                 <tr <?= ($index === count($userBooks) - 1) ? 'class="last-row"' : '' ?>>
-                                    <td><img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($book->getImage() ?? 'default-book.jpg') ?>" alt="<?= htmlspecialchars($book->getTitle()) ?>"></td>
+                                    <td><img src="<?= ROOT ?>/public/img/cover/<?= htmlspecialchars($book->getImage() ?? 'default-book.jpg') ?>" alt="<?= htmlspecialchars($book->getTitle()) ?>"></td>
                                     <td><?= htmlspecialchars($book->getTitle()) ?></td>
                                     <td><?= htmlspecialchars($book->getAuthor()) ?></td>
                                     <td class="description">

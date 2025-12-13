@@ -91,7 +91,7 @@ class BookController extends AbstractController
                 if (preg_match("#jpeg|jpg|png#", $_FILES['image']['type'])) {
                     $dateHour = date('YmdHHis'); // Génère un préfixe basé sur la date/heure pour éviter les doublons
                     $image = $dateHour . '_' . $_FILES['image']['name']; // Nouveau nom du fichier
-                    $path = "public/img/"; // Dossier de destination
+                    $path = "public/img/cover/"; // Dossier de destination
                     /* move_uploaded_file déplace le fichier téléchargé vers le répertoire spécifié
                      - 1er argument → chemin temporaire ($_FILES['image']['tmp_name'])
                      - 2e argument → destination finale (ici $path . $image)*/
@@ -289,14 +289,14 @@ class BookController extends AbstractController
                 // Vérifier le type de l'image
                 if (preg_match("#jpeg|jpg|png#", $_FILES['image']['type'])) {
                     // Supprimer l'ancienne image (sauf si c'est l'image par défaut)
-                    if ($book->getImage() && $book->getImage() !== 'edit-book.jpg' && file_exists('public/img/' . $book->getImage())) {
+                    if ($book->getImage() && $book->getImage() !== 'edit-book.jpg' && file_exists('public/img/cover/' . $book->getImage())) {
                         // Supprimer l'ancienne image du serveur
-                        unlink('public/img/' . $book->getImage());
+                        unlink('public/img/cover/' . $book->getImage());
                     }
                     // Uploader la nouvelle image
                     $dateHour = date('YmdHHis');// Génère un préfixe basé sur la date/heure pour éviter les doublons
                     $image = $dateHour . '_' . $_FILES['image']['name'];// Nouveau nom du fichier
-                    $path = "public/img/";// Dossier de destination
+                    $path = "public/img/cover/";// Dossier de destination
                     // Déplacer le fichier uploadé vers le dossier de destination
                     move_uploaded_file($_FILES['image']['tmp_name'], $path . $image);
                     // Mettre à jour le nom de l'image dans l'objet Book
@@ -337,8 +337,15 @@ class BookController extends AbstractController
         // Vérifie qu'un identifiant de livre est bien fourni
         if ($id !== null) {
             $bookManager = new BookManager();
+            // Récupérer le livre pour obtenir le nom de l'image
+            $book = $bookManager->getBookById($id);
+            
             // Appelle la méthode du BookManager pour supprimer le livre
             if ($bookManager->deleteBook($id)) {
+                // Supprimer l'image physique (sauf si c'est l'image par défaut)
+                if ($book && $book->getImage() && $book->getImage() !== 'edit-book.jpg' && file_exists('public/img/cover/' . $book->getImage())) {
+                    unlink('public/img/cover/' . $book->getImage());
+                }
                 // Si la suppression réussit → redirection vers la liste des livres disponibles
                 header('Location: ' . ROOT . '/book/availableBooks');
                 exit;

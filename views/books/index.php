@@ -23,8 +23,11 @@ ob_start(); ?>
             <?php foreach ($lastBooks as $book) : ?>
                 <a href="<?= ROOT ?>/book/singleBook/<?= $book->getId() ?>" class="card-livre-link">
                     <div class="card-livre">
-                        <img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($book->getImage() ?: 'default.jpg') ?>" 
-                             alt="Livre <?= htmlspecialchars($book->getTitle()) ?>" class="book-image">
+                        <img src="<?= ROOT ?>/public/img/cover/<?= htmlspecialchars($book->getImage() ?: 'default.jpg') ?>"
+                            alt="Livre <?= htmlspecialchars($book->getTitle()) ?>" class="book-image">
+                        <?php if ($book->getStatus() === 0): ?>
+                            <span class="not-available" aria-label="Livre non disponible">non dispo.</span>
+                        <?php endif; ?>
                         <div class="card-content">
                             <h3 class="book-title"><?= htmlspecialchars($book->getTitle()) ?></h3>
                             <h4 class="book-subtitle"><?= htmlspecialchars($book->getAuthor()) ?></h4>

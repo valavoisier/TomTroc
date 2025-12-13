@@ -430,7 +430,7 @@ class UserController extends AbstractController
                 // Générer un nom de fichier unique
                 $extension = pathinfo($file['name'], PATHINFO_EXTENSION); //extension du fichier uploadé extrait avec pathinfo
                 $newFileName = 'avatar_' . $_SESSION['user']['id'] . '_' . time() . '.' . $extension; //nouveau nom de fichier unique
-                $uploadPath = 'public/img/' . $newFileName; //chemin de destination
+                $uploadPath = 'public/img/avatar/' . $newFileName; //chemin de destination
                 // Déplacer le fichier uploadé
                 if (move_uploaded_file($file['tmp_name'], $uploadPath)) {
                     // supprimer ancien avatar si pertinent
@@ -439,10 +439,10 @@ class UserController extends AbstractController
                         isset($_SESSION['user']['avatar']) &&
                         $_SESSION['user']['avatar'] !== 'user.png' &&
                         // Vérifier si le fichier de l'ancien avatar existe
-                        file_exists('public/img/' . $_SESSION['user']['avatar'])
+                        file_exists('public/img/avatar/' . $_SESSION['user']['avatar'])
                     ) {
                         // Supprimer l'ancien avatar
-                        @unlink('public/img/' . $_SESSION['user']['avatar']);
+                        @unlink('public/img/avatar/' . $_SESSION['user']['avatar']);
                     }
                     // Charger l'utilisateur et mettre à jour
                     $user = $this->userManager->getUserById($_SESSION['user']['id']);

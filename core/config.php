@@ -17,6 +17,7 @@
      */    
 
     // Définition de la constante ROOT pour l'URL de base de l'application
+    // $_SERVER variable superglobale qui contient le nom d’hôte du serveur
     if ($_SERVER['SERVER_NAME'] == 'localhost') {
         // Environnement local
         define('ROOT', 'http://localhost/TomTroc'); 

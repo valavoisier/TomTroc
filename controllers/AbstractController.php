@@ -65,7 +65,7 @@ abstract class AbstractController {
      * @param string $redirectUrl URL de redirection en cas d'échec (optionnel, par défaut page précédente)
      * @return void Redirige si le token est invalide
      */    
-    protected function verifyCSRF(string $redirectUrl = null): void {
+    protected function verifyCSRF(string $redirectUrl): void {
         // Récupérer le token soumis via le formulaire si absent $token vaut null
         $token = $_POST['csrf_token'] ?? null;
         //veifyCSRFToken ompare le token soumis avec celui stocké en session et retourne true si le token est valide, false sinon

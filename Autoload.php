@@ -7,10 +7,10 @@
  */
 
 class Autoload {
-    // création d'une méthode statique que l'on n'est pas obligé d'appeler en instanciant la classe    
-    public static function register() {
+    // création d'une méthode statique que l'on n'est pas obligé d'appeler en instanciant la classe
+        public static function register() {
         // Enregistre la méthode load comme autoloader pour le chargement des classes
-        // __CLASS__ renvoie la classe courante actuellement en cours d'exécution, ici Autoload
+        // __CLASS__ (constante magique)renvoie la classe courante actuellement en cours d'exécution, ici Autoload
         // spl_autoload_register() est une fonction PHP qui enregistre une fonction de rappel pour l'autoloading des classes
         // Cela signifie que lorsque PHP essaie de charger une classe qui n'est pas encore définie, il appellera la méthode load de cette classe
         // pour tenter de charger le fichier de la classe correspondante.

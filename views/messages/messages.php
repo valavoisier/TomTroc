@@ -13,7 +13,7 @@ ob_start(); ?>
                         <a href="<?= ROOT ?>/message/conversation/<?= $conversation->getUserId() ?>" class="conversation-link">
                             <div class="conversation-item <?= ($index === 0 && !isset($selectedConversation))
                                                                 || (isset($selectedConversation) && $selectedConversation->getId() == $conversation->getUserId()) ? 'first' : '' ?>">
-                                <img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($conversation->getAvatarPath()) ?>" alt="Avatar" class="conversation-avatar">
+                                <img src="<?= ROOT ?>/public/img/avatar/<?= htmlspecialchars($conversation->getAvatarPath()) ?>" alt="Avatar" class="conversation-avatar">
                                 <div class="conversation-content">
                                     <div class="conversation-header">
                                         <span class="conversation-name"><?= htmlspecialchars($conversation->getPseudo()) ?></span>
@@ -43,7 +43,7 @@ ob_start(); ?>
             <?php if (isset($selectedConversation) && !empty($selectedConversation)): ?>
                 <!-- Header de la conversation -->
                 <div class="messages-header">
-                    <img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($selectedConversation->getAvatar() ?? 'user.png', ENT_NOQUOTES, 'UTF-8') ?>" alt="Avatar" class="messages-header-avatar">
+                    <img src="<?= ROOT ?>/public/img/avatar/<?= htmlspecialchars($selectedConversation->getAvatar() ?? 'user.png', ENT_NOQUOTES, 'UTF-8') ?>" alt="Avatar" class="messages-header-avatar">
                     <span class="messages-header-name"><?= htmlspecialchars($selectedConversation->getPseudo(), ENT_NOQUOTES, 'UTF-8') ?></span>
                 </div>
                 <!-- Contenu de la conversation sélectionnée -->
@@ -58,7 +58,7 @@ ob_start(); ?>
                                 <!-- Message du sender (gauche) -->
                                 <div class="message-item <?= $messageClass ?>">
                                     <div class="message-header">
-                                        <img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($message->getSenderAvatar(), ENT_NOQUOTES, 'UTF-8') ?>" alt="<?= htmlspecialchars($message->getSenderPseudo(), ENT_NOQUOTES, 'UTF-8') ?>" class="message-avatar">
+                                        <img src="<?= ROOT ?>/public/img/avatar/<?= htmlspecialchars($message->getSenderAvatar(), ENT_NOQUOTES, 'UTF-8') ?>" alt="<?= htmlspecialchars($message->getSenderPseudo(), ENT_NOQUOTES, 'UTF-8') ?>" class="message-avatar">
                                         <span class="message-time"><?= date('d.m H:i', strtotime($message->getCreatedAt())) ?></span>
                                     </div>
                                     <div class="message-bubble message-bubble-sender">
