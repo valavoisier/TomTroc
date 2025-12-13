@@ -20,7 +20,7 @@ ob_start(); ?>
             <?php foreach ($books as $book) : ?>               
                 <a href="<?= ROOT ?>/book/singleBook/<?= $book->getId() ?>" class="card-livre-link">
                     <div class="card-livre">
-                        <img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($book->getImage()) ?>" 
+                        <img src="<?= ROOT ?>/public/img/cover/<?= htmlspecialchars($book->getImage() ?: 'default.jpg') ?>" 
                              alt="Livre <?= htmlspecialchars($book->getTitle()) ?>" class="book-image">
                         <?php if ($book->getStatus() === 0): ?>
                             <span class="not-available" aria-label="Livre non disponible">non dispo.</span>

@@ -7,6 +7,10 @@
  * - Orchestration entre les entités (Users, Messages), les managers et les vues.
  * - Permet l'affichage des conversations, l'envoi de nouveaux messages
  *   et la consultation d'une conversation spécifique.
+ *  méthodes:
+ * - index() : void - Affiche la messagerie avec la liste des conversations.
+ * - send() : void - Traite l'envoi d'un nouveau message.
+ * - conversation(int $otherUserId) : void - Affiche une conversation spécifique.
  * @extends AbstractController
  * @uses MessageManager Pour la gestion des messages et conversations.
  * @uses UserManager Pour la gestion des utilisateurs.

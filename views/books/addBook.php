@@ -17,7 +17,7 @@ ob_start(); ?>
                 <div class="edit-left">
                     <p class="section-label">Photos</p>
                     <div class="book-image-wrapper">
-                        <img src="<?= ROOT ?>/public/img/edit-book.jpg" alt="Aperçu du livre" id="preview-image">
+                        <img src="<?= ROOT ?>/public/img/cover/edit-book.jpg" alt="Aperçu du livre" id="preview-image">
                     </div>
                     <label for="upload-book-image" class="edit-photo-link" aria-label="Télécharger une photo du livre">Modifier la photo</label>
                     <input type="hidden" name="MAX_FILE_SIZE" value="10000000">

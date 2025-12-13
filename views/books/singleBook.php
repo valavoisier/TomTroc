@@ -14,7 +14,7 @@ ob_start(); ?>
     <div class="single-book-container">
         <!-- Partie gauche : Image -->
         <div class="book-image-section">
-            <img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($book->getImage() ?? 'default-book.jpg') ?>"
+            <img src="<?= ROOT ?>/public/img/cover/<?= htmlspecialchars($book->getImage() ?? 'default-book.jpg') ?>"
                 alt="<?= htmlspecialchars($book->getTitle()) ?>"
                 class="single-book-image">
         </div>
@@ -40,7 +40,7 @@ ob_start(); ?>
                 <a href="<?= $profileUrl ?>" class="owner-profile-link">
                     <div class="owner-profile">
                         <div class="owner-avatar">
-                            <img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($book->getAvatar() ?? 'user.png') ?>"
+                            <img src="<?= ROOT ?>/public/img/avatar/<?= htmlspecialchars($book->getAvatar() ?? 'user.png') ?>"
                                 alt="<?= htmlspecialchars($book->getPseudo()) ?>">
                         </div>
                         <span class="owner-name"><?= htmlspecialchars($book->getPseudo()) ?></span>

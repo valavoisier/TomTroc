@@ -15,7 +15,7 @@ ob_start(); ?>
                     <?= Utils::csrfTokenField() ?>
                     <div class="avatar-block">
                         <div class="avatar-wrapper">
-                            <img src="<?= ROOT ?>/public/img/<?= htmlspecialchars(($user ? $user->getAvatar() : ($_SESSION['user']['avatar'] ?? 'user.png'))) ?>" alt="Photo de profil">
+                            <img src="<?= ROOT ?>/public/img/avatar/<?= htmlspecialchars(($user ? $user->getAvatar() : ($_SESSION['user']['avatar'] ?? 'user.png'))) ?>" alt="Photo de profil">
                         </div>
                         <label for="upload-avatar" class="edit-avatar-link" aria-label="Télécharger une nouvelle photo de profil">Modifier</label>
                         <input type="hidden" name="MAX_FILE_SIZE" value="10000000">
@@ -87,7 +87,7 @@ ob_start(); ?>
                                 $id = is_object($book) ? $book->getId() : $book['id'];
                             ?>
                             <tr <?= ($index === count($userBooks) - 1) ? 'class="last-row"' : '' ?>>
-                                <td><img src="<?= ROOT ?>/public/img/<?= htmlspecialchars($image) ?>" alt="<?= htmlspecialchars($title) ?>"></td>
+                                <td><img src="<?= ROOT ?>/public/img/cover/<?= htmlspecialchars($image) ?>" alt="<?= htmlspecialchars($title) ?>"></td>
                                 <td><?= htmlspecialchars($title) ?></td>
                                 <td><?= htmlspecialchars($author) ?></td>
                                 <td class="description"><?= htmlspecialchars($description) ?></td>
