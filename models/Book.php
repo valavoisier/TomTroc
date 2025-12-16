@@ -18,8 +18,6 @@ class Book {
     private $createdAt;
     private $updatedAt;
     private $status;
-    private $pseudo;
-    private $avatar;
 
     public function __construct($id, $title, $author, $description, $image, $userId, $createdAt, $updatedAt, $status) {
         $this->id = $id ? (int)$id : null;
@@ -51,11 +49,4 @@ class Book {
     public function setImage($image) { $this->image = $image; }
     public function setStatus($status) { $this->status = (int)$status; }
     public function setUpdatedAt($updatedAt) { $this->updatedAt = $updatedAt; }
-
-    // Utilisateur
-    public function getPseudo() { return $this->pseudo; }
-    public function setPseudo($pseudo) { $this->pseudo = $pseudo; }
-
-    public function getAvatar() { return $this->avatar ?: 'user.png'; }
-    public function setAvatar($avatar) { $this->avatar = $avatar; }
 }

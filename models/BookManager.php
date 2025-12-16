@@ -1,7 +1,10 @@
 <?php
 class BookManager extends AbstractManager
 {
-    // Récupère tous les livres (avec pseudo et avatar)
+    /**
+     * Récupère tous les livres avec les informations du propriétaire
+     * @return BookWithOwnerDTO[] Tableau de DTOs combinant Book + infos propriétaire
+     */
     public function findAll(): array
     {
         $dbConnection = $this->db->getConnection();
@@ -14,7 +17,7 @@ class BookManager extends AbstractManager
         $req = $dbConnection->prepare($query);
         $req->execute();
 
-        $books = [];
+        $bookDTOs = [];
         while ($data = $req->fetch(PDO::FETCH_ASSOC)) {
             $book = new Book(
                 $data['id'],
@@ -27,16 +30,19 @@ class BookManager extends AbstractManager
                 $data['updated_at'],
                 $data['status']
             );
-            $book->setPseudo($data['pseudo']);
-            $book->setAvatar($data['avatar']);
-            $books[] = $book;
+            // Utilisation du DTO pour combiner Book + User
+            $bookDTOs[] = new BookWithOwnerDTO($book, $data['pseudo'], $data['avatar']);
         }
 
-        return $books;
+        return $bookDTOs;
     }
 
-    // Récupère un livre par son id
-    public function getBookById($id): ?Book
+    /**
+     * Récupère un livre par son id avec les informations du propriétaire
+     * @param int $id ID du livre
+     * @return BookWithOwnerDTO|null DTO ou null si non trouvé
+     */
+    public function getBookById($id): ?BookWithOwnerDTO
     {
         $dbConnection = $this->db->getConnection();
 
@@ -47,7 +53,7 @@ class BookManager extends AbstractManager
 
         $req = $dbConnection->prepare($query);
         $req->execute([':id' => $id]);
-        $data = $req->fetch(PDO::FETCH_ASSOC);//un seul résultat attendu
+        $data = $req->fetch(PDO::FETCH_ASSOC);
 
         if ($data) {
             $book = new Book(
@@ -61,16 +67,18 @@ class BookManager extends AbstractManager
                 $data['updated_at'],
                 $data['status']
             );
-            $book->setPseudo($data['pseudo']);
-            $book->setAvatar($data['avatar']);
-            return $book;
+            return new BookWithOwnerDTO($book, $data['pseudo'], $data['avatar']);
         }
 
         return null;
     }
 
-    // Récupère un livre par son titre (LIKE)
-    public function getBookByTitle($title): ?Book
+    /**
+     * Récupère un livre par son titre (LIKE) avec les informations du propriétaire
+     * @param string $title Titre à rechercher
+     * @return BookWithOwnerDTO|null DTO ou null si non trouvé
+     */
+    public function getBookByTitle($title): ?BookWithOwnerDTO
     {
         $dbConnection = $this->db->getConnection();
 
@@ -96,15 +104,17 @@ class BookManager extends AbstractManager
                 $data['updated_at'],
                 $data['status']
             );
-            $book->setPseudo($data['pseudo']);
-            $book->setAvatar($data['avatar']);
-            return $book;
+            return new BookWithOwnerDTO($book, $data['pseudo'], $data['avatar']);
         }
 
         return null;
     }
 
-    // Récupère les derniers livres (limit)
+    /**
+     * Récupère les derniers livres avec les informations du propriétaire
+     * @param int $limit Nombre de livres à récupérer (défaut: 4)
+     * @return BookWithOwnerDTO[] Tableau de DTOs
+     */
     public function getLastBooks(int $limit = 4): array
     {
         $dbConnection = $this->db->getConnection();
@@ -121,7 +131,7 @@ class BookManager extends AbstractManager
 
         $rows = $req->fetchAll(PDO::FETCH_ASSOC);
 
-        $books = [];
+        $bookDTOs = [];
         foreach ($rows as $data) {
             $book = new Book(
                 $data['id'],
@@ -134,12 +144,10 @@ class BookManager extends AbstractManager
                 $data['updated_at'],
                 $data['status']
             );
-            $book->setPseudo($data['pseudo']);
-            $book->setAvatar($data['avatar']);
-            $books[] = $book;
+            $bookDTOs[] = new BookWithOwnerDTO($book, $data['pseudo'], $data['avatar']);
         }
 
-        return $books;
+        return $bookDTOs;
     }
 
     // Insère un livre
@@ -196,7 +204,11 @@ class BookManager extends AbstractManager
         return $data ? (int)$data['total'] : 0;
     }
 
-    // Récupère les livres par utilisateur
+    /**
+     * Récupère les livres par utilisateur avec les informations du propriétaire
+     * @param int $userId ID de l'utilisateur
+     * @return BookWithOwnerDTO[] Tableau de DTOs
+     */
     public function getBooksByUserId($userId): array
     {
         $dbConnection = $this->db->getConnection();
@@ -212,7 +224,7 @@ class BookManager extends AbstractManager
 
         $results = $req->fetchAll(PDO::FETCH_ASSOC);
 
-        $books = [];
+        $bookDTOs = [];
         foreach ($results as $data) {
             $book = new Book(
                 $data['id'],
@@ -225,11 +237,9 @@ class BookManager extends AbstractManager
                 $data['updated_at'],
                 $data['status']
             );
-            $book->setPseudo($data['pseudo']);
-            $book->setAvatar($data['avatar']);
-            $books[] = $book;
+            $bookDTOs[] = new BookWithOwnerDTO($book, $data['pseudo'], $data['avatar']);
         }
 
-        return $books;
+        return $bookDTOs;
     }
 }
