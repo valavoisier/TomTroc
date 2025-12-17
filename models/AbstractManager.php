@@ -21,7 +21,7 @@ abstract class AbstractManager {
     protected $db;
 
     public function __construct() {
-        // Connexion à la base via le pattern Singleton Database
+        // Connexion à la base via le pattern Singleton Database, récupération instance unique
         $this->db = Database::getInstance();
     }
 
@@ -33,7 +33,7 @@ abstract class AbstractManager {
      * - Lie les valeurs fournies aux paramètres.
      * - Exécute la requête pour insérer l'enregistrement.
      * @param string $table Nom de la table où insérer l'enregistrement.
-     * @param array  $data  Données à insérer sous forme de tableau associatif (colonne => valeur).
+     * @param array  $data  Données à insérer sous forme de tableau associatif ['colonne' => valeur].
      * @return bool         Retourne true si l'insertion a réussi, false sinon.
      *  @uses Database::getConnection() Pour obtenir la connexion PDO.
      *
@@ -57,11 +57,10 @@ abstract class AbstractManager {
      * 
      * @return array Tableau associatif contenant tous les enregistrements.
      * @uses Database::getConnection() Pour obtenir la connexion PDO.
-     *      
-    
+     *  
      */
     public function getAll(string $table): array {
-        $query = "SELECT * FROM $table";// requête pour récupérer tous les enregistrements
+        $query = "SELECT * FROM $table";// requête pour récupérer toutes les colonnes de la table
         $dbConnection = $this->db->getConnection();
         $req = $dbConnection->prepare($query);
         $req->execute();
@@ -69,8 +68,8 @@ abstract class AbstractManager {
     }
 
     /**
-     * getById()Récupère un enregistrement par son ID.
-     *
+     * getById()Récupère le tuple (enregistrement) d'une table spécifiée en fonction de l'ID fourni.
+     * 
      * @param string $table Nom de la table.
      * @param int    $id    ID de l'enregistrement à récupérer.
      * @return array|null    Tableau associatif de l'enregistrement ou null si non trouvé.
@@ -81,10 +80,10 @@ abstract class AbstractManager {
         $query = "SELECT * FROM $table WHERE id = :id";// requête pour récupérer l'enregistrement par ID
         $dbConnection = $this->db->getConnection();
         $req = $dbConnection->prepare($query);//préparer la requête évite injection SQL
-        $req->bindParam(':id', $id, PDO::PARAM_INT);
+        $req->bindParam(':id', $id, PDO::PARAM_INT);//lier le paramètre id à la valeur fournie
         $req->execute();
-        $result = $req->fetch(PDO::FETCH_ASSOC);
-        return $result ?: null;
+        $result = $req->fetch(PDO::FETCH_ASSOC);//récupérer l'enregistrement sous forme de tableau associatif
+        return $result ?: null;//retourner null si aucun enregistrement trouvé
     }
 
     /**

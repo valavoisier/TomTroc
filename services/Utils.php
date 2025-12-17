@@ -9,10 +9,14 @@
  * Responsabilités principales :
  * - Générer du code JavaScript à insérer dans des attributs HTML (onclick, onchange).
  * - Faciliter l'intégration de comportements interactifs (confirmation, aperçu d'image).
+ * - Gérer la génération et la vérification des tokens CSRF pour la sécurité des formulaires.
  * Méthodes :
  * - askConfirmation() → confirmation sur bouton.
  * - askConfirmationOnChange() → confirmation + soumission formulaire sur input file.
  * - previewImage() → aperçu d’image sélectionnée dans un input file.
+ * - generateCSRFToken() → génère un token CSRF et le stocke en session.
+ * - verifyCSRFToken() → vérifie la validité d'un token CSRF soumis.
+ * - csrfTokenField() → génère un champ input hidden avec le token CSRF.
  * 
  * @property Utils $instance Instance de la classe Utils (non instanciable).
  */

@@ -1,12 +1,8 @@
 <?php
 /**
  * Modèle représentant un livre.
- * Responsabilités principales :
- * - Stocker les propriétés d'un livre (id, titre, auteur, description, image, userId, createdAt, updatedAt, status).
- * - Fournir des getters et setters pour accéder et modifier ces propriétés.
+ * Propriétés : id, title, author, description, image, userId, createdAt, updatedAt, status.
  * @package Models
- * @uses User Pour accéder aux informations de l'utilisateur (pseudo, avatar)
- * 
  */
 class Book {
     private $id;

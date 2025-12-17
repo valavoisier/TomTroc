@@ -278,20 +278,23 @@ class BookController extends AbstractController
                 $this->render('views/books/editBook.php', ['book' => $book, 'message' => $message, 'formData' => $_POST]);
                 return;
             }
-            // Mise à jour des propriétés de l’objet
-            $book->setTitle($_POST['title']);
-            $book->setAuthor($_POST['author']);
-            $book->setDescription($_POST['description']);
-            $book->setStatus(isset($_POST['status']) ? (int)$_POST['status'] : 1);
-            $book->setUpdatedAt(date('Y-m-d H:i:s'));
+            // Récupérer l'objet Book depuis le DTO pour pouvoir le modifier
+            $bookEntity = $book->getBook();
+            
+            // Mise à jour des propriétés de l'objet
+            $bookEntity->setTitle($_POST['title']);
+            $bookEntity->setAuthor($_POST['author']);
+            $bookEntity->setDescription($_POST['description']);
+            $bookEntity->setStatus(isset($_POST['status']) ? (int)$_POST['status'] : 1);
+            $bookEntity->setUpdatedAt(date('Y-m-d H:i:s'));
             // Gestion de l'image si une nouvelle est uploadée
             if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
                 // Vérifier le type de l'image
                 if (preg_match("#jpeg|jpg|png#", $_FILES['image']['type'])) {
                     // Supprimer l'ancienne image (sauf si c'est l'image par défaut)
-                    if ($book->getImage() && $book->getImage() !== 'edit-book.jpg' && file_exists('public/img/cover/' . $book->getImage())) {
+                    if ($bookEntity->getImage() && $bookEntity->getImage() !== 'edit-book.jpg' && file_exists('public/img/cover/' . $bookEntity->getImage())) {
                         // Supprimer l'ancienne image du serveur
-                        unlink('public/img/cover/' . $book->getImage());
+                        unlink('public/img/cover/' . $bookEntity->getImage());
                     }
                     // Uploader la nouvelle image
                     $dateHour = date('YmdHHis');// Génère un préfixe basé sur la date/heure pour éviter les doublons
@@ -300,13 +303,13 @@ class BookController extends AbstractController
                     // Déplacer le fichier uploadé vers le dossier de destination
                     move_uploaded_file($_FILES['image']['tmp_name'], $path . $image);
                     // Mettre à jour le nom de l'image dans l'objet Book
-                    $book->setImage($image);
+                    $bookEntity->setImage($image);
                 }
             }
             // Mise à jour via BookManager 
-            if ($bookManager->updateBook($book)) {
+            if ($bookManager->updateBook($bookEntity)) {
                 // Si succès, rediriger vers la page détail du livre
-                header('Location: ' . ROOT . '/book/singleBook/' . $book->getId());
+                header('Location: ' . ROOT . '/book/singleBook/' . $bookEntity->getId());
                 exit;
             } else {
                 // En cas d'erreur lors de la mise à jour

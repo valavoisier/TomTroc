@@ -7,6 +7,11 @@
  * - Préparation des données communes pour toutes les vues (ex: compteur de messages non lus)
  * - Gestion des dépendances communes
  * - Méthodes utilitaires partagées (ex: rendu de vues, vérification CSRF)
+ * Méthodes:
+ * - __construct() : Initialise les données communes
+ * - prepareCommonData() : Prépare les données communes pour les vues
+ * - render($viewPath, $data) : Rend une vue avec les données communes
+ * - verifyCSRF($redirectUrl) : Vérifie le token CSRF pour les formulaires POST
  * @package Controllers
  * @uses MessageManager Pour récupérer le nombre de conversations non lues
  * @uses Utils Pour la vérification des tokens CSRF *  
