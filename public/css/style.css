@@ -360,6 +360,10 @@ header {
     font-weight: 400;
     color: var(--color-text-black);
     margin: 0 0 8px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 155px;
 }
 
 .book-subtitle {
