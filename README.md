@@ -149,7 +149,7 @@ TomTroc/
 4. Remplissez les informations (titre, auteur, description, image optionnelle)
 
 ### Envoyer un message
-1. Consultez le profil d'un utilisateur
+1. Consultez le profil d'un utilisateur via détail d'un livre
 2. Cliquez sur "Envoyer un message"
 3. Rédigez votre message et envoyez
 
