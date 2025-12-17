@@ -28,21 +28,21 @@ class Book {
     }
 
     // Getters
-    public function getId() { return $this->id; }
-    public function getTitle() { return $this->title; }
-    public function getAuthor() { return $this->author; }
-    public function getDescription() { return $this->description; }
-    public function getImage() { return $this->image ?: 'default-book.jpg'; }
-    public function getUserId() { return $this->userId; }
-    public function getCreatedAt() { return $this->createdAt; }
-    public function getUpdatedAt() { return $this->updatedAt; }
-    public function getStatus() { return $this->status; }
+    public function getId(): ?int { return $this->id; }
+    public function getTitle(): string { return $this->title; }
+    public function getAuthor(): string { return $this->author; }
+    public function getDescription(): string { return $this->description; }
+    public function getImage(): string { return $this->image ?: 'default-book.jpg'; }
+    public function getUserId(): int { return $this->userId; }
+    public function getCreatedAt(): string { return $this->createdAt; }
+    public function getUpdatedAt(): string { return $this->updatedAt; }
+    public function getStatus(): int { return $this->status; }
 
     // Setters
-    public function setTitle($title) { $this->title = $title; }
-    public function setAuthor($author) { $this->author = $author; }
-    public function setDescription($description) { $this->description = $description; }
-    public function setImage($image) { $this->image = $image; }
-    public function setStatus($status) { $this->status = (int)$status; }
-    public function setUpdatedAt($updatedAt) { $this->updatedAt = $updatedAt; }
+    public function setTitle(string $title): void { $this->title = $title; }
+    public function setAuthor(string $author): void { $this->author = $author; }
+    public function setDescription(string $description): void { $this->description = $description; }
+    public function setImage(?string $image): void { $this->image = $image; }
+    public function setStatus(int $status): void { $this->status = (int)$status; }
+    public function setUpdatedAt(string $updatedAt): void { $this->updatedAt = $updatedAt; }
 }

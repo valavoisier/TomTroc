@@ -1,7 +1,7 @@
 <?php
 class UserManager extends AbstractManager {
 
-    public function findByEmail($email) {
+    public function findByEmail(string $email): ?User {
         $query = "SELECT * FROM users WHERE email = :email LIMIT 1";
         $stmt = $this->db->getConnection()->prepare($query);
         $stmt->bindParam(':email', $email);
@@ -22,7 +22,7 @@ class UserManager extends AbstractManager {
         return null;
     }
 
-    public function getUserById($id) {
+    public function getUserById(int $id): ?User {
         $query = "SELECT * FROM users WHERE id = :id";
         $stmt = $this->db->getConnection()->prepare($query);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
@@ -43,7 +43,7 @@ class UserManager extends AbstractManager {
         return null;
     }
 
-    public function registerUser(User $user) {
+    public function registerUser(User $user): bool {
         $data = [
             'pseudo'     => $user->getPseudo(),
             'email'      => $user->getEmail(),
@@ -55,7 +55,7 @@ class UserManager extends AbstractManager {
         return $this->add('users', $data);
     }
 
-    public function updateUserInfo(User $user) {
+    public function updateUserInfo(User $user): bool {
         $data = [
             'pseudo'     => $user->getPseudo(),
             'email'      => $user->getEmail(),

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Contrôleur pour la gestion des utilisateurs
  * @extends AbstractController
@@ -30,6 +29,7 @@ class UserController extends AbstractController
         parent::__construct();
         $this->userManager = new UserManager();
     }
+
     /** 
      * Méthode index() redirigeant vers account().
      * Cette méthode :
@@ -67,24 +67,29 @@ class UserController extends AbstractController
             header("Location: " . ROOT . "/book/availableBooks");
             exit;
         }
+        
         // Récupérer l'utilisateur par son ID
         $user = $this->userManager->getUserById($id);
         if (!$user) {
             echo "Utilisateur introuvable.";
             return;
         }
+        
         // Récupérer le nombre de livres et la liste des livres mis en ligne par l'utilisateur
         $bookManager = new BookManager();
         $bookCount = $bookManager->countBooksByUser($id); //nombre de livres
         $userBooks = $bookManager->getBooksByUserId($id); //liste des livres
+        
         $createdAt = new DateTime($user->getCreatedAt()); //date de création du compte
         $now = new DateTime(); // date actuelle
         $interval = $createdAt->diff($now); //différence entre les 2 dates
+        
         // Calcul du texte "Membre depuis ..."
         // Si plus d'un an, afficher le nombre d'années, sinon "moins d'un an"
         $memberSince = $interval->y > 0
             ? "Membre depuis {$interval->y} an" . ($interval->y > 1 ? "s" : "")
             : "Membre depuis moins d'un an";
+        
         // Passe un objet $user et la liste $userBooks à la vue
         $this->render('views/users/publicAccount.php', [
             'user' => $user,
@@ -145,6 +150,7 @@ class UserController extends AbstractController
                 ]);
                 return;
             }
+            
             // Validation des champs du formulaire
             if (empty($_POST['email']) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
                 $message = "Veuillez saisir une adresse email valide.";
@@ -162,11 +168,14 @@ class UserController extends AbstractController
                 ]);
                 return;
             }
+            
             // Sanitize des données
             $email    = htmlspecialchars($_POST['email'], ENT_QUOTES, 'UTF-8');
             $password = $_POST['password']; //mot de passe en clair
+            
             // Récupérer l'utilisateur par email
             $user = $this->userManager->findByEmail($email);
+            
             // Vérifier le mot de passe
             if ($user && password_verify($password, $user->getPassword())) {
                 // Initialiser la session utilisateur
@@ -213,6 +222,7 @@ class UserController extends AbstractController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Vérification du token CSRF
             $this->verifyCSRF(ROOT . '/user/register');
+            
             // Validation des champs du formulaire
             // Champ pseudo obligatoire
             if (empty($_POST['pseudo'])) {
@@ -238,7 +248,8 @@ class UserController extends AbstractController
                     'formData' => $_POST//préremplir le formulaire
                 ]);
                 return;
-            }            
+            }
+            
             // Validation de la complexité du mot de passe
             $passwordPlain = $_POST['password'];//mot de passe en clair
             //au moins 6 caractères, une majuscule, un chiffre, un caractère spécial
@@ -252,13 +263,16 @@ class UserController extends AbstractController
                     'formData' => $_POST//préremplir le formulaire
                 ]);
                 return;
-            }            
+            }
+            
             // Sanitize et préparation des données utilisateur
             $pseudo   = htmlspecialchars($_POST['pseudo'], ENT_QUOTES, 'UTF-8');
             $email    = htmlspecialchars($_POST['email'], ENT_QUOTES, 'UTF-8');
-            $password = password_hash($_POST['password'], PASSWORD_DEFAULT);            
+            $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+            
             // Vérifier si l'email est déjà utilisé
-            $existingUser = $this->userManager->findByEmail($email);            
+            $existingUser = $this->userManager->findByEmail($email);
+            
             if ($existingUser) {
                 $message = "Cet email est déjà utilisé.";
                 $this->render('views/users/register.php', [
@@ -266,7 +280,8 @@ class UserController extends AbstractController
                     'formData' => $_POST
                 ]);
                 return;
-            }            
+            }
+            
             // Créer un nouvel utilisateur
             $now = date("Y-m-d H:i:s");
             $user = new User(
@@ -277,9 +292,11 @@ class UserController extends AbstractController
                 'user.png',
                 $now,
                 $now
-            );            
+            );
+            
             // Enregistrer l'utilisateur via UserManager
             $isRegistered = $this->userManager->registerUser($user);
+            
             // Si l'inscription a réussi, rediriger vers la page de connexion
             if ($isRegistered) {
                 header("Location: " . ROOT . "/user/login");

@@ -20,7 +20,8 @@
  * 
  * @property Utils $instance Instance de la classe Utils (non instanciable).
  */
-class Utils{
+class Utils
+{
     /**
      * Méthode askConfirmation() pour générer du code JavaScript de confirmation.
      *

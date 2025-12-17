@@ -27,6 +27,7 @@ class MessageController extends AbstractController {
         $this->messageManager = new MessageManager();
         $this->userManager = new UserManager();
     }
+
     /**
      * Méthode index() pour afficher la messagerie avec la liste des conversations.
      *
@@ -53,13 +54,16 @@ class MessageController extends AbstractController {
             exit;
         }
         // Récupérer l'ID de l'utilisateur connecté 
-        $userId = $_SESSION['user']['id'];        
+        $userId = $_SESSION['user']['id'];
+        
         // Récupérer toutes les conversations
-        $conversations = $this->messageManager->getConversations($userId);        
+        $conversations = $this->messageManager->getConversations($userId);
+        
         // Auto-sélectionner la première conversation et marquer les messages comme lus
         $selectedConversation = null;
         // Initialiser le tableau des messages
-        $messages = [];  
+        $messages = [];
+        
         // Si des conversations existent, sélectionner la première par défaut     
         if (!empty($conversations)) {
             // Sélectionner la première conversation
@@ -69,10 +73,12 @@ class MessageController extends AbstractController {
             // Marquer les messages comme lus
             $this->messageManager->markMessagesAsRead($userId, $firstConversation->getUserId());
             // Récupérer les messages de la conversation
-            $messages = $this->messageManager->getConversationMessages($userId, $firstConversation->getUserId());            
+            $messages = $this->messageManager->getConversationMessages($userId, $firstConversation->getUserId());
+            
             // Recalculer le compteur après avoir marqué les messages comme lus
             $this->conversationsCount = $this->messageManager->getUnreadConversationsCount($userId);
         }
+        
         // Inclure la vue avec les données préparées
         $this->render('views/messages/messages.php', [
             'conversations' => $conversations,//liste des conversations
@@ -99,42 +105,49 @@ class MessageController extends AbstractController {
      *
      * @return void Cette méthode ne retourne rien ; elle effectue des actions (validation, insertion, redirection).
      */
-    public function send() {
+    public function send()
+    {
         // Vérifier si l'utilisateur est connecté sinon redirection formulaire connexion 
         if (!isset($_SESSION['user'])) {
             header('Location: ' . ROOT . '/user/login');
             exit;
         }
+        
         // Vérifier si la requête est de type POST
          if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Vérification du token CSRF
             $this->verifyCSRF(ROOT . '/message');
+            
             // Récupérer les données du formulaire 
             $senderId   = $_SESSION['user']['id'];//ID de l'expéditeur
             $receiverId = isset($_POST['receiver_id']) ? (int) $_POST['receiver_id'] : null;//ID du destinataire
             $content    = isset($_POST['content']) ? trim($_POST['content']) : '';//Contenu du message
+            
             // Validation des données
             if (!$receiverId) {
                 $_SESSION['error'] = "Destinataire manquant.";
                 header('Location: ' . ROOT . '/message');
                 exit;
             }
+            
             // Vérifier que le contenu n'est pas vide
             if ($content === '') {
                 $_SESSION['error'] = "Le message ne peut pas être vide.";
                 header('Location: ' . ROOT . '/message/conversation/' . $receiverId);
                 exit;
             }
+            
             // Envoyer le message via le MessageManager
             $this->messageManager->sendMessage($senderId, $receiverId, $content);
             header('Location: ' . ROOT . '/message/conversation/' . $receiverId);
             exit;
         }
+        
         header('Location: ' . ROOT . '/message');
         exit;
     }
 
-   /**
+    /**
      * Méthode conversation() pour afficher une conversation spécifique entre l'utilisateur connecté et un autre utilisateur.
      *
      * Cette méthode :
@@ -149,23 +162,29 @@ class MessageController extends AbstractController {
      * @param int $otherUserId Identifiant unique de l'autre utilisateur avec qui on converse.
      * @return void Prépare les données et inclut une vue.
      */
-    public function conversation($otherUserId) {
+    public function conversation($otherUserId)
+    {
         // Vérifier si l'utilisateur est connecté
         if (!isset($_SESSION['user'])) {
             header('Location: ' . ROOT . '/user/login');
             exit;
         }
+        
         // Récupérer l'ID de l'utilisateur connecté
-        $userId = $_SESSION['user']['id'];        
+        $userId = $_SESSION['user']['id'];
+        
         // Récupérer toutes les conversations
-        $conversations = $this->messageManager->getConversations($userId);        
+        $conversations = $this->messageManager->getConversations($userId);
+        
         // Récupérer les informations de l'utilisateur sélectionné
         $selectedConversation = $this->userManager->getUserById($otherUserId);
         $this->messageManager->markMessagesAsRead($userId, $otherUserId);
         // Récupérer les messages de la conversation
-        $messages = $this->messageManager->getConversationMessages($userId, $otherUserId);        
+        $messages = $this->messageManager->getConversationMessages($userId, $otherUserId);
+        
         // Recalculer le compteur après avoir marqué les messages comme lus
         $this->conversationsCount = $this->messageManager->getUnreadConversationsCount($userId);
+        
         $this->render('views/messages/messages.php', [
             'conversations' => $conversations,//liste des conversations
             'selectedConversation' => $selectedConversation,//utilisateur sélectionné

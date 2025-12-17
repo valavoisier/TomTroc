@@ -37,14 +37,14 @@ class Message {
     }
 
     // Getters
-    public function getId() { return $this->id; }
-    public function getSenderId() { return $this->senderId; }
-    public function getReceiverId() { return $this->receiverId; }
-    public function getContent() { return $this->content; }
-    public function getCreatedAt() { return $this->createdAt; }
-    public function isRead() { return $this->isRead; }
-    public function getSenderPseudo() { return $this->senderPseudo; }
-    public function getSenderAvatar() { return $this->senderAvatar; }
-    public function getReceiverPseudo() { return $this->receiverPseudo; }
-    public function getReceiverAvatar() { return $this->receiverAvatar; }
+    public function getId(): ?int { return $this->id; }
+    public function getSenderId(): ?int { return $this->senderId; }
+    public function getReceiverId(): ?int { return $this->receiverId; }
+    public function getContent(): string { return $this->content; }
+    public function getCreatedAt(): ?string { return $this->createdAt; }
+    public function isRead(): bool { return $this->isRead; }
+    public function getSenderPseudo(): ?string { return $this->senderPseudo; }
+    public function getSenderAvatar(): string { return $this->senderAvatar; }
+    public function getReceiverPseudo(): ?string { return $this->receiverPseudo; }
+    public function getReceiverAvatar(): string { return $this->receiverAvatar; }
 }

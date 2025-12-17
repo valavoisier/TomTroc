@@ -52,9 +52,11 @@ abstract class AbstractController {
      */
     protected function render(string $viewPath, array $data = []): void {
         // Rendre disponible le compteur pour la vue
-        $conversationsCount = $this->conversationsCount;        
+        $conversationsCount = $this->conversationsCount;
+        
         // Extraire les données spécifiques sous forme de variables
-        extract($data);        
+        extract($data);
+        
         // Inclure la vue
         require_once $viewPath;
     }
@@ -73,10 +75,12 @@ abstract class AbstractController {
     protected function verifyCSRF(string $redirectUrl): void {
         // Récupérer le token soumis via le formulaire si absent $token vaut null
         $token = $_POST['csrf_token'] ?? null;
+        
         //veifyCSRFToken ompare le token soumis avec celui stocké en session et retourne true si le token est valide, false sinon
         if (!Utils::verifyCSRFToken($token)) {
-           // gestion de l'erreur CSRF
+            // gestion de l'erreur CSRF
             $_SESSION['error'] = "Requête invalide. Veuillez réessayer.";
+            
             // Redirection vers l'URL spécifiée $redirectUrl 
             if ($redirectUrl) {
                 header('Location: ' . $redirectUrl);

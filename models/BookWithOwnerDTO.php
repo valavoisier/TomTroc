@@ -28,15 +28,15 @@ class BookWithOwnerDTO
     }
 
     // Délégation vers l'objet Book
-    public function getId() { return $this->book->getId(); }
-    public function getTitle() { return $this->book->getTitle(); }
-    public function getAuthor() { return $this->book->getAuthor(); }
-    public function getDescription() { return $this->book->getDescription(); }
-    public function getImage() { return $this->book->getImage(); }
-    public function getUserId() { return $this->book->getUserId(); }
-    public function getCreatedAt() { return $this->book->getCreatedAt(); }
-    public function getUpdatedAt() { return $this->book->getUpdatedAt(); }
-    public function getStatus() { return $this->book->getStatus(); }
+    public function getId(): ?int { return $this->book->getId(); }
+    public function getTitle(): string { return $this->book->getTitle(); }
+    public function getAuthor(): string { return $this->book->getAuthor(); }
+    public function getDescription(): string { return $this->book->getDescription(); }
+    public function getImage(): string { return $this->book->getImage(); }
+    public function getUserId(): int { return $this->book->getUserId(); }
+    public function getCreatedAt(): string { return $this->book->getCreatedAt(); }
+    public function getUpdatedAt(): string { return $this->book->getUpdatedAt(); }
+    public function getStatus(): int { return $this->book->getStatus(); }
 
     // Accès à l'objet Book complet si nécessaire
     public function getBook(): Book { return $this->book; }

@@ -29,13 +29,13 @@
 class BookController extends AbstractController
 {
     /** Page d’accueil redirigeant vers la liste des livres disponibles */
-    public function index()
+    public function index(): void
     {
         $this->availableBooks();
     }
 
     /** Formulaire d'ajout de livre */
-    public function addBook()
+    public function addBook(): void
     {
         $this->render('views/books/addBook.php');
     }
@@ -54,7 +54,7 @@ class BookController extends AbstractController
      * @uses Books Pour représenter l'entité livre.
      * @uses Utils Pour les fonctionnalités utilitaires (ex: confirmations JavaScript).
      */
-    public function registerBook()
+    public function registerBook(): void
     {
         // Vérifie si la requête est bien envoyée en POST (soumission du formulaire)
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -67,6 +67,7 @@ class BookController extends AbstractController
                 header('Location: ' . ROOT . '/user/login');
                 exit;
             }
+            
             // Validation des données du formulaire
             if (empty($_POST['title'])) {
                 $message = "Le titre est obligatoire.";
@@ -102,7 +103,8 @@ class BookController extends AbstractController
                     return;
                 }
             }
-            // Création de l’objet Books (avec les données du formulaire / colonnes de ta table books)
+            
+            // Création de l'objet Books (avec les données du formulaire / colonnes de ta table books)
             $book = new Book(
                 null, // ID auto-incrémenté → null
                 $_POST['title'],
@@ -114,6 +116,7 @@ class BookController extends AbstractController
                 date('Y-m-d H:i:s'), // Date de mise à jour
                 1 // Statusdisponible par défaut
             );
+            
             // Enregistrement via BookManager
             $bookManager = new BookManager();
             // Si succès, rediriger vers le compte utilisateur
@@ -141,9 +144,10 @@ class BookController extends AbstractController
      * @uses BookManager::findAll() Pour récupérer tous les livres.
      * @uses BookController::render() Pour afficher la vue avec les données des livres.
      */
-    public function availableBooks()
+    public function availableBooks(): void
     {
         $bookManager = new BookManager();
+        
         // Récupérer tous les livres
         $books = $bookManager->findAll();
         if ($books) {
@@ -167,7 +171,7 @@ class BookController extends AbstractController
      * @uses BookManager::getBookByTitle() Pour rechercher un livre par titre.
      * @uses BookController::availableBooks() Pour recharger la liste des livres si aucun résultat n'est trouvé.
      */
-    public function search()
+    public function search(): void
     {
         // Vérification du token CSRF
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -177,9 +181,11 @@ class BookController extends AbstractController
         // Vérifier si une requête de recherche a été envoyée via POST
         // q : nom du champ de recherche dans le formulaire
         if (!empty($_POST['q'])) {
+            
             // Utiliser BookManager pour chercher un livre par titre via getBookByTitle()
             $bookManager = new BookManager();
             $book = $bookManager->getBookByTitle($_POST['q']);
+            
             // Si un livre est trouvé, rediriger vers sa page de détail singleBook
             if ($book) {
                 header('Location: ' . ROOT . '/book/singleBook/' . $book->getId());
@@ -209,13 +215,15 @@ class BookController extends AbstractController
      * @param int|null $id Identifiant du livre à afficher
      * @return void Cette méthode ne retourne rien ; elle effectue des actions (affichage, message d'erreur).
      */
-    public function singleBook($id = null)
+    public function singleBook($id = null): void
     {
         // Vérifier qu’un identifiant est fourni
         if ($id !== null) {
             $bookManager = new BookManager();
+            
             // Récupérer le livre par son ID
             $book = $bookManager->getBookById($id);
+            
             // Si le livre est trouvé, rendre la vue avec les données du livre
             if ($book) {
                 $this->render('views/books/singleBook.php', ['book' => $book]);
@@ -239,13 +247,15 @@ class BookController extends AbstractController
      * @param int|null $id Identifiant du livre à éditer
      * @return void Cette méthode ne retourne rien ; elle effectue des actions (affichage, mise à jour, redirection).
      */
-    public function editBook($id = null)
+    public function editBook($id = null): void
     {
         $bookManager = new BookManager();
         // Si la requête est en GET et qu'un ID est fourni → afficher le formulaire
         if ($_SERVER['REQUEST_METHOD'] === 'GET' && $id !== null) {
+            
             // Récupérer le livre par son ID
             $book = $bookManager->getBookById($id);
+            
             if ($book) {
                 // Rendre la vue avec les données du livre
                 $this->render('views/books/editBook.php', ['book' => $book]);
@@ -255,15 +265,19 @@ class BookController extends AbstractController
         }
         // Si la requête est en POST et qu'un ID est fourni → traiter la modification
         elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && $id !== null) {
+            
             // Vérification du token CSRF
-            $this->verifyCSRF(ROOT . '/book/editBook/' . $id);            
+            $this->verifyCSRF(ROOT . '/book/editBook/' . $id);
+            
             // Récupérer le livre par son ID
             $book = $bookManager->getBookById($id);
+            
             // Vérifier que le livre existe
             if (!$book) {
                 echo "Livre introuvable.";
                 return;
             }
+            
             // Validation des données /champs obligatoires
             if (empty($_POST['title'])) {
                 $message = "Le titre est obligatoire.";
@@ -278,6 +292,7 @@ class BookController extends AbstractController
                 $this->render('views/books/editBook.php', ['book' => $book, 'message' => $message, 'formData' => $_POST]);
                 return;
             }
+            
             // Récupérer l'objet Book depuis le DTO pour pouvoir le modifier
             $bookEntity = $book->getBook();
             
@@ -287,6 +302,7 @@ class BookController extends AbstractController
             $bookEntity->setDescription($_POST['description']);
             $bookEntity->setStatus(isset($_POST['status']) ? (int)$_POST['status'] : 1);
             $bookEntity->setUpdatedAt(date('Y-m-d H:i:s'));
+            
             // Gestion de l'image si une nouvelle est uploadée
             if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
                 // Vérifier le type de l'image
@@ -306,7 +322,8 @@ class BookController extends AbstractController
                     $bookEntity->setImage($image);
                 }
             }
-            // Mise à jour via BookManager 
+            
+            // Mise à jour via BookManager
             if ($bookManager->updateBook($bookEntity)) {
                 // Si succès, rediriger vers la page détail du livre
                 header('Location: ' . ROOT . '/book/singleBook/' . $bookEntity->getId());
@@ -335,11 +352,12 @@ class BookController extends AbstractController
      * @param int|null $id Identifiant du livre à supprimer
      * @return void Cette méthode ne retourne rien ; elle effectue des actions (suppression, redirection, affichage).
     */
-    public function deleteBook($id = null)
+    public function deleteBook($id = null): void
     {
         // Vérifie qu'un identifiant de livre est bien fourni
         if ($id !== null) {
             $bookManager = new BookManager();
+            
             // Récupérer le livre pour obtenir le nom de l'image
             $book = $bookManager->getBookById($id);
             
