@@ -16,15 +16,15 @@
 ##  Technologies
 
 - **Backend** : PHP 8.2x (POO strict, typage fort)
-- **Base de données** : MySQL 8.x avec PDO
+- **Base de données** : MariaDB 10.4+ avec PDO
 - **Architecture** : MVC personnalisé avec Router et Autoloader
 - **Frontend** : HTML5, CSS3 
-- **Patterns** : Singleton (Database), DAO (Managers), MVC
+- **Patterns** : Singleton (Database), Repository/Manager (couche d'accès aux données), DTO (BookWithOwnerDTO)
 
 ##  Prérequis
 
 - PHP 8.2 ou supérieur
-- MySQL 8.2 ou supérieur
+- MariaDB 10.4 ou supérieur (ou MySQL 8.0+)
 - Serveur web (Apache/Nginx) avec mod_rewrite activé
 
 ##  Installation
@@ -98,16 +98,17 @@ TomTroc/
 ├── controllers/          # Contrôleurs MVC
 │   ├── AbstractController.php
 │   ├── BookController.php
+│   ├── HomeController.php
 │   ├── MessageController.php
 │   └── UserController.php
 ├── core/                 # Configuration et infrastructure
 │   ├── config.php        # Paramètres BDD et constantes
-│   ├── db/
-│   │   └── Database.php  # Singleton PDO
+│   ├── Database.php      # Singleton PDO
 │   └── Router.php        # Routeur personnalisé
 ├── models/               # Modèles (Managers + Entités)
 │   ├── AbstractManager.php
 │   ├── BookManager.php
+│   ├── BookWithOwnerDTO.php
 │   ├── MessageManager.php
 │   ├── UserManager.php
 │   ├── Book.php
