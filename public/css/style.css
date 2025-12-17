@@ -540,9 +540,14 @@ footer{
 
 .footer-container{
     display: flex;
+    align-items: center;
     height: 61px;
     margin: 0 40px 0 40px;
     font-size: 12px;
+}
+
+.footer-container nav{
+    width: 100%;
 }
 
 .footer-container ul{
