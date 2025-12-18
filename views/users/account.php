@@ -17,7 +17,7 @@ ob_start(); ?>
                         <div class="avatar-wrapper">
                             <img src="<?= ROOT ?>/public/img/avatar/<?= htmlspecialchars(($user ? $user->getAvatar() : ($_SESSION['user']['avatar'] ?? 'user.png'))) ?>" alt="Photo de profil">
                         </div>
-                        <label for="upload-avatar" class="edit-avatar-link" aria-label="Télécharger une nouvelle photo de profil">Modifier</label>
+                        <label for="upload-avatar" class="edit-avatar-link">Modifier</label>
                         <input type="hidden" name="MAX_FILE_SIZE" value="10000000">
                         <input type="file" id="upload-avatar" class="upload-avatar" accept="image/*" name="avatar" 
                                <?= Utils::askConfirmationOnChange('Voulez-vous enregistrer cette nouvelle photo ?', 'avatar-form') ?>>

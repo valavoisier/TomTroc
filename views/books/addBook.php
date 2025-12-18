@@ -19,7 +19,7 @@ ob_start(); ?>
                     <div class="book-image-wrapper">
                         <img src="<?= ROOT ?>/public/img/cover/edit-book.jpg" alt="Aperçu du livre" id="preview-image">
                     </div>
-                    <label for="upload-book-image" class="edit-photo-link" aria-label="Télécharger une photo du livre">Modifier la photo</label>
+                    <label for="upload-book-image" class="edit-photo-link">Modifier la photo</label>
                     <input type="hidden" name="MAX_FILE_SIZE" value="10000000">
                     <input type="file" name="image" id="upload-book-image" class="upload-book-image" accept="image/*" <?= Utils::previewImage('preview-image') ?>>
                 </div>
@@ -27,15 +27,15 @@ ob_start(); ?>
                 <div class="edit-right">
                     <div class="form-group">
                         <label for="title">Titre</label>
-                        <input type="text" id="title" name="title" value="<?= htmlspecialchars($formData['title'] ?? '', ENT_QUOTES, 'UTF-8') ?>" required aria-required="true">
+                        <input type="text" id="title" name="title" value="<?= htmlspecialchars($formData['title'] ?? '', ENT_QUOTES, 'UTF-8') ?>" required>
                     </div>
                     <div class="form-group">
                         <label for="author">Auteur</label>
-                        <input type="text" id="author" name="author" value="<?= htmlspecialchars($formData['author'] ?? '', ENT_QUOTES, 'UTF-8') ?>" required aria-required="true">
+                        <input type="text" id="author" name="author" value="<?= htmlspecialchars($formData['author'] ?? '', ENT_QUOTES, 'UTF-8') ?>" required>
                     </div>
                     <div class="form-group">
                         <label for="description">Commentaire</label>
-                        <textarea id="description" name="description" rows="10" required aria-required="true"><?= htmlspecialchars($formData['description'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
+                        <textarea id="description" name="description" rows="10" required><?= htmlspecialchars($formData['description'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
                     </div>
                     <button type="submit" class="btn-primary validate-btn">Valider</button>
                 </div>

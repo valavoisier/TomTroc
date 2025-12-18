@@ -1,6 +1,6 @@
  <!-- Footer-->
         </main>
-    <footer role="contentinfo">
+    <footer>
         <div class="footer-container">
             <nav aria-label="Liens légaux et informations">
                 <ul>

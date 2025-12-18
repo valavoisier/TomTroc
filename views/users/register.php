@@ -15,15 +15,15 @@ ob_start(); ?>
                 <?= Utils::csrfTokenField() ?>
                 <div class="form-group">
                     <label for="pseudo">Pseudo</label>
-                    <input type="text" id="pseudo" name="pseudo" value="<?= htmlspecialchars($formData['pseudo'] ?? '', ENT_QUOTES, 'UTF-8') ?>" required aria-required="true">
+                    <input type="text" id="pseudo" name="pseudo" value="<?= htmlspecialchars($formData['pseudo'] ?? '', ENT_QUOTES, 'UTF-8') ?>" required>
                 </div>
                 <div class="form-group">
                     <label for="email">Adresse email</label>
-                    <input type="email" id="email" name="email" value="<?= htmlspecialchars($formData['email'] ?? '', ENT_QUOTES, 'UTF-8') ?>" required aria-required="true">
+                    <input type="email" id="email" name="email" value="<?= htmlspecialchars($formData['email'] ?? '', ENT_QUOTES, 'UTF-8') ?>" required>
                 </div>
                 <div class="form-group">
                     <label for="password">Mot de passe</label>
-                    <input type="password" id="password" name="password" required aria-required="true">
+                    <input type="password" id="password" name="password" required>
                 </div>
                 <button type="submit" class="btn-primary login-btn">S'inscrire</button>
                 <p class="register-link">Déjà inscrit ? <a href="<?= ROOT ?>/user/login">Connectez-vous</a></p>

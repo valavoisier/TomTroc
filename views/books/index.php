@@ -26,7 +26,7 @@ ob_start(); ?>
                         <img src="<?= ROOT ?>/public/img/cover/<?= htmlspecialchars($book->getImage() ?: 'default.jpg') ?>"
                             alt="Livre <?= htmlspecialchars($book->getTitle()) ?>" class="book-image">
                         <?php if ($book->getStatus() === 0): ?>
-                            <span class="not-available" aria-label="Livre non disponible">non dispo.</span>
+                            <span class="not-available">non dispo.</span>
                         <?php endif; ?>
                         <div class="card-content">
                             <h3 class="book-title"><?= htmlspecialchars($book->getTitle()) ?></h3>
