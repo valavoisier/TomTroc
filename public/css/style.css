@@ -338,6 +338,17 @@ header {
     text-decoration: none;
     color: inherit;
     display: block;
+    border-radius: 10px;
+}
+
+.card-livre-link:focus {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.card-livre-link:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 2px;
 }
 
 
@@ -885,6 +896,17 @@ footer{
     display: block;
     text-decoration: none;
     margin-bottom: 20px;
+    border-radius: 114px;
+}
+
+.owner-profile-link:focus {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.owner-profile-link:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 2px;
 }
 
 .owner-profile {
@@ -951,6 +973,17 @@ footer{
 .message-button {
     display: block;
     text-decoration: none;
+    border-radius: 10px;
+}
+
+.message-button:focus {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.message-button:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 2px;
 }
 
 .btn-message-large {
@@ -1559,6 +1592,18 @@ footer{
 .conversation-link {
     text-decoration: none;
     color: inherit;
+    display: block;
+    border-radius: 4px;
+}
+
+.conversation-link:focus {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.conversation-link:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 2px;
 }
 
 .conversation-item {
