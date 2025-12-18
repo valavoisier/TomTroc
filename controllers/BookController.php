@@ -360,10 +360,10 @@ class BookController extends AbstractController
             $bookManager = new BookManager();
             
             // Récupérer le livre pour obtenir le nom de l'image
-            $book = $bookManager->getBookById($id);
+            $book = $bookManager->getBookById((int)$id);
             
             // Appelle la méthode du BookManager pour supprimer le livre
-            if ($bookManager->deleteBook($id)) {
+            if ($bookManager->deleteBook((int)$id)) {
                 // Supprimer l'image physique (sauf si c'est l'image par défaut)
                 if ($book && $book->getImage() && $book->getImage() !== 'edit-book.jpg' && file_exists('public/img/cover/' . $book->getImage())) {
                     unlink('public/img/cover/' . $book->getImage());

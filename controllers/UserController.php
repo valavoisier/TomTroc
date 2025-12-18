@@ -507,6 +507,13 @@ class UserController extends AbstractController
         }
         // Récupérer les informations de l'utilisateur connecté
         $user = $this->userManager->getUserById($_SESSION['user']['id']);
+        
+        // Vérifier que l'utilisateur existe
+        if (!$user) {
+            header("Location: " . ROOT . "/user/login");
+            exit;
+        }
+        
         $bookManager = new BookManager();
         // Récupérer le nombre de livres et la liste des livres mis en ligne par l'utilisateur
         $bookCount = $bookManager->countBooksByUser($user->getId());
