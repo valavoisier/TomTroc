@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /*
 MANAGER pour les opérations spécifiques aux messages
 */ 

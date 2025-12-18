@@ -1,4 +1,4 @@
-    <?php     
+    <?php
     /**
      * Fichier de configuration config.php
      * 

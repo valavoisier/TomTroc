@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Modèle représentant un livre.
  * Propriétés : id, title, author, description, image, userId, createdAt, updatedAt, status.

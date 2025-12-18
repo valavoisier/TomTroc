@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Fichier Autoload.php
  * Enregistre automatiquement les classes utilisées dans l'application.
@@ -23,7 +24,7 @@ class Autoload
      * Méthode static pour charger dynamiquement les classes de contrôleurs.
      * @param string $className Le nom de la classe à charger.
      */
-    public static function load($className)
+    public static function load(string $className): void
     {
         $baseDir = __DIR__ . '/'; // Chemin vers le répertoire des contrôleurs.
         // La constante magique __DIR__ donne le chemin du répertoire courant
@@ -32,7 +33,6 @@ class Autoload
         $directories = [
             'controllers/',
             'models/',
-            'views/',
             'core/',
             'services/',
             '/'

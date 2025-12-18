@@ -1,9 +1,10 @@
 <?php
+declare(strict_types=1);
 class BookManager extends AbstractManager
 {
     /**
      * Récupère tous les livres avec les informations du propriétaire
-     * @return BookWithOwnerDTO[] Tableau de DTOs combinant Book + infos propriétaire
+     * @return BookWithOwnerDTO[] Tableau de DTOs combinant Book + pseudo et avatar du propriétaire
      */
     public function findAll(): array
     {
@@ -11,13 +12,14 @@ class BookManager extends AbstractManager
 
         $query = "SELECT books.*, users.pseudo, users.avatar
                   FROM books
-                  JOIN users ON books.user_id = users.id
+                  JOIN users ON books.user_id = users.id -- (LEFT JOIN utilisé pour tester affichage sans propriétaire)
                   ORDER BY books.id DESC";
 
         $req = $dbConnection->prepare($query);
-        $req->execute();
-
+        $req->execute();        
+        
         $bookDTOs = [];
+        // Parcourir les résultats et créer les DTOs
         while ($data = $req->fetch(PDO::FETCH_ASSOC)) {
             $book = new Book(
                 $data['id'],
@@ -30,7 +32,7 @@ class BookManager extends AbstractManager
                 $data['updated_at'],
                 $data['status']
             );
-            // Utilisation du DTO pour combiner Book + User
+            // Utilisation du DTO pour combiner Book + User en ajoutant pseudo et avatar
             $bookDTOs[] = new BookWithOwnerDTO($book, $data['pseudo'], $data['avatar']);
         }
 
@@ -42,7 +44,7 @@ class BookManager extends AbstractManager
      * @param int $id ID du livre
      * @return BookWithOwnerDTO|null DTO ou null si non trouvé
      */
-    public function getBookById($id): ?BookWithOwnerDTO
+    public function getBookById( int $id): ?BookWithOwnerDTO
     {
         $dbConnection = $this->db->getConnection();
 

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * DTO (Data Transfer Object) pour transporter les données d'un livre avec son propriétaire
  * 

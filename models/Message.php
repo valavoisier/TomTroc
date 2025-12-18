@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Modèle représentant un message.
  * Propriétés : id, senderId, receiverId, content, createdAt, isRead, senderPseudo, senderAvatar, receiverPseudo, receiverAvatar.

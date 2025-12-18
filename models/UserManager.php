@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 class UserManager extends AbstractManager {
 
     public function findByEmail(string $email): ?User {

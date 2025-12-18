@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Contrôleur pour la page d'accueil
   */ 

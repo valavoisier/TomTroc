@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 // Inclusion du fichier de configuration pour charger les constantes et configurations de l'application
 require_once 'config.php';
 /**
