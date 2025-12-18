@@ -144,6 +144,12 @@ header {
     margin-left: 30px; 
 }
 
+/* Pas de contour vert au clic souris, seulement au clavier */
+.nav-left a:focus:not(:focus-visible),
+.nav-right a:focus:not(:focus-visible) {
+    outline: none;
+}
+
 .nav-left a.active,
 .nav-right a.active {
     font-weight: 600;
@@ -338,14 +344,20 @@ header {
     text-decoration: none;
     color: inherit;
     display: block;
-    border-radius: 10px;
 }
 
+/* Pas d'outline au clic souris, seulement au clavier */
+.card-livre-link:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* Focus pour fallback navigateurs anciens */
 .card-livre-link:focus {
     outline: 3px solid var(--color-primary);
     outline-offset: 2px;
 }
 
+/* Focus visible au clavier (3px) */
 .card-livre-link:focus-visible {
     outline: 3px solid var(--color-primary);
     outline-offset: 2px;
@@ -899,11 +911,18 @@ footer{
     border-radius: 114px;
 }
 
+/* Pas d'outline au clic souris, seulement au clavier */
+.owner-profile-link:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* Focus pour fallback navigateurs anciens */
 .owner-profile-link:focus {
     outline: 3px solid var(--color-primary);
     outline-offset: 2px;
 }
 
+/* Focus visible au clavier (3px) */
 .owner-profile-link:focus-visible {
     outline: 3px solid var(--color-primary);
     outline-offset: 2px;
@@ -976,11 +995,18 @@ footer{
     border-radius: 10px;
 }
 
+/* Pas d'outline au clic souris, seulement au clavier */
+.message-button:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* Focus pour fallback navigateurs anciens */
 .message-button:focus {
     outline: 3px solid var(--color-primary);
     outline-offset: 2px;
 }
 
+/* Focus visible au clavier (3px) */
 .message-button:focus-visible {
     outline: 3px solid var(--color-primary);
     outline-offset: 2px;
@@ -1596,11 +1622,18 @@ footer{
     border-radius: 4px;
 }
 
+/* Pas d'outline au clic souris, seulement au clavier */
+.conversation-link:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* Focus pour fallback navigateurs anciens */
 .conversation-link:focus {
     outline: 3px solid var(--color-primary);
     outline-offset: 2px;
 }
 
+/* Focus visible au clavier (3px) */
 .conversation-link:focus-visible {
     outline: 3px solid var(--color-primary);
     outline-offset: 2px;
