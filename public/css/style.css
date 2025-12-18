@@ -34,7 +34,8 @@
  }
 
 /* Screen reader only - masque visuellement mais reste accessible utilisé pour w3c titre h1 publicAccount */
-.sr-only {
+.sr-only,
+.visually-hidden {
     position: absolute;
     width: 1px;
     height: 1px;

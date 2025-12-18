@@ -70,7 +70,7 @@ class MessageController extends AbstractController {
             // Sélectionner la première conversation
             $firstConversation = $conversations[0];
             // Récupérer les informations de l'utilisateur sélectionné
-            $selectedConversation = $this->userManager->getUserById($firstConversation->getUserId());
+            $selectedConversation = $this->userManager->getUserById((int)$firstConversation->getUserId());
             // Marquer les messages comme lus
             $this->messageManager->markMessagesAsRead($userId, $firstConversation->getUserId());
             // Récupérer les messages de la conversation
@@ -178,7 +178,7 @@ class MessageController extends AbstractController {
         $conversations = $this->messageManager->getConversations($userId);
         
         // Récupérer les informations de l'utilisateur sélectionné
-        $selectedConversation = $this->userManager->getUserById($otherUserId);
+        $selectedConversation = $this->userManager->getUserById((int)$otherUserId);
         $this->messageManager->markMessagesAsRead($userId, $otherUserId);
         // Récupérer les messages de la conversation
         $messages = $this->messageManager->getConversationMessages($userId, $otherUserId);

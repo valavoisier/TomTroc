@@ -223,7 +223,7 @@ class BookController extends AbstractController
             $bookManager = new BookManager();
             
             // Récupérer le livre par son ID
-            $book = $bookManager->getBookById($id);
+            $book = $bookManager->getBookById((int)$id);
             
             // Si le livre est trouvé, rendre la vue avec les données du livre
             if ($book) {
@@ -255,7 +255,7 @@ class BookController extends AbstractController
         if ($_SERVER['REQUEST_METHOD'] === 'GET' && $id !== null) {
             
             // Récupérer le livre par son ID
-            $book = $bookManager->getBookById($id);
+            $book = $bookManager->getBookById((int)$id);
             
             if ($book) {
                 // Rendre la vue avec les données du livre
@@ -271,7 +271,7 @@ class BookController extends AbstractController
             $this->verifyCSRF(ROOT . '/book/editBook/' . $id);
             
             // Récupérer le livre par son ID
-            $book = $bookManager->getBookById($id);
+            $book = $bookManager->getBookById((int)$id);
             
             // Vérifier que le livre existe
             if (!$book) {

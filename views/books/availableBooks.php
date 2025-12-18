@@ -9,7 +9,8 @@ ob_start(); ?>
                 <?= Utils::csrfTokenField() ?>
                 <div class="search-container">
                     <img src="<?= ROOT ?>/public/img/loupe.svg" alt="" class="search-icon" aria-hidden="true">
-                    <input type="search" name="q" placeholder="Rechercher un livre..." class="search-input">
+                    <label for="search-book" id="search-book-label" class="visually-hidden">Rechercher un livre</label>
+                    <input type="search" id="search-book" name="q" placeholder="Rechercher un livre..." class="search-input" aria-labelledby="search-book-label">
                 </div>
             </form>
             <?php if (isset($message)): ?>

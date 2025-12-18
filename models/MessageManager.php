@@ -141,6 +141,7 @@ class MessageManager extends AbstractManager {
      * - Retourne ce nombre sous forme d'entier.
      */
      public function getUnreadConversationsCount($userId): int {
+        //COUNT() fonction d'agrégation retourne le nombre de lignes correspondant aux critères spécifiés dans la clause WHERE non lues.
         $sql = "SELECT COUNT(*) as count
                 FROM messages
                 WHERE receiver_id = :userId AND is_read = 0";

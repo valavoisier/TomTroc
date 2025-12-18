@@ -12,8 +12,10 @@ class BookManager extends AbstractManager
 
         $query = "SELECT books.*, users.pseudo, users.avatar
                   FROM books
-                  JOIN users ON books.user_id = users.id -- (LEFT JOIN utilisé pour tester affichage sans propriétaire)
+                  JOIN users ON books.user_id = users.id
                   ORDER BY books.id DESC";
+                  // Chaque livre est lié à un utilisateur via la clé étrangère user_id.
+                  // LEFT JOIN utilisé pour tester affichage sans propriétaire.
 
         $req = $dbConnection->prepare($query);
         $req->execute();        
@@ -42,7 +44,7 @@ class BookManager extends AbstractManager
     /**
      * Récupère un livre par son id avec les informations du propriétaire
      * @param int $id ID du livre
-     * @return BookWithOwnerDTO|null DTO ou null si non trouvé
+     * @return BookWithOwnerDTO|null DTO ou null si non trouvé (?)
      */
     public function getBookById( int $id): ?BookWithOwnerDTO
     {
@@ -57,6 +59,7 @@ class BookManager extends AbstractManager
         $req->execute([':id' => $id]);
         $data = $req->fetch(PDO::FETCH_ASSOC);
 
+        //Si livre trouvé → construction d’un Book + BookWithOwnerDTO sinon null.
         if ($data) {
             $book = new Book(
                 $data['id'],
@@ -76,7 +79,7 @@ class BookManager extends AbstractManager
     }
 
     /**
-     * Récupère un livre par son titre (LIKE) avec les informations du propriétaire
+     * Récupère un livre par son titre avec LIKE(partiel) avec les informations du propriétaire
      * @param string $title Titre à rechercher
      * @return BookWithOwnerDTO|null DTO ou null si non trouvé
      */
@@ -88,10 +91,10 @@ class BookManager extends AbstractManager
                   FROM books
                   JOIN users ON books.user_id = users.id
                   WHERE books.title LIKE :title
-                  LIMIT 1";
+                  LIMIT 1";//  retourne uniquement la première correspondance
 
         $req = $dbConnection->prepare($query);
-        $req->execute([':title' => "%$title%"]);
+        $req->execute([':title' => "%$title%"]);//%$title% → recherche contenant le mot.
         $data = $req->fetch(PDO::FETCH_ASSOC);
 
         if ($data) {
@@ -165,10 +168,10 @@ class BookManager extends AbstractManager
             'created_at' => $book->getCreatedAt(),
             'updated_at' => $book->getUpdatedAt()
         ];
-        return $this->add('books', $data);
+        return $this->add('books', $data);//appel méthode add de AbstractManager
     }
     
-    // Met à jour un livre
+    // Met à jour un livre existant
     public function updateBook(Book $book): bool
     {
          $data = [
@@ -179,13 +182,13 @@ class BookManager extends AbstractManager
             'status'     => $book->getStatus(),
             'updated_at' => $book->getUpdatedAt()
         ];
-        return $this->update('books', $data, $book->getId());
+        return $this->update('books', $data, $book->getId());//appel méthode update de AbstractManager
     }
 
     // Supprime un livre
     public function deleteBook($id): bool
     {
-        return $this->delete('books', $id);
+        return $this->delete('books', $id);//appel méthode delete de AbstractManager
     }
 
 
@@ -220,7 +223,8 @@ class BookManager extends AbstractManager
                   JOIN users ON books.user_id = users.id
                   WHERE books.user_id = :userId
                   ORDER BY books.id DESC";
-
+                // Chaque livre est lié à un utilisateur via la clé étrangère user_id.
+                // WHERE Filtre les livres appartenant à l'utilisateur spécifié :userId paramètre nommé
         $req = $dbConnection->prepare($query);
         $req->execute([':userId' => $userId]);
 

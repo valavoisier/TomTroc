@@ -85,7 +85,8 @@ ob_start(); ?>
                 <form class="messages-form" method="POST" action="<?= ROOT ?>/message/send" aria-label="Envoyer un message">
                     <?= Utils::csrfTokenField() ?>
                     <input type="hidden" name="receiver_id" value="<?= $selectedConversation->getId() ?>">
-                    <input type="text" name="content" class="messages-input" placeholder="Tapez votre message ici" required aria-required="true">
+                    <label for="message-content" id="message-content-label" class="visually-hidden">Tapez votre message ici</label>
+                    <input type="text" id="message-content" name="content" class="messages-input" placeholder="Tapez votre message ici" required aria-required="true" aria-labelledby="message-content-label">
                     <button type="submit" class="messages-submit">Envoyer</button>
                 </form>
             <?php else: ?>
