@@ -23,10 +23,10 @@
         define('ROOT', 'http://localhost/TomTroc'); 
         // Paramètres de connexion à la base de données locale
         define('DB_HOST', 'localhost');
-        define('DB_USERNAME', 'root');
+        define('DB_USERNAME', '');
         define('DB_PASSWORD', '');
         define('DB_NAME', 'tomtroc_db');  
     } else {
         // Environnement de production
-        define('ROOT', 'https://valerielavoisier.fr/TomTroc');
+        define('ROOT', '/TomTroc');
     }
