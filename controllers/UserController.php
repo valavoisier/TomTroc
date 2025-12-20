@@ -72,7 +72,8 @@ class UserController extends AbstractController
         // Récupérer l'utilisateur par son ID
         $user = $this->userManager->getUserById((int)$id);
         if (!$user) {
-            echo "Utilisateur introuvable.";
+            //echo "Utilisateur introuvable.";
+            $this->show404();
             return;
         }
         
