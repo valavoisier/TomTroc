@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : jeu. 18 déc. 2025 à 16:03
+-- Généré le : jeu. 18 déc. 2025 à 18:42
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 
@@ -55,11 +55,11 @@ INSERT INTO `books` (`id`, `user_id`, `title`, `author`, `description`, `image`,
 (9, 5, 'Hygge', 'Meik Wiking', 'Un livre qui célèbre l\'art danois du bonheur et du confort, à travers rituels et atmosphères chaleureuses.', 'hygge.jpg', 1, '2025-11-13 20:58:14', '2025-12-17 22:56:35'),
 (10, 8, 'Minimalist Graphics', 'Julia Schonlau', 'Un ouvrage artistique qui explore le graphisme minimaliste et ses formes épurées.', 'minimalist_graphics.jpg', 1, '2025-11-13 20:58:15', '2025-12-17 22:56:35'),
 (11, 7, 'Milwaukee Mission', 'Elder Cooper low', 'Un témoignage sur la vie communautaire et les initiatives locales à Milwaukee.', 'milwaukee_mission.jpg', 1, '2025-11-13 20:58:16', '2025-12-17 22:56:35'),
-(12, 6, 'Delight!', 'Justin Rossow', 'Un livre qui met en avant la joie et la gratitude au quotidien, à travers réflexions et anecdotes.', 'delight.jpg', 1, '2025-11-13 20:58:17', '2025-12-17 22:56:35'),
+(12, 6, 'Delight!', 'Justin Rossow', 'Un livre qui met en avant la joie et la gratitude au quotidien, à travers réflexions et anecdotes.', 'delight.jpg', 0, '2025-11-13 20:58:17', '2025-12-18 18:39:57'),
 (13, 5, 'Milk & Honey', 'Rupi Kaur', 'Recueil de poèmes intimes sur l\'amour, la douleur et la guérison, empreint de force et de douceur.', 'milk_honey.jpg', 1, '2025-11-13 20:58:18', '2025-12-17 22:56:35'),
 (14, 1, 'Wabi Sabi', 'Beth Kempton', 'Un guide inspirant qui invite à apprécier la beauté de l\'imperfection et de la simplicité japonaise.', 'wabi_sabi.jpg', 1, '2025-11-13 20:58:19', '2025-12-18 14:55:14'),
 (15, 2, 'The Kinfolk Table', 'Nathan Williams', 'J\'ai récemment plongé dans les pages de \'The Kinfolk Table\' et j\'ai été enchanté par cette œuvre captivante. Ce livre va bien au-delà d\'une simple collection de recettes ; il célèbre l\'art de partager des moments authentiques autour de la table.\r\n\r\nLes photographies magnifiques et le ton chaleureux captivent dès le départ, transportant le lecteur dans un voyage à travers des recettes et des histoires qui mettent en avant la beauté de la simplicité et de la convivialité.\r\n\r\nChaque page est une invitation à ralentir, à savourer et à créer des souvenirs durables avec les êtres chers.\r\n\r\n\'The Kinfolk Table\' incarne parfaitement l\'esprit de la cuisine et de la camaraderie, et il est certain que ce livre trouvera une place spéciale dans le cœur de tout amoureux de la cuisine et des rencontres inspirantes.', 'kinfolk_table.jpg', 1, '2025-11-13 20:58:20', '2025-12-17 22:56:35'),
-(16, 4, 'Esther', 'Alabaster', 'Un récit poétique et visuel qui explore la spiritualité et l\'art à travers des images modernes.', 'esther.jpg', 1, '2025-11-13 20:58:21', '2025-12-17 22:56:35');
+(16, 4, 'Esther', 'Alabaster', 'Un récit poétique et visuel qui explore la spiritualité et l\'art à travers des images modernes.', 'esther.jpg', 1, '2025-11-13 20:58:21', '2025-12-18 18:19:11');
 
 -- --------------------------------------------------------
 
@@ -164,7 +164,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT pour la table `books`
 --
 ALTER TABLE `books`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT pour la table `messages`
@@ -176,7 +176,7 @@ ALTER TABLE `messages`
 -- AUTO_INCREMENT pour la table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- Contraintes pour les tables déchargées

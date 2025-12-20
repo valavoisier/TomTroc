@@ -11,26 +11,6 @@ require_once 'config.php';
 class Router
 {
     /**
-     * Affiche la page d'erreur 404 (Not Found).
-     *
-     * Cette méthode :
-     * - Définit le code de réponse HTTP à 404 via http_response_code().
-     * - Inclut la vue correspondante (views/errors/404.php) pour afficher la page d'erreur.
-     * - Termine l'exécution du script avec exit afin d'éviter tout traitement supplémentaire.
-     * 
-     * @return void
-     */
-    private function show404()
-    {
-        // Définir le code de réponse HTTP à 404 (Not Found)
-        // utilisation de la fonction native http_response_code() de PHP (remplace header("HTTP/1.1 404 Not Found"))
-        http_response_code(404);
-        // Inclusion de la vue de la page d'erreur 404
-        require_once 'views/errors/404.php';
-        exit;
-    }
-
-    /**
      * Méthode principale  routeRequest() pour gérer le routage des requêtes entrantes.
      *
      * Cette méthode :
@@ -47,10 +27,10 @@ class Router
      *   - Avec les paramètres si la méthode en attend.
      *   - Sans paramètres si la méthode n'en attend aucun.
      * - Si une étape échoue (fichier, classe, méthode ou paramètres manquants),
-     *   affiche la page d'erreur 404 via show404().
+     *   affiche la page d'erreur 404 via Utils::show404().
      * 
      * @return void
-     * @see self::show404() Méthode appelée en cas d'erreur de routage.
+     * @see Utils::show404() Méthode appelée en cas d'erreur de routage.
      */
     public function routeRequest()
     {
@@ -120,7 +100,7 @@ class Router
                             //revient à l'Appel dynamique de la méthode du contrôleur  $controller->$action();
                         } else {
                             // Si le nombre de paramètres est insuffisant, on affiche une erreur
-                            $this->show404();
+                            Utils::show404();
                         }
                     } else {
                         // Si la méthode n’attend aucun paramètre, on l’appelle directement sans arguments.
@@ -129,15 +109,15 @@ class Router
                     }
                 } else {
                     // Si la méthode correspondant à l'action n'existe pas dans le contrôleur, on affiche une erreur.
-                    $this->show404();
+                    Utils::show404();
                 }
             } else {
                 // Si la classe du contrôleur n'existe pas dans le fichier inclus, on affiche une erreur.
-                $this->show404();
+                Utils::show404();
             }
         } else {
             // Si le fichier du contrôleur n'existe pas dans le dossier 'controllers/', on affiche une erreur.
-            $this->show404();
+            Utils::show404();
         }
     }
 }

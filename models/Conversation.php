@@ -25,8 +25,8 @@ class Conversation
     private int $userId;
     private string $pseudo;
     private ?string $avatar;
-    private ?string $lastMessage;
-    private ?string $lastMessageDate;
+    private ?string $lastMessage;//contenu du dernier message échangé
+    private ?string $lastMessageDate;//date du dernier message échangé
 
     /**
      * Constructeur de la classe Conversation

@@ -88,6 +88,7 @@ class MessageManager extends AbstractManager {
      * @return Conversation[] Tableau d'objets Conversation.
      */
     public function getConversations($userId): array {
+        //SELECT DISTINCT pour éviter les doublons si plusieurs messages échangés avec même utilisateur
         $sql = "SELECT DISTINCT
                     u.id as user_id, -- ID de l'autre utilisateur
                     u.pseudo, -- Pseudo de l'autre utilisateur

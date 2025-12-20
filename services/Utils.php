@@ -131,4 +131,22 @@ class Utils
         $token = self::generateCSRFToken();
         return '<input type="hidden" name="csrf_token" value="' . htmlspecialchars($token, ENT_QUOTES, 'UTF-8') . '">';
     }
+
+    /**
+     * Affiche la page d'erreur 404 et arrête l'exécution.
+     * 
+     * Cette méthode :
+     * - Définit le code de réponse HTTP à 404
+     * - Affiche la vue d'erreur 404
+     * - Termine l'exécution du script
+     * - Utilisable depuis Router ou Controllers
+     * 
+     * @return void
+     */
+    public static function show404(): void
+    {
+        http_response_code(404);
+        require_once 'views/errors/404.php';
+        exit;
+    }
 }

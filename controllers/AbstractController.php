@@ -77,7 +77,7 @@ abstract class AbstractController {
         // Récupérer le token soumis via le formulaire si absent $token vaut null
         $token = $_POST['csrf_token'] ?? null;
         
-        //veifyCSRFToken ompare le token soumis avec celui stocké en session et retourne true si le token est valide, false sinon
+        //veifyCSRFToken compare le token soumis avec celui stocké en session et retourne true si le token est valide, false sinon
         if (!Utils::verifyCSRFToken($token)) {
             // gestion de l'erreur CSRF
             $_SESSION['error'] = "Requête invalide. Veuillez réessayer.";
@@ -92,5 +92,15 @@ abstract class AbstractController {
             }
             exit;// arrêt exécution du script après la redirection
         }
+    }
+
+    /**
+     * Affiche la page d'erreur 404
+     * Délègue à Utils::show404() pour centraliser le code
+     * 
+     * @return void
+     */
+    protected function show404(): void {
+        Utils::show404();
     }
 }

@@ -229,10 +229,10 @@ class BookController extends AbstractController
             if ($book) {
                 $this->render('views/books/singleBook.php', ['book' => $book]);
             } else {
-                echo "Livre introuvable.";
+                $this->show404();
             }
         } else {
-            echo "Aucun livre sélectionné.";
+            $this->show404();
         }
     }
 
